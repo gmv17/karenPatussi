@@ -2421,6 +2421,8 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
       function requestNext(){
         if(!canTrigger()) return;
         if(phase === "opening") return;
+        // ✅ se já estamos no último card, não avança (fim da experiência)
+        if(flowStarted && sceneIndex === (cards.length - 1)) return;
         if(footerDocked) return; // ✅ já estamos no fim
         setLock();
         closeScene();
@@ -2477,9 +2479,10 @@ function updateFooterGate(){
 
   const isLast = flowStarted && sceneIndex === (cards.length - 1);
   const openingOrOpen = (phase === "open" || phase === "opening");
-  const fullyOpen = (openingOrOpen && p >= 0.97 && pTarget >= 0.999);
+  // ✅ doka assim que o último card estiver praticamente aberto (evita piscar/fechar)
+  const ready = openingOrOpen && (p >= 0.94 || pTarget >= 0.999);
 
-  if(isLast && fullyOpen){
+  if(isLast && ready){
     setFooterDocked(true);
   }
 }
