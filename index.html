@@ -74,7 +74,7 @@
       --fadeBlur: 1.6px;
 
       --loaderDur: 3000ms;
-      --loaderLogoW: min(88px, 22vw);
+      --loaderLogoW: min(104px, 24vw);
       --loaderFade: 820ms;
       --loaderEase: cubic-bezier(.16, 1, .18, 1);
 
@@ -437,7 +437,50 @@
       user-select:none;
       font-family: var(--bodyFont);
     }
-    body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; }
+    
+    /* ✅ Loader progress (substitui "Carregando") */
+    .loader-progress{
+      width: min(260px, 72vw);
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.20);
+      overflow: hidden;
+      box-shadow: 0 12px 26px rgba(0,0,0,.16);
+    }
+    .loader-progress > span{
+      display:block;
+      height: 100%;
+      width: 100%;
+      transform-origin: left center;
+      transform: scaleX(0);
+      background: rgba(255,255,255,.86);
+      animation: loaderFill var(--loaderDur) cubic-bezier(.16, 1, .18, 1) forwards;
+      will-change: transform;
+    }
+    .loader.is-done .loader-progress > span{ transform: scaleX(1); }
+
+    @keyframes loaderFill{
+      0%   { transform: scaleX(0); }
+      70%  { transform: scaleX(.78); }
+      100% { transform: scaleX(1); }
+    }
+
+    /* Acessibilidade: texto só para leitor de tela */
+    .sr-only{
+      position:absolute;
+      width:1px; height:1px;
+      padding:0; margin:-1px;
+      overflow:hidden;
+      clip: rect(0,0,0,0);
+      white-space:nowrap;
+      border:0;
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .loader-progress > span{ animation: none; transform: scaleX(1); }
+    }
+body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; }
 
     /* ========================= TOPBAR ========================= */
     .topbar{
@@ -1315,7 +1358,8 @@
       <div class="loader-logoMark" aria-hidden="true"></div>
       <!-- ✅ AQUI: Logo.PNG -->
       <img class="loader-fallbackImg" src="./imagens/Logo.PNG" alt="Logo Káren Patussi">
-      <p class="loader-sub">Carregando</p>
+      <div class="loader-progress" aria-hidden="true"><span></span></div>
+      <span class="sr-only">Carregando</span>
     </div>
   </div>
 
@@ -1938,6 +1982,7 @@
       /* ========================= LOADER ========================= */
       function finishLoader(){
         if(!loader) return;
+        loader.classList.add("is-done");
         document.body.classList.add("is-ready");
         loader.classList.add("is-hidden");
         document.body.classList.remove("is-loading");
