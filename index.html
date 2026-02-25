@@ -2421,8 +2421,6 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
       function requestNext(){
         if(!canTrigger()) return;
         if(phase === "opening") return;
-        // ✅ se já estamos no último card, não avança (fim da experiência)
-        if(flowStarted && sceneIndex === (cards.length - 1)) return;
         if(footerDocked) return; // ✅ já estamos no fim
         setLock();
         closeScene();
@@ -2452,59 +2450,45 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
       /* ✅ FOOTER gate: só libera quando o último card estiver 100% aberto */
       
     /* ========================= FOOTER DOCK (após fechar o último card) ========================= */
-    // ========================= FOOTER DOCK (card final fixo na tela) =========================
-// Regra: quando chegar no último card e ele abrir, o rodapé "doca" e fica fixo.
-// Não existe "auto-undock" por scroll — só sai se você navegar para outro trecho (menu/home).
-let footerDocked = false;
+    let footerDocked = false;
+    let footerLockY = null;
 
-function setFooterDocked(v){
-  const next = !!v;
-  if(next === footerDocked) return;
+    function setFooterDocked(v){
+      const next = !!v;
+      if(next === footerDocked) return;
 
-  footerDocked = next;
-  document.body.classList.toggle("footer-docked", footerDocked);
+      footerDocked = next;
+      document.body.classList.toggle("footer-docked", footerDocked);
 
-  if(footerDocked){
-    document.body.classList.add("footer-ready");
-    lockBody(); // trava scroll/gestos
-  } else {
-    document.body.classList.remove("footer-ready");
-    unlockBody();
-  }
-}
+      if(footerDocked){
+        // trava o scroll exatamente no ponto em que o card final abre
+        footerLockY = window.scrollY;
+        window.scrollTo({ top: footerLockY, behavior: "auto" });
+        lockBody(); // ✅ trava total (sem “bounce”)
+      } else {
+        footerLockY = null;
+        unlockBody();
+      }
+    }
 
+    // mantém o scroll preso no limite final enquanto estiver dockado
+    window.addEventListener("scroll", () => {
+      if(!footerDocked || footerLockY == null) return;
+      if(Math.abs(window.scrollY - footerLockY) > 2){
+        window.scrollTo({ top: footerLockY, behavior: "auto" });
+      }
+    }, { passive: true });
 function updateFooterGate(){
-  // latch: uma vez dockado, não solta mais automaticamente
-  if(footerDocked) return;
+        const isLast = flowStarted && sceneIndex === (cards.length - 1);
+        const fullyOpen = (p >= 0.985 && (phase === "open" || phase === "opening") && pTarget >= 0.999);
 
-  const isLast = flowStarted && sceneIndex === (cards.length - 1);
-  const openingOrOpen = (phase === "open" || phase === "opening");
-  // ✅ doka assim que o último card estiver praticamente aberto (evita piscar/fechar)
-  const ready = openingOrOpen && (p >= 0.94 || pTarget >= 0.999);
+        // ✅ quando o card final abrir por completo, trava o “fim” do scroll e fixa no limite inferior
+        setFooterDocked(isLast && fullyOpen);
 
-  if(isLast && ready){
-    setFooterDocked(true);
-  }
-}
-
+        if(isLast && fullyOpen) document.body.classList.add("footer-ready");
+        else document.body.classList.remove("footer-ready");
+      }
 function render(){
-
-// ✅ se o rodapé estiver dockado, ele vira a "tela final" e não some mais
-if(footerDocked){
-  const lastIdx = cards.length - 1;
-  sceneIndex = lastIdx;
-  flowStarted = true;
-  phase = "open";
-  p = 1; pTarget = 1;
-
-  hideAllCards();
-  const last = cards[lastIdx];
-  if(last) applyCardStyles(last, 1);
-
-  updateBubbles(flowStarted, sceneIndex, 1);
-  return;
-}
-
         if(prefersReduced()){
           hideAllCards();
           if(flowStarted){
