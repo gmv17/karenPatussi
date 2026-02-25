@@ -2430,7 +2430,7 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
 
       function requestPrev(){
       if(!canTrigger()) return;
-      if(footerDocked) setFooterDocked(false);
+      if(footerDocked) return; // ✅ travado no fim
         if(phase === "opening") return;
 
         if(sceneIndex === 0){
@@ -2480,7 +2480,7 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
     }, { passive: true });
 function updateFooterGate(){
         const isLast = flowStarted && sceneIndex === (cards.length - 1);
-        const fullyOpen = (phase === "open" && p >= 0.995);
+        const fullyOpen = (p >= 0.985 && (phase === "open" || phase === "opening") && pTarget >= 0.999);
 
         // ✅ quando o card final abrir por completo, trava o “fim” do scroll e fixa no limite inferior
         setFooterDocked(isLast && fullyOpen);
@@ -2594,7 +2594,7 @@ function render(){
           const dy = scaledWheelDelta(e);
 
           // ✅ fim do scroll: com o card final dockado, ignora scroll para baixo
-          if(footerDocked && dy > 0){ wheelAccum = 0; scheduleRender(); return; }
+          if(footerDocked){ e.preventDefault(); wheelAccum = 0; scheduleRender(); return; }
 
           const res = tryScrollInsideActiveCard(dy);
           if(res.used && res.moved){
@@ -2648,7 +2648,7 @@ function render(){
           e.preventDefault();
 
           // ✅ fim do scroll: com o card final dockado, ignora gesto para baixo
-          if(footerDocked && dy > 0){ touchAccum = 0; scheduleRender(); return; }
+          if(footerDocked){ e.preventDefault(); touchAccum = 0; scheduleRender(); return; }
 
           const res = tryScrollInsideActiveCard(dy);
           if(res.used && res.moved){
