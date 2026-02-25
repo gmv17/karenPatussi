@@ -1224,8 +1224,8 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
     @media (max-width: 720px){
       .cards-track{ padding: calc(var(--cardStickyTop) + 8px) calc(var(--padX) + var(--safeR)) calc(46px + var(--safeB)) calc(var(--padX) + var(--safeL)); }
     }
-    .cards-track .track-spacer{ height: 260vh; }
-    @media (max-width: 720px){ .cards-track .track-spacer{ height: 300vh; } }
+    .cards-track .track-spacer{ height: 320vh; }
+    @media (max-width: 720px){ .cards-track .track-spacer{ height: 360vh; } }
 
     .cards-stage{
       position: sticky;
@@ -1825,40 +1825,49 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
           </div>
         </article>
 
+        <!-- RODAPÉ (CARD) -->
+        <article class="section-card glass-card" data-card id="rodape">
+          <div class="card-inner">
+            <div class="card-kicker">Encerramento</div>
+            <h2 class="card-title">Rodapé</h2>
+
+            <div class="card-scroll" data-scroll>
+              <p class="card-text" style="margin-top:2px">
+                <strong>CRP</strong> 12/09861<br>
+                © 2026 Káren Patussi – Todos os direitos reservados.
+              </p>
+
+              <div style="height:10px"></div>
+
+              <p class="card-text" style="opacity:.82">
+                Atendimento online • Sigilo profissional • Espaço seguro
+              </p>
+
+              <div style="height:14px"></div>
+
+              <div class="contact-ctaRow" aria-label="Links e redes">
+                <a class="btn-ghost" href="#" onclick="return false" aria-label="Instagram (link em breve)">
+                  <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2Zm0 1.8A3.95 3.95 0 0 0 3.8 7.75v8.5A3.95 3.95 0 0 0 7.75 20.2h8.5a3.95 3.95 0 0 0 3.95-3.95v-8.5a3.95 3.95 0 0 0-3.95-3.95h-8.5ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 1.8a3.2 3.2 0 1 0 0 6.4 3.2 3.2 0 0 0 0-6.4Zm6.2-.95a1.05 1.05 0 1 1-2.1 0 1.05 1.05 0 0 1 2.1 0Z"/>
+                  </svg>
+                  Instagram (em breve)
+                </a>
+              </div>
+
+              <div class="end-spacer" aria-hidden="true"></div>
+            </div>
+          </div>
+        </article>
+
+
       </div>
 
       <div class="track-spacer" aria-hidden="true"></div>
     </section>
 
-    <!-- RODAPÉ -->
-    <div class="footer-wrap" aria-label="Rodapé">
-      <div class="footer-spacer" aria-hidden="true"></div>
+    
 
-      <footer class="site-footer" id="siteFooter">
-        <div class="footer-grid">
-          <div class="footer-left">
-            <div class="footer-meta">
-              <span><b>CRP</b> 12/09861</span>
-              <span aria-hidden="true">•</span>
-              <span>Contato por WhatsApp ou e-mail</span>
-            </div>
-            <div class="footer-copy">© 2026 Káren Patussi – Todos os direitos reservados.</div>
-          </div>
-
-          <div class="footer-right">
-            <a class="ig-btn" href="#" id="igLink" aria-label="Instagram (link em breve)" title="Instagram (em breve)">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4h-9ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.6-2.65a1.05 1.05 0 1 1 0 2.1 1.05 1.05 0 0 1 0-2.1Z"/>
-              </svg>
-            </a>
-          </div>
-        </div>
-      </footer>
-    </div>
-
-  </div>
-
-  <script>
+<script>
     (() => {
       const root = document.documentElement;
       const loader = document.getElementById("loader");
@@ -2243,6 +2252,7 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
           { x: leftX, y: midY },   // Áreas
           { x: rightX, y: midY },  // FAQ
           { x: leftX, y: botY },   // Contato
+          { x: 0, y: botY + (isMobile ? 120 : 150) }, // Rodapé
         ];
         return map[i] || map[0];
       }
