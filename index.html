@@ -1350,7 +1350,9 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
     
     /* ========================= FOOTER DOCK (card final travado no fim) ========================= */
     body.footer-docked{
+      overflow: hidden;
       overscroll-behavior: none;
+      touch-action: none;
     }
     body.footer-docked #rodape{
       position: fixed !important;
@@ -2462,8 +2464,10 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
         // trava o scroll exatamente no ponto em que o card final abre
         footerLockY = window.scrollY;
         window.scrollTo({ top: footerLockY, behavior: "auto" });
+        lockBody(); // ✅ trava total (sem “bounce”)
       } else {
         footerLockY = null;
+        unlockBody();
       }
     }
 
