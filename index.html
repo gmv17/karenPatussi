@@ -1349,6 +1349,30 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
       footer.site-footer{ opacity: 1 !important; transform: none !important; filter: none !important; pointer-events: auto !important; }
     }
   </style>
+
+<style>
+/* ===== Ajustes Loader ===== */
+
+/* Aumenta a logo da tela de carregamento */
+.loader img,
+.loader-logo img {
+    width: 180px !important;  /* aumentada */
+    max-width: 180px !important;
+}
+
+/* Diminui largura da barra de progresso */
+.loader-progress,
+.progress-bar-container {
+    width: 180px !important;  /* menos larga */
+}
+
+/* Altura um pouco mais fina para ficar elegante */
+.loader-progress,
+.progress-bar {
+    height: 6px !important;
+}
+</style>
+
 </head>
 
 <body class="is-loading">
