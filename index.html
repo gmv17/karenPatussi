@@ -377,7 +377,6 @@
       transform: translateZ(0);
     }
 
-    /* ✅ AQUI: Logo.PNG (case-sensitive) */
     .loader-logoMark{
       width: var(--loaderLogoW);
       aspect-ratio: 1 / 1;
@@ -428,17 +427,7 @@
       .loader-fallbackImg{ display:block; }
     }
 
-    .loader-sub{
-      margin: 0;
-      font-size: 11px;
-      letter-spacing: .22em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.78);
-      user-select:none;
-      font-family: var(--bodyFont);
-    }
-    
-    /* ✅ Loader progress (substitui "Carregando") */
+    /* ✅ Loader progress */
     .loader-progress{
       width: min(260px, 72vw);
       height: 7px;
@@ -466,7 +455,6 @@
       100% { transform: scaleX(1); }
     }
 
-    /* Acessibilidade: texto só para leitor de tela */
     .sr-only{
       position:absolute;
       width:1px; height:1px;
@@ -480,7 +468,8 @@
     @media (prefers-reduced-motion: reduce){
       .loader-progress > span{ animation: none; transform: scaleX(1); }
     }
-body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; }
+
+    body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; }
 
     /* ========================= TOPBAR ========================= */
     .topbar{
@@ -536,7 +525,6 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
       flex: 0 0 auto;
     }
 
-    /* ✅ AQUI: Logo.PNG (case-sensitive) */
     @supports ((-webkit-mask-image: url("x.png")) or (mask-image: url("x.png"))){
       .logo-img{ display:none; }
       .logo-mark{
@@ -1240,11 +1228,6 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
       .cards-stage{ height: calc(100dvh - var(--cardStickyTop) - 10px); min-height: 520px; }
     }
 
-    @keyframes cardFloat{
-      0%,100%{ transform: translate3d(var(--tx,0px), var(--ty,0px), 0) scale(var(--ts,1)); }
-      50%{ transform: translate3d(var(--tx,0px), calc(var(--ty,0px) - var(--cardFloatAmp)), 0) scale(var(--ts,1)); }
-    }
-
     .section-card{
       grid-area: 1 / 1;
       position: relative;
@@ -1259,24 +1242,22 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
       pointer-events: none;
       border-radius: calc(18px + (var(--p,0) * 10px));
     }
-    .section-card.is-active{ pointer-events: auto; animation: none; }
+    .section-card.is-active{ pointer-events: auto; }
+
     /* ========================= CARD FINAL (INFORMAÇÕES) ========================= */
     #rodape{
-      align-self: end;             /* cola no limite inferior do sticky stage */
+      align-self: end;
       justify-self: center;
-      width: min(860px, 100%) !important; /* assinatura final mais estreita */
+      width: min(860px, 100%) !important;
       margin-bottom: 0;
 
-      /* mais sutil que os cards principais */
       background: rgba(255,255,255,.20);
       border: 1px solid rgba(0,0,0,.045);
       box-shadow: 0 16px 40px rgba(0,0,0,.075);
 
-      /* remove o blur do glass pra ficar mais “real” */
       backdrop-filter: blur(0px) saturate(1.03);
       -webkit-backdrop-filter: blur(0px) saturate(1.03);
 
-      /* entrada/saída um pouco mais lenta */
       transition:
         opacity 1200ms var(--menuEase),
         transform 1200ms var(--menuEase),
@@ -1344,15 +1325,15 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
     }
     .footer-ig:active{ transform: translateY(0) scale(.99); }
 
+    /* ========================= LOCK GENÉRICO (hero) ========================= */
     body.is-locked{ overflow: hidden; touch-action: none; }
 
-    
-    
-    /* ========================= FOOTER DOCK (card final travado no fim) ========================= */
+    /* ========================= FOOTER DOCK (rodapé fixa ao abrir) ========================= */
     body.footer-docked{
-      overflow: hidden;
-      overscroll-behavior: none;
-      touch-action: none;
+      /* NÃO travar o body: precisa subir */
+      overflow: auto;
+      touch-action: auto;
+      overscroll-behavior: auto;
     }
     body.footer-docked #rodape{
       position: fixed !important;
@@ -1374,59 +1355,28 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
         bottom: calc(12px + var(--safeB)) !important;
       }
     }
-.footer-grid{ display:flex; align-items:center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-    .footer-left{ display:flex; flex-direction: column; gap: 6px; min-width: 240px; flex: 1 1 340px; }
-    .footer-meta{ display:flex; flex-wrap: wrap; gap: 10px; align-items: baseline; color: var(--footerInk); font-size: 12px; line-height: 1.6; letter-spacing: .02em; }
-    .footer-meta b{ color: rgba(20,28,32,.62); font-weight: 850; letter-spacing: .06em; text-transform: uppercase; font-size: 11px; }
-    .footer-copy{ color: var(--footerInk2); font-size: 11.5px; line-height: 1.55; letter-spacing: .02em; }
-    .footer-right{ display:flex; align-items:center; gap: 10px; flex: 0 0 auto; }
-
-    .ig-btn{
-      display:inline-flex; align-items:center; justify-content:center;
-      width: 38px; height: 38px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.22);
-      border: 1px solid rgba(0,0,0,.05);
-      box-shadow: 0 12px 28px rgba(0,0,0,.05);
-      color: rgba(20,28,32,.58);
-      text-decoration: none;
-      transition: transform .18s ease, background .18s ease, color .18s ease, border-color .18s ease;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .ig-btn svg{ width: 18px; height: 18px; display:block; fill: currentColor; opacity: .92; }
-    @media (hover:hover) and (pointer:fine){
-      .ig-btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.28); border-color: rgba(26,93,102,.10); color: rgba(26,93,102,.70); }
-    }
-    .ig-btn:active{ transform: translateY(0) scale(.99); }
 
     @media (prefers-reduced-motion: reduce){
       footer.site-footer{ opacity: 1 !important; transform: none !important; filter: none !important; pointer-events: auto !important; }
     }
   </style>
 
-<style>
-/* ===== Ajustes Loader ===== */
-
-/* Aumenta a logo da tela de carregamento */
-.loader img,
-.loader-logo img {
-    width: 180px !important;  /* aumentada */
-    max-width: 180px !important;
-}
-
-/* Diminui largura da barra de progresso */
-.loader-progress,
-.progress-bar-container {
-    width: 180px !important;  /* menos larga */
-}
-
-/* Altura um pouco mais fina para ficar elegante */
-.loader-progress,
-.progress-bar {
-    height: 6px !important;
-}
-</style>
-
+  <style>
+    /* ===== Ajustes Loader ===== */
+    .loader img,
+    .loader-logo img {
+      width: 180px !important;
+      max-width: 180px !important;
+    }
+    .loader-progress,
+    .progress-bar-container {
+      width: 180px !important;
+    }
+    .loader-progress,
+    .progress-bar {
+      height: 6px !important;
+    }
+  </style>
 </head>
 
 <body class="is-loading">
@@ -1434,7 +1384,6 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
   <div class="loader" id="loader" aria-label="Carregando" role="status" aria-live="polite">
     <div class="loader-wrap">
       <div class="loader-logoMark" aria-hidden="true"></div>
-      <!-- ✅ AQUI: Logo.PNG -->
       <img class="loader-fallbackImg" src="./imagens/Logo.PNG" alt="Logo Káren Patussi">
       <div class="loader-progress" aria-hidden="true"><span></span></div>
       <span class="sr-only">Carregando</span>
@@ -1455,7 +1404,6 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
   <header class="topbar" id="topbar" aria-label="Barra superior">
     <div class="bar-title" id="barTitle">
       <span class="logo-mark" aria-hidden="true"></span>
-      <!-- ✅ AQUI: Logo.PNG -->
       <img class="logo-img" src="./imagens/Logo.PNG" alt="Logo">
       <span class="bar-name">Káren Patussi</span>
     </div>
@@ -1493,7 +1441,6 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
 
       <div class="menu-logo" aria-hidden="true">
         <div class="logo-box">
-          <!-- ✅ AQUI: Logo.PNG -->
           <img src="./imagens/Logo.PNG" alt="">
         </div>
       </div>
@@ -1502,7 +1449,6 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
 
   <!-- SITE -->
   <div class="site" id="siteRoot">
-
     <!-- HERO -->
     <main id="home" class="hero-stage" aria-label="Hero">
       <section class="hero" aria-label="Identidade">
@@ -1882,17 +1828,9 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
         <!-- RODAPÉ (CARD) -->
         <article class="section-card glass-card card--rodape" data-card id="rodape" aria-label="Informações finais">
           <div class="card-inner footer-inner">
-            <p class="footer-line">
-              <strong>CRP</strong> 12/09861
-            </p>
-
-            <p class="footer-line">
-              © 2026 Káren Patussi – Todos os direitos reservados.
-            </p>
-
-            <p class="footer-sub">
-              Atendimento online • Sigilo absoluto • Espaço seguro
-            </p>
+            <p class="footer-line"><strong>CRP</strong> 12/09861</p>
+            <p class="footer-line">© 2026 Káren Patussi – Todos os direitos reservados.</p>
+            <p class="footer-sub">Atendimento online • Sigilo absoluto • Espaço seguro</p>
 
             <div class="footer-actions" aria-label="Redes sociais">
               <a class="footer-ig" href="#" aria-label="Instagram (link em breve)" title="Instagram (em breve)">
@@ -1905,15 +1843,13 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
           </div>
         </article>
 
-
       </div>
 
       <div class="track-spacer" aria-hidden="true"></div>
     </section>
+  </div>
 
-    
-
-<script>
+  <script>
     (() => {
       const root = document.documentElement;
       const loader = document.getElementById("loader");
@@ -1929,9 +1865,6 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
       const cards = Array.from(document.querySelectorAll("[data-card]"));
       const bubblesStage = document.getElementById("bubblesStage");
       const bubbles = [];
-
-      const siteFooter = document.getElementById("siteFooter");
-      const igLink = document.getElementById("igLink");
 
       const clamp = (v,a,b)=>Math.max(a,Math.min(b,v));
       const prefersReduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -2101,14 +2034,6 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
       closeBtn.addEventListener("click", closeMenu);
       overlayBg.addEventListener("click", closeMenu);
       window.addEventListener("keydown", (e) => { if(e.key === "Escape" && overlay.classList.contains("is-open")) closeMenu(); });
-
-      /* ========================= FOOTER IG PLACEHOLDER ========================= */
-      if(igLink){
-        igLink.addEventListener("click", (e) => {
-          const href = (igLink.getAttribute("href") || "").trim();
-          if(!href || href === "#") e.preventDefault();
-        });
-      }
 
       /* ========================= HERO (2 scrolls até o Sobre) ========================= */
       let step = 0, accum = 0, locked = false, animating = false, lastDir = 0, cooldownUntil = 0;
@@ -2368,14 +2293,22 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
         scheduleRender();
       }
 
+      /* ========================= FOOTER DOCK (fixa ao abrir) ========================= */
+      let footerDocked = false;
+      function setFooterDocked(v){
+        const next = !!v;
+        if(next === footerDocked) return;
+        footerDocked = next;
+        document.body.classList.toggle("footer-docked", footerDocked);
+      }
+
       function handoffToCards(){
         if(flowStarted) return;
-      setFooterDocked(false);
+        setFooterDocked(false);
         flowStarted = true;
         topbar.classList.add("show-brand");
 
         lockBody();
-
         const y = cardsTrack.getBoundingClientRect().top + window.scrollY;
         window.scrollTo({ top: y + 1, behavior: "auto" });
 
@@ -2400,7 +2333,7 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
       }
 
       async function returnToHeroWithSameMotion(){
-      setFooterDocked(false);
+        setFooterDocked(false);
         flowStarted = false;
         clearAutoRole();
         step = 2;
@@ -2421,7 +2354,7 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
       function requestNext(){
         if(!canTrigger()) return;
         if(phase === "opening") return;
-        if(footerDocked) return; // ✅ já estamos no fim
+        if(footerDocked) return; // no fim: não passa do rodapé
         setLock();
         closeScene();
         pendingDir = +1;
@@ -2429,9 +2362,14 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
       }
 
       function requestPrev(){
-      if(!canTrigger()) return;
-      if(footerDocked) return; // ✅ travado no fim
+        if(!canTrigger()) return;
         if(phase === "opening") return;
+
+        // ✅ se estiver no rodapé fixo e subir: libera e volta
+        if(footerDocked){
+          setFooterDocked(false);
+          // deixa cair no fluxo normal: voltar pro card anterior
+        }
 
         if(sceneIndex === 0){
           setLock();
@@ -2447,48 +2385,15 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
         returnToHeroAfterClose = false;
       }
 
-      /* ✅ FOOTER gate: só libera quando o último card estiver 100% aberto */
-      
-    /* ========================= FOOTER DOCK (após fechar o último card) ========================= */
-    let footerDocked = false;
-    let footerLockY = null;
-
-    function setFooterDocked(v){
-      const next = !!v;
-      if(next === footerDocked) return;
-
-      footerDocked = next;
-      document.body.classList.toggle("footer-docked", footerDocked);
-
-      if(footerDocked){
-        // trava o scroll exatamente no ponto em que o card final abre
-        footerLockY = window.scrollY;
-        window.scrollTo({ top: footerLockY, behavior: "auto" });
-        lockBody(); // ✅ trava total (sem “bounce”)
-      } else {
-        footerLockY = null;
-        unlockBody();
-      }
-    }
-
-    // mantém o scroll preso no limite final enquanto estiver dockado
-    window.addEventListener("scroll", () => {
-      if(!footerDocked || footerLockY == null) return;
-      if(Math.abs(window.scrollY - footerLockY) > 2){
-        window.scrollTo({ top: footerLockY, behavior: "auto" });
-      }
-    }, { passive: true });
-function updateFooterGate(){
+      function updateFooterGate(){
         const isLast = flowStarted && sceneIndex === (cards.length - 1);
-        const fullyOpen = (p >= 0.985 && (phase === "open" || phase === "opening") && pTarget >= 0.999);
+        const openingOrOpen = (phase === "opening" || phase === "open");
+        const visible = p >= 0.12; // fixa cedo (ajuste fino)
 
-        // ✅ quando o card final abrir por completo, trava o “fim” do scroll e fixa no limite inferior
-        setFooterDocked(isLast && fullyOpen);
-
-        if(isLast && fullyOpen) document.body.classList.add("footer-ready");
-        else document.body.classList.remove("footer-ready");
+        setFooterDocked(isLast && openingOrOpen && visible);
       }
-function render(){
+
+      function render(){
         if(prefersReduced()){
           hideAllCards();
           if(flowStarted){
@@ -2538,12 +2443,8 @@ function render(){
             pTarget = 1;
             resetActiveScroll();
           } else {
-          phase = "closed";
-          const lastIdx = cards.length - 1;
-          if(sceneIndex === lastIdx && pendingDir === +1){
-            setFooterDocked(true);
+            phase = "closed";
           }
-        }
         }
 
         updateBubbles(flowStarted, sceneIndex, p);
@@ -2593,8 +2494,12 @@ function render(){
 
           const dy = scaledWheelDelta(e);
 
-          // ✅ fim do scroll: com o card final dockado, ignora scroll para baixo
-          if(footerDocked){ e.preventDefault(); wheelAccum = 0; scheduleRender(); return; }
+          // ✅ rodapé fixo: descer ignora / subir volta
+          if(footerDocked && dy > 0){
+            wheelAccum = 0;
+            scheduleRender();
+            return;
+          }
 
           const res = tryScrollInsideActiveCard(dy);
           if(res.used && res.moved){
@@ -2647,8 +2552,12 @@ function render(){
         if(flowStarted && !prefersReduced()){
           e.preventDefault();
 
-          // ✅ fim do scroll: com o card final dockado, ignora gesto para baixo
-          if(footerDocked){ e.preventDefault(); touchAccum = 0; scheduleRender(); return; }
+          // ✅ rodapé fixo: descer ignora / subir volta
+          if(footerDocked && dy > 0){
+            touchAccum = 0;
+            scheduleRender();
+            return;
+          }
 
           const res = tryScrollInsideActiveCard(dy);
           if(res.used && res.moved){
@@ -2680,7 +2589,7 @@ function render(){
       window.addEventListener("touchend", () => { touchY = null; touchAccum = 0; }, { passive: true });
 
       function goToScene(i){
-      setFooterDocked(false);
+        setFooterDocked(false);
         if(i < 0){ returnToHeroWithSameMotion(); return; }
 
         if(!flowStarted){
@@ -2715,8 +2624,6 @@ function render(){
 
       /* ========================= CONTATO ========================= */
       const CONTACT = {
-        // ✅ Troque pelos dados reais:
-        // Ex.: "5551999999999" (55 + DDD + número) só números
         phoneDigits: "55DDDN9XXXXXXX",
         email: "karen@seudominio.com"
       };
