@@ -1347,37 +1347,32 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
     body.is-locked{ overflow: hidden; touch-action: none; }
 
     
-    /* ========================= FOOTER DOCK (após fechar o último card) ========================= */
-    body.footer-docked footer.site-footer{
-      position: fixed;
-      left: 50%;
-      bottom: calc(14px + var(--safeB));
-      transform: translate3d(-50%, 0, 0);
-      width: min(980px, calc(100vw - 28px));
-      margin: 0;
+    
+    /* ========================= FOOTER DOCK (card final travado no fim) ========================= */
+    body.footer-docked{
+      overscroll-behavior: none;
+    }
+    body.footer-docked #rodape{
+      position: fixed !important;
+      left: 50% !important;
+      bottom: calc(14px + var(--safeB)) !important;
+      top: auto !important;
+
+      transform: translate3d(-50%, 0, 0) !important;
+      width: min(860px, calc(100vw - 28px)) !important;
+
       opacity: 1 !important;
       filter: none !important;
       pointer-events: auto !important;
-      z-index: 2200;
-
-      /* mais nítido/visível */
-      background: rgba(255,255,255, .78);
-      border: 1px solid rgba(0,0,0,.10);
-      box-shadow: 0 18px 60px rgba(0,0,0,.12);
-      backdrop-filter: blur(18px) saturate(1.08);
-      -webkit-backdrop-filter: blur(18px) saturate(1.08);
+      z-index: 2200 !important;
     }
-    body.footer-docked .footer-meta{ color: rgba(20,28,32,.78); }
-    body.footer-docked .footer-copy{ color: rgba(20,28,32,.62); }
-    body.footer-docked .ig-btn{ background: rgba(255,255,255,.56); border-color: rgba(0,0,0,.10); color: rgba(26,93,102,.72); }
     @media (max-width: 720px){
-      body.footer-docked footer.site-footer{
-        width: calc(100vw - 20px);
-        bottom: calc(12px + var(--safeB));
+      body.footer-docked #rodape{
+        width: calc(100vw - 20px) !important;
+        bottom: calc(12px + var(--safeB)) !important;
       }
     }
-
-    .footer-grid{ display:flex; align-items:center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.footer-grid{ display:flex; align-items:center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
     .footer-left{ display:flex; flex-direction: column; gap: 6px; min-width: 240px; flex: 1 1 340px; }
     .footer-meta{ display:flex; flex-wrap: wrap; gap: 10px; align-items: baseline; color: var(--footerInk); font-size: 12px; line-height: 1.6; letter-spacing: .02em; }
     .footer-meta b{ color: rgba(20,28,32,.62); font-weight: 850; letter-spacing: .06em; text-transform: uppercase; font-size: 11px; }
@@ -2424,6 +2419,7 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
       function requestNext(){
         if(!canTrigger()) return;
         if(phase === "opening") return;
+        if(footerDocked) return; // ✅ já estamos no fim
         setLock();
         closeScene();
         pendingDir = +1;
@@ -2453,18 +2449,42 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
       
     /* ========================= FOOTER DOCK (após fechar o último card) ========================= */
     let footerDocked = false;
+    let footerLockY = null;
+
     function setFooterDocked(v){
-      footerDocked = !!v;
+      const next = !!v;
+      if(next === footerDocked) return;
+
+      footerDocked = next;
       document.body.classList.toggle("footer-docked", footerDocked);
+
+      if(footerDocked){
+        // trava o scroll exatamente no ponto em que o card final abre
+        footerLockY = window.scrollY;
+        window.scrollTo({ top: footerLockY, behavior: "auto" });
+      } else {
+        footerLockY = null;
+      }
     }
+
+    // mantém o scroll preso no limite final enquanto estiver dockado
+    window.addEventListener("scroll", () => {
+      if(!footerDocked || footerLockY == null) return;
+      if(Math.abs(window.scrollY - footerLockY) > 2){
+        window.scrollTo({ top: footerLockY, behavior: "auto" });
+      }
+    }, { passive: true });
 function updateFooterGate(){
         const isLast = flowStarted && sceneIndex === (cards.length - 1);
         const fullyOpen = (phase === "open" && p >= 0.995);
+
+        // ✅ quando o card final abrir por completo, trava o “fim” do scroll e fixa no limite inferior
+        setFooterDocked(isLast && fullyOpen);
+
         if(isLast && fullyOpen) document.body.classList.add("footer-ready");
         else document.body.classList.remove("footer-ready");
       }
-
-      function render(){
+function render(){
         if(prefersReduced()){
           hideAllCards();
           if(flowStarted){
@@ -2568,6 +2588,10 @@ function updateFooterGate(){
           e.preventDefault();
 
           const dy = scaledWheelDelta(e);
+
+          // ✅ fim do scroll: com o card final dockado, ignora scroll para baixo
+          if(footerDocked && dy > 0){ wheelAccum = 0; scheduleRender(); return; }
+
           const res = tryScrollInsideActiveCard(dy);
           if(res.used && res.moved){
             scheduleRender();
@@ -2618,6 +2642,10 @@ function updateFooterGate(){
 
         if(flowStarted && !prefersReduced()){
           e.preventDefault();
+
+          // ✅ fim do scroll: com o card final dockado, ignora gesto para baixo
+          if(footerDocked && dy > 0){ touchAccum = 0; scheduleRender(); return; }
+
           const res = tryScrollInsideActiveCard(dy);
           if(res.used && res.moved){
             scheduleRender();
