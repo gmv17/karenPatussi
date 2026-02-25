@@ -1350,8 +1350,9 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
     
     /* ========================= FOOTER DOCK (card final travado no fim) ========================= */
     body.footer-docked{
-      /* mantém o rodapé fixo, mas NÃO trava o scroll (usuário consegue subir) */
-      overscroll-behavior: contain;
+      overflow: hidden;
+      overscroll-behavior: none;
+      touch-action: none;
     }
     body.footer-docked #rodape{
       position: fixed !important;
@@ -2450,6 +2451,7 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
       
     /* ========================= FOOTER DOCK (após fechar o último card) ========================= */
     let footerDocked = false;
+    let footerLockY = null;
 
     function setFooterDocked(v){
       const next = !!v;
@@ -2458,10 +2460,23 @@ body.is-loading{ overflow: hidden !important; height: 100%; touch-action: none; 
       footerDocked = next;
       document.body.classList.toggle("footer-docked", footerDocked);
 
-      // Importante: não travar o body aqui.
-      // O rodapé fica fixo, mas o usuário pode rolar para cima para voltar aos cards.
+      if(footerDocked){
+        // trava o scroll exatamente no ponto em que o card final abre
+        footerLockY = window.scrollY;
+        window.scrollTo({ top: footerLockY, behavior: "auto" });
+        lockBody(); // ✅ trava total (sem “bounce”)
+      } else {
+        footerLockY = null;
+        unlockBody();
+      }
     }
-}
+
+    // mantém o scroll preso no limite final enquanto estiver dockado
+    window.addEventListener("scroll", () => {
+      if(!footerDocked || footerLockY == null) return;
+      if(Math.abs(window.scrollY - footerLockY) > 2){
+        window.scrollTo({ top: footerLockY, behavior: "auto" });
+      }
     }, { passive: true });
 function updateFooterGate(){
         const isLast = flowStarted && sceneIndex === (cards.length - 1);
@@ -2578,19 +2593,9 @@ function render(){
 
           const dy = scaledWheelDelta(e);
 
-          // ✅ fim do scroll: com o card final dockado
-          // - scroll para baixo: ignora (mantém no “fim”)
-          // - scroll para cima: destrava e permite voltar para os cards
-          if(footerDocked){
-            if(dy > 0){
-              wheelAccum = 0;
-              scheduleRender();
-              return;
-            } else {
-              setFooterDocked(false);
-              wheelAccum = 0;
-            }
-          }
+          // ✅ fim do scroll: com o card final dockado, ignora scroll para baixo
+          if(footerDocked){ e.preventDefault(); wheelAccum = 0; scheduleRender(); return; }
+
           const res = tryScrollInsideActiveCard(dy);
           if(res.used && res.moved){
             scheduleRender();
