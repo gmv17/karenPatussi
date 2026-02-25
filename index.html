@@ -131,14 +131,14 @@
       --contactRevealEase: cubic-bezier(.16, 1, .18, 1);
 
       /* ✅ RODAPÉ (quase imperceptível) */
-      --footerGlass: .18;
-      --footerBlur: 18px;
-      --footerBorder: rgba(0,0,0,.05);
-      --footerInk: rgba(20,28,32,.55);
-      --footerInk2: rgba(20,28,32,.42);
-      --footerRadius: 16px;
+      --footerGlass: .62;
+      --footerBlur: 16px;
+      --footerBorder: rgba(0,0,0,.10);
+      --footerInk: rgba(20,28,32,.82);
+      --footerInk2: rgba(20,28,32,.70);
+      --footerRadius: 18px;
       --footerPadY: 14px;
-      --footerPadX: 14px;
+      --footerPadX: 16px;
     }
 
     /* ========================= RESPONSIVO (tablet/mobile) ========================= */
@@ -1219,83 +1219,74 @@
     .section-card.is-active{ pointer-events: auto; animation: none; }
     body.is-locked{ overflow: hidden; touch-action: none; }
 
-    /* ========================= RODAPÉ (aparece só no final) ========================= */
+    /* ========================= RODAPÉ (aparece APÓS fechar o último card) ========================= */
     .footer-wrap{
-      position: relative; z-index: 2;
-      padding: 0 calc(var(--padX) + var(--safeR)) calc(34px + var(--safeB)) calc(var(--padX) + var(--safeL));
-    }
-    .footer-spacer{ height: 110px; }
-    footer.site-footer{
-      /* ✅ Dock fixo no rodapé (só aparece depois que o último card FECHA) */
       position: fixed;
       left: 50%;
       bottom: calc(14px + var(--safeB));
+      transform: translateX(-50%);
+      z-index: 880; /* acima do conteúdo */
       width: min(980px, calc(100vw - (var(--padX) * 2)));
+      pointer-events: none; /* só libera quando aparece */
+    }
+
+    footer.site-footer{
+      width: 100%;
       margin: 0;
       border-radius: var(--footerRadius);
-
-      /* estado "invisível" */
-      opacity: 0;
-      pointer-events: none;
-      filter: blur(1.2px);
-      transform: translate3d(-50%, 12px, 0);
-
-      /* glass default (bem leve) */
       background: rgba(255,255,255, var(--footerGlass));
       border: 1px solid var(--footerBorder);
-      backdrop-filter: blur(var(--footerBlur)) saturate(1.02);
-      -webkit-backdrop-filter: blur(var(--footerBlur)) saturate(1.02);
-      box-shadow: 0 18px 60px rgba(0,0,0,.06);
+      backdrop-filter: blur(var(--footerBlur)) saturate(1.06);
+      -webkit-backdrop-filter: blur(var(--footerBlur)) saturate(1.06);
+      box-shadow: 0 16px 48px rgba(0,0,0,.12);
       padding: var(--footerPadY) var(--footerPadX);
 
-      transition:
-        opacity 680ms cubic-bezier(.16,1,.18,1),
-        transform 680ms cubic-bezier(.16,1,.18,1),
-        filter 680ms cubic-bezier(.16,1,.18,1),
-        background 680ms cubic-bezier(.16,1,.18,1),
-        border-color 680ms cubic-bezier(.16,1,.18,1),
-        box-shadow 680ms cubic-bezier(.16,1,.18,1);
-    }
-    body.footer-ready footer.site-footer{
-      /* ✅ Visível e nítido */
-      opacity: 1;
-      pointer-events: auto;
-      filter: blur(0);
-      transform: translate3d(-50%, 0, 0);
+      opacity: 0;
+      transform: translate3d(0, 16px, 0);
+      filter: none; /* ✅ nítido */
+      pointer-events: none;
 
-      /* mais "card" e mais legível */
-      background: rgba(255,255,255,.78);
-      border-color: rgba(0,0,0,.08);
-      box-shadow: 0 22px 72px rgba(0,0,0,.10);
+      transition: opacity 520ms cubic-bezier(.16,1,.18,1),
+                  transform 520ms cubic-bezier(.16,1,.18,1);
     }
+
+    /* ✅ aparece só quando o último card FECHOU */
+    body.footer-docked footer.site-footer{
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+      pointer-events: auto;
+    }
+
     .footer-grid{ display:flex; align-items:center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
     .footer-left{ display:flex; flex-direction: column; gap: 6px; min-width: 240px; flex: 1 1 340px; }
-    .footer-meta{ display:flex; flex-wrap: wrap; gap: 10px; align-items: baseline; color: var(--footerInk); font-size: 12px; line-height: 1.6; letter-spacing: .02em; }
-    .footer-meta b{ color: rgba(20,28,32,.62); font-weight: 850; letter-spacing: .06em; text-transform: uppercase; font-size: 11px; }
-    .footer-copy{ color: var(--footerInk2); font-size: 11.5px; line-height: 1.55; letter-spacing: .02em; }
+    .footer-meta{ display:flex; flex-wrap: wrap; gap: 10px; align-items: baseline; color: var(--footerInk); font-size: 12.5px; line-height: 1.6; letter-spacing: .02em; }
+    .footer-meta b{ color: rgba(20,28,32,.86); font-weight: 900; letter-spacing: .08em; text-transform: uppercase; font-size: 11px; }
+    .footer-copy{ color: var(--footerInk2); font-size: 12px; line-height: 1.55; letter-spacing: .02em; }
+
     .footer-right{ display:flex; align-items:center; gap: 10px; flex: 0 0 auto; }
 
     .ig-btn{
       display:inline-flex; align-items:center; justify-content:center;
-      width: 38px; height: 38px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.22);
-      border: 1px solid rgba(0,0,0,.05);
-      box-shadow: 0 12px 28px rgba(0,0,0,.05);
-      color: rgba(20,28,32,.58);
+      width: 40px; height: 40px; border-radius: 999px;
+      background: rgba(255,255,255,.38);
+      border: 1px solid rgba(0,0,0,.10);
+      box-shadow: 0 12px 26px rgba(0,0,0,.10);
+      color: rgba(20,28,32,.78);
       text-decoration: none;
       transition: transform .18s ease, background .18s ease, color .18s ease, border-color .18s ease;
       -webkit-tap-highlight-color: transparent;
     }
-    .ig-btn svg{ width: 18px; height: 18px; display:block; fill: currentColor; opacity: .92; }
+    .ig-btn svg{ width: 18px; height: 18px; display:block; fill: currentColor; opacity: .95; }
     @media (hover:hover) and (pointer:fine){
-      .ig-btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.28); border-color: rgba(26,93,102,.10); color: rgba(26,93,102,.70); }
+      .ig-btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.48); border-color: rgba(26,93,102,.18); color: rgba(26,93,102,.82); }
     }
     .ig-btn:active{ transform: translateY(0) scale(.99); }
 
     @media (prefers-reduced-motion: reduce){
-      footer.site-footer{ opacity: 1 !important; transform: none !important; filter: none !important; pointer-events: auto !important; }
+      footer.site-footer{ transition: none !important; }
+      body.footer-docked footer.site-footer{ opacity: 1 !important; transform: none !important; }
     }
+}
   </style>
 </head>
 
@@ -1755,8 +1746,6 @@
 
     <!-- RODAPÉ -->
     <div class="footer-wrap" aria-label="Rodapé">
-      <div class="footer-spacer" aria-hidden="true"></div>
-
       <footer class="site-footer" id="siteFooter">
         <div class="footer-grid">
           <div class="footer-left">
@@ -2309,16 +2298,14 @@
         returnToHeroAfterClose = false;
       }
 
-      /* ✅ FOOTER gate: só libera quando o último card estiver 100% aberto */
-      function updateFooterGate(){
-        /* ✅ Agora o rodapé aparece quando o ÚLTIMO card (Contato) FECHA */
-        const isLast = flowStarted && sceneIndex === (cards.length - 1);
-        const fullyClosed = (phase === "closed" && p <= 0.005);
-        if(isLast && fullyClosed) document.body.classList.add("footer-ready");
-        else document.body.classList.remove("footer-ready");
-      }
-
-      function render(){
+      /* ========================= FOOTER (dock após fechar o último card) ========================= */
+    function updateFooterDock(){
+      const lastIdx = cards.length - 1;
+      const lastClosed = flowStarted && sceneIndex === lastIdx && phase === "closed" && p <= 0.001 && pTarget <= 0.001;
+      if(lastClosed) document.body.classList.add("footer-docked");
+      else document.body.classList.remove("footer-docked");
+    }
+function render(){
         if(prefersReduced()){
           hideAllCards();
           if(flowStarted){
@@ -2332,7 +2319,7 @@
             c.style.zIndex = "30";
             setActiveCardClass();
           }
-          updateFooterGate();
+          updateFooterDock();
           return;
         }
 
@@ -2356,7 +2343,7 @@
             p = 0; pTarget = 0;
             hideAllCards();
             updateBubbles(flowStarted, sceneIndex, p);
-            updateFooterGate();
+            updateFooterDock();
             returnToHeroWithSameMotion();
             return;
           }
@@ -2373,7 +2360,7 @@
         }
 
         updateBubbles(flowStarted, sceneIndex, p);
-        updateFooterGate();
+        updateFooterDock();
 
         const needsMore = Math.abs(p - pTarget) > 0.001 || phase === "opening" || phase === "closing";
         if(needsMore) scheduleRender();
@@ -2647,7 +2634,7 @@
       applyHeroState();
       hideAllCards();
       updateBubbles(flowStarted, 0, 0);
-      updateFooterGate();
+      updateFooterDock();
       scheduleRender();
       initContact();
     })();
