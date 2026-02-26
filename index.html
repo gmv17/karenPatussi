@@ -141,36 +141,7 @@
       --footerPadX: 14px;
     }
 
-    
-    /* ========================= RESPONSIVO (desktop amplo) ========================= */
-    @media (min-width: 1200px){
-      :root{
-        /* Mais "respiro" e cards maiores no desktop, sem esticar demais */
-        --padX: clamp(24px, 5vw, 110px);
-        --cardMaxW: 1120px;
-        --cardFullVw: 86;
-        --cardFromVw: 9;
-
-        /* Tipografia um pouco mais confortável em telas grandes */
-        --paraSize: 15px;
-        --paraLine: 1.92;
-      }
-
-      /* Mantém a árvore proporcional em widescreens */
-      .tree{
-        width: min(60vw, 72vh);
-        height: min(60vw, 72vh);
-      }
-
-      /* "Sobre" mais editorial no desktop */
-      .about .editorial{ grid-template-columns: 260px 1fr; gap: 18px; }
-      .about .portrait{ max-height: 360px; }
-
-      /* Deixa a assinatura/role menos espremida */
-      .role{ max-width: 520px; }
-    }
-
-/* ========================= RESPONSIVO (tablet/mobile) ========================= */
+    /* ========================= RESPONSIVO (tablet/mobile) ========================= */
     @media (max-width: 980px){
       :root{
         --padX: clamp(14px, 5vw, 44px);
