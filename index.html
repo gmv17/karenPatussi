@@ -1207,13 +1207,13 @@
     /* ========================= TRACK / CARDS ========================= */
     .cards-track{
       position: relative; z-index: 2;
-      padding: calc(var(--cardStickyTop) + 10px) calc(var(--padX) + var(--safeR)) calc(56px + var(--safeB)) calc(var(--padX) + var(--safeL));
+      padding: calc(var(--cardStickyTop) + 10px) calc(var(--padX) + var(--safeR)) calc(20px + var(--safeB)) calc(var(--padX) + var(--safeL));
     }
     @media (max-width: 720px){
-      .cards-track{ padding: calc(var(--cardStickyTop) + 8px) calc(var(--padX) + var(--safeR)) calc(46px + var(--safeB)) calc(var(--padX) + var(--safeL)); }
+      .cards-track{ padding: calc(var(--cardStickyTop) + 8px) calc(var(--padX) + var(--safeR)) calc(20px + var(--safeB)) calc(var(--padX) + var(--safeL)); }
     }
     .cards-track .track-spacer{ height: 320vh; }
-    @media (max-width: 720px){ .cards-track .track-spacer{ height: 900vh; } }
+    @media (max-width: 720px){ .cards-track .track-spacer{ height: 520vh; } }
 
     .cards-stage{
       position: sticky;
@@ -3003,6 +3003,69 @@ document.querySelectorAll('.drawer-nav a').forEach(link => {
     }
   });
 });
+</script>
+
+
+<script>
+// FOOTER FINISH LINE (BOTTOM LOCK)
+// Ao chegar no rodapé, ele encaixa no fundo (classe footer-docked) e impede scroll para baixo.
+(() => {
+  const footer = document.getElementById('rodape');
+  if (!footer) return;
+
+  let lockY = 0;
+  let locked = false;
+  let touchStartY = null;
+
+  function computeLockY(){
+    const h = footer.offsetHeight || 0;
+    const pad = 16;
+    lockY = footer.offsetTop - (window.innerHeight - h - pad);
+    if (!isFinite(lockY) || lockY < 0) lockY = 0;
+  }
+
+  function setLocked(on){
+    if (locked === on) return;
+    locked = on;
+    document.body.classList.toggle('footer-docked', on);
+    if (on) window.scrollTo(0, lockY);
+  }
+
+  function check(){
+    // trava quando a página chega no ponto onde o rodapé encosta no fundo
+    if (window.scrollY >= lockY - 2) setLocked(true);
+    else setLocked(false);
+  }
+
+  // mantém o scroll “clampado” quando travado
+  function clamp(){
+    if (locked && window.scrollY > lockY + 1) window.scrollTo(0, lockY);
+  }
+
+  window.addEventListener('resize', () => { computeLockY(); check(); }, { passive: true });
+  window.addEventListener('scroll', () => { clamp(); if (!locked) check(); }, { passive: true });
+
+  // bloqueia rolagem para baixo quando travado (mouse wheel)
+  window.addEventListener('wheel', (e) => {
+    if (locked && e.deltaY > 0) e.preventDefault();
+  }, { passive: false });
+
+  // bloqueia swipe para cima (que rola para baixo) quando travado (touch)
+  window.addEventListener('touchstart', (e) => {
+    touchStartY = e.touches && e.touches[0] ? e.touches[0].clientY : null;
+  }, { passive: true });
+
+  window.addEventListener('touchmove', (e) => {
+    if (!locked || touchStartY == null) return;
+    const y = e.touches && e.touches[0] ? e.touches[0].clientY : touchStartY;
+    const dy = touchStartY - y; // dy > 0 = swipe para cima (scroll para baixo)
+    if (dy > 0) e.preventDefault();
+  }, { passive: false });
+
+  computeLockY();
+  check();
+})();
+// /FOOTER FINISH LINE (BOTTOM LOCK)
 </script>
 
 </body>
