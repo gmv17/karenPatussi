@@ -879,8 +879,6 @@
       scrollbar-color: rgba(0,0,0,.18) transparent;
       scrollbar-gutter: stable both-edges;
     }
-
-    /* Scrollbar discreta (desktop) */
     @media (min-width: 981px){
       .card-scroll::-webkit-scrollbar{ width: 3px; height: 3px; }
       .card-scroll::-webkit-scrollbar-track{ background: transparent; }
@@ -901,62 +899,7 @@
     @supports (-webkit-touch-callout: none){ .card-scroll{ overflow: overlay; } }
     .card-scroll::before, .card-scroll::after{ content: none !important; display: none !important; }
 
-    /* ========================= MOBILE (touch) UX ========================= */
-    /* Mobile: sem scroll interno + "Ver mais" para expandir o card inteiro */
-    @media (hover:none) and (pointer:coarse){
-      /* remove scroll interno */
-      .card-scroll{
-        max-height: none;
-        overflow: visible;
-        padding-bottom: 0;
-        scrollbar-width: none;
-        scrollbar-color: transparent transparent;
-      }
-      .card-scroll::-webkit-scrollbar{ width:0 !important; height:0 !important; display:none !important; }
-
-      /* card colapsado */
-      .section-card{
-        max-height: 62vh;
-        overflow: hidden;
-        transition: max-height 600ms cubic-bezier(.4,0,.2,1);
-      }
-      .section-card.is-expanded{
-        max-height: 200vh;
-      }
-
-      /* botão discreto (apenas mobile) */
-      .more-toggle{
-        margin-top: 10px;
-        align-self: flex-start;
-        display:inline-flex;
-        align-items:center;
-        gap: 8px;
-        padding: 9px 11px;
-        border-radius: 999px;
-        background: rgba(255,255,255,.60);
-        border: 1px solid rgba(0,0,0,.07);
-        box-shadow: 0 12px 22px rgba(0,0,0,.06);
-        color: rgba(20,28,32,.80);
-        font-weight: 850;
-        letter-spacing: .12em;
-        text-transform: uppercase;
-        font-size: 11px;
-        cursor: pointer;
-        -webkit-tap-highlight-color: transparent;
-        user-select: none;
-      }
-      .more-toggle:active{ transform: scale(.99); }
-      .more-toggle .chev{ width: 14px; height: 14px; opacity: .9; transform: rotate(90deg); transition: transform 240ms ease; }
-      .section-card.is-expanded .more-toggle .chev{ transform: rotate(-90deg); }
-      .section-card.is-expanded .more-toggle .txt::after{ content: " ver menos"; }
-      .more-toggle .txt::after{ content: " ver mais"; }
-
-      /* mais espaço pro dedo */
-      @media (max-width: 720px){
-        .section-card{ max-height: 64vh; }
-      }
-    }
-/* ========================= SOBRE ========================= */
+    /* ========================= SOBRE ========================= */
     .about{ display: grid; gap: 14px; margin-top: 6px; }
     .about .editorial{ display:grid; grid-template-columns: 190px 1fr; gap: 14px; align-items: start; }
     @media (min-width: 720px){ .about .editorial{ grid-template-columns: 220px 1fr; gap: 16px; } }
@@ -1416,53 +1359,90 @@
     @media (prefers-reduced-motion: reduce){
       footer.site-footer{ opacity: 1 !important; transform: none !important; filter: none !important; pointer-events: auto !important; }
     }
-    /* ======================= MOBILE FIX: cards fixos + movimento suave ======================= */
-    @media (max-width: 720px){
-      :root{
-        --cardLag: .80;          /* transições mais sedosas */
-        --sceneLockMs: 920ms;    /* evita pulos duplos no touch */
-      }
+  
+    /* ========================= MOBILE STACK (TOUCH) ========================= */
+    @media (max-width: 768px), (pointer: coarse){
+      /* esconde a barra de rolagem (continua rolando normalmente) */
+      html, body{ scrollbar-width: none; }
+      html::-webkit-scrollbar, body::-webkit-scrollbar{ display:none; }
 
-      /* cards "fixados" no viewport */
+      /* cards em fluxo vertical (sem "cena" travada) */
       .cards-stage{
-        position: fixed;
-        left: 0;
-        right: 0;
-        top: var(--cardStickyTop);
-        height: calc(100dvh - var(--cardStickyTop) - 10px);
-        min-height: 520px;
-        z-index: 30;
+        position: relative;
+        top: auto;
+        height: auto;
+        min-height: unset;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        place-items: unset;
+        pointer-events: auto;
+        padding: 10px 0 24px;
       }
 
-      /* reduz a necessidade de scroll de página no mobile */
-      .cards-track .track-spacer{ height: 120vh; }
+      .section-card{
+        grid-area: auto;
+        position: relative;
+        width: min(96vw, 560px);
+        max-width: 560px;
+        margin: 0 auto;
+        opacity: 1 !important;
+        filter: none !important;
+        transform: none !important;
+        will-change: auto;
+        pointer-events: auto !important;
 
-      /* remove scroll interno / barra dentro do card (o "ver mais" expande) */
+        /* tamanho padrão (colapsado) */
+        max-height: 76vh;
+        overflow: hidden;
+        transition: max-height .55s cubic-bezier(.16,1,.18,1);
+      }
+      .section-card.is-expanded{
+        max-height: 9999px;
+        overflow: visible;
+      }
+
+      /* remove scroll interno no mobile */
       .card-scroll{
         max-height: none !important;
-        overflow: hidden !important;
-        -webkit-overflow-scrolling: auto !important;
-        overscroll-behavior: none !important;
+        overflow: visible !important;
+        padding-bottom: 0 !important;
       }
 
-      /* esconde barras de rolagem (sem travar o layout) */
-      html, body{ scrollbar-width: none; }
-      html::-webkit-scrollbar, body::-webkit-scrollbar{ width:0; height:0; }
-
-      /* sem "hover" / micro efeitos no touch */
-      .section-card{ filter: none; }
-    }
-
-  
-    /* ======================= DESKTOP: flutuação sutil (apenas notebook/desktop) ======================= */
-    @keyframes cardDesktopFloat{
-      0%, 100%{ transform: translate3d(var(--tx), calc(var(--ty) - var(--cardFloatAmp)), 0) scale(var(--ts)); }
-      50%{ transform: translate3d(var(--tx), calc(var(--ty) + var(--cardFloatAmp)), 0) scale(var(--ts)); }
-    }
-    @media (min-width: 721px){
-      .section-card.is-active{
-        animation: cardDesktopFloat var(--cardFloatDur) ease-in-out infinite;
+      /* fade discreto + botão ver mais */
+      .card-more{
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 22px 18px 14px;
+        display: grid;
+        place-items: center;
+        pointer-events: none;
       }
+      .card-more::before{
+        content:"";
+        position:absolute;
+        inset: 0;
+        background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,.82));
+        opacity: .9;
+      }
+      .card-more-btn{
+        position: relative;
+        pointer-events: auto;
+        border: 1px solid rgba(0,0,0,.10);
+        background: rgba(255,255,255,.66);
+        backdrop-filter: blur(10px) saturate(1.05);
+        -webkit-backdrop-filter: blur(10px) saturate(1.05);
+        color: rgba(16,22,26,.92);
+        font-family: var(--bodyFont);
+        font-size: 13px;
+        padding: 10px 14px;
+        border-radius: 999px;
+        letter-spacing: .02em;
+        opacity: .92;
+      }
+      .section-card.is-expanded .card-more::before{ opacity: .0; }
     }
 
   </style>
@@ -1482,41 +1462,90 @@
     .progress-bar {
       height: 6px !important;
     }
-    /* ======================= MOBILE FIX: cards fixos + movimento suave ======================= */
-    @media (max-width: 720px){
-      :root{
-        --cardLag: .80;          /* transições mais sedosas */
-        --sceneLockMs: 920ms;    /* evita pulos duplos no touch */
-      }
+  
+    /* ========================= MOBILE STACK (TOUCH) ========================= */
+    @media (max-width: 768px), (pointer: coarse){
+      /* esconde a barra de rolagem (continua rolando normalmente) */
+      html, body{ scrollbar-width: none; }
+      html::-webkit-scrollbar, body::-webkit-scrollbar{ display:none; }
 
-      /* cards "fixados" no viewport */
+      /* cards em fluxo vertical (sem "cena" travada) */
       .cards-stage{
-        position: fixed;
-        left: 0;
-        right: 0;
-        top: var(--cardStickyTop);
-        height: calc(100dvh - var(--cardStickyTop) - 10px);
-        min-height: 520px;
-        z-index: 30;
+        position: relative;
+        top: auto;
+        height: auto;
+        min-height: unset;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        place-items: unset;
+        pointer-events: auto;
+        padding: 10px 0 24px;
       }
 
-      /* reduz a necessidade de scroll de página no mobile */
-      .cards-track .track-spacer{ height: 120vh; }
+      .section-card{
+        grid-area: auto;
+        position: relative;
+        width: min(96vw, 560px);
+        max-width: 560px;
+        margin: 0 auto;
+        opacity: 1 !important;
+        filter: none !important;
+        transform: none !important;
+        will-change: auto;
+        pointer-events: auto !important;
 
-      /* remove scroll interno / barra dentro do card (o "ver mais" expande) */
+        /* tamanho padrão (colapsado) */
+        max-height: 76vh;
+        overflow: hidden;
+        transition: max-height .55s cubic-bezier(.16,1,.18,1);
+      }
+      .section-card.is-expanded{
+        max-height: 9999px;
+        overflow: visible;
+      }
+
+      /* remove scroll interno no mobile */
       .card-scroll{
         max-height: none !important;
-        overflow: hidden !important;
-        -webkit-overflow-scrolling: auto !important;
-        overscroll-behavior: none !important;
+        overflow: visible !important;
+        padding-bottom: 0 !important;
       }
 
-      /* esconde barras de rolagem (sem travar o layout) */
-      html, body{ scrollbar-width: none; }
-      html::-webkit-scrollbar, body::-webkit-scrollbar{ width:0; height:0; }
-
-      /* sem "hover" / micro efeitos no touch */
-      .section-card{ filter: none; }
+      /* fade discreto + botão ver mais */
+      .card-more{
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 22px 18px 14px;
+        display: grid;
+        place-items: center;
+        pointer-events: none;
+      }
+      .card-more::before{
+        content:"";
+        position:absolute;
+        inset: 0;
+        background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,.82));
+        opacity: .9;
+      }
+      .card-more-btn{
+        position: relative;
+        pointer-events: auto;
+        border: 1px solid rgba(0,0,0,.10);
+        background: rgba(255,255,255,.66);
+        backdrop-filter: blur(10px) saturate(1.05);
+        -webkit-backdrop-filter: blur(10px) saturate(1.05);
+        color: rgba(16,22,26,.92);
+        font-family: var(--bodyFont);
+        font-size: 13px;
+        padding: 10px 14px;
+        border-radius: 999px;
+        letter-spacing: .02em;
+        opacity: .92;
+      }
+      .section-card.is-expanded .card-more::before{ opacity: .0; }
     }
 
   </style>
@@ -2012,6 +2041,56 @@
       const clamp = (v,a,b)=>Math.max(a,Math.min(b,v));
       const prefersReduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+      const isMobileMode = () =>
+        window.matchMedia("(max-width: 768px), (pointer: coarse)").matches;
+
+      function enableMobileStack(){
+        document.body.classList.add("mobile-stack");
+        // garante que nada fique travado no body
+        document.body.style.overflow = "";
+        document.documentElement.style.overflow = "";
+      }
+
+      function initMobileVerMais(){
+        const cards = [...document.querySelectorAll("[data-card]")];
+        if(!cards.length) return;
+
+        // mede depois do layout estabilizar
+        requestAnimationFrame(() => {
+          cards.forEach(card => {
+            // limpa botões antigos (se houver)
+            const old = card.querySelector(".card-more");
+            if(old) old.remove();
+
+            card.classList.remove("is-expanded");
+
+            // se não houver corte, não cria botão
+            const needsMore = (card.scrollHeight - card.clientHeight) > 24;
+            if(!needsMore) return;
+
+            const more = document.createElement("div");
+            more.className = "card-more";
+
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "card-more-btn";
+            btn.textContent = "Ver mais";
+
+            btn.addEventListener("click", () => {
+              const open = card.classList.toggle("is-expanded");
+              btn.textContent = open ? "Ver menos" : "Ver mais";
+              // quando abrir, garante que o topo do card fique confortável no viewport
+              if(open){
+                card.scrollIntoView({ behavior: "smooth", block: "start" });
+              }
+            });
+
+            more.appendChild(btn);
+            card.appendChild(more);
+          });
+        });
+      }
+
       function getMsVar(name, fallbackMs){
         const raw = getComputedStyle(root).getPropertyValue(name).trim();
         if(!raw) return fallbackMs;
@@ -2447,6 +2526,12 @@
 
       function handoffToCards(){
         if(flowStarted) return;
+        if(isMobileMode()){
+          topbar.classList.add("show-brand");
+          const el = document.getElementById("cardsStage") || document.querySelector(".cards-stage");
+          if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+          return;
+        }
         setFooterDocked(false);
         flowStarted = true;
         topbar.classList.add("show-brand");
@@ -2499,8 +2584,6 @@
         if(phase === "opening") return;
         if(footerDocked) return; // no fim: não passa do rodapé
         setLock();
-        // fecha "Ver mais" antes de trocar de card (melhor no mobile)
-        cards.forEach(c => c.classList.remove("is-expanded"));
         closeScene();
         pendingDir = +1;
         returnToHeroAfterClose = false;
@@ -2518,8 +2601,6 @@
 
         if(sceneIndex === 0){
           setLock();
-        // fecha "Ver mais" antes de trocar de card (melhor no mobile)
-        cards.forEach(c => c.classList.remove("is-expanded"));
           closeScene();
           pendingDir = -1;
           returnToHeroAfterClose = true;
@@ -2527,8 +2608,6 @@
         }
 
         setLock();
-        // fecha "Ver mais" antes de trocar de card (melhor no mobile)
-        cards.forEach(c => c.classList.remove("is-expanded"));
         closeScene();
         pendingDir = -1;
         returnToHeroAfterClose = false;
@@ -2634,6 +2713,7 @@
       }
 
       window.addEventListener("wheel", (e) => {
+        if(isMobileMode()) return;
         if(document.body.classList.contains("is-loading")) return;
         if(overlay.classList.contains("is-open")) return;
 
@@ -2690,6 +2770,7 @@
       }, { passive: true });
 
       window.addEventListener("touchmove", (e) => {
+        if(isMobileMode()) return;
         if(document.body.classList.contains("is-loading")) return;
         if(overlay.classList.contains("is-open")) return;
         if(touchY == null) return;
@@ -2736,79 +2817,6 @@
       }, { passive: false });
 
       window.addEventListener("touchend", () => { touchY = null; touchAccum = 0; }, { passive: true });
-
-      /* ========================= MOBILE HELPERS ========================= */
-      // "Ver mais" (expande o card atual) + botões Prev/Next (touch)
-      function setupMoreButtons(){
-        // só no touch (mobile/tablet)
-        const isTouch = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
-        if(!isTouch) return;
-
-        cards.forEach((card) => {
-          const sc = card.querySelector("[data-scroll]");
-          const inner = card.querySelector(".card-inner");
-          if(!sc || !inner) return;
-
-          // evita duplicar
-          if(inner.querySelector(".more-toggle")) return;
-
-          const btn = document.createElement("button");
-          btn.type = "button";
-          btn.className = "more-toggle";
-          btn.setAttribute("aria-expanded", "false");
-          btn.setAttribute("aria-label", "Ver mais");
-
-          btn.innerHTML = `
-            <svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M9.5 5.5L16 12l-6.5 6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <span class="txt"></span>
-          `;
-
-          btn.addEventListener("click", () => {
-            const next = !card.classList.contains("is-expanded");
-
-            // um card expandido por vez (mantém fluido no mobile)
-            cards.forEach(c => c.classList.remove("is-expanded"));
-            card.classList.toggle("is-expanded", next);
-
-            btn.setAttribute("aria-expanded", next ? "true" : "false");
-            btn.setAttribute("aria-label", next ? "Ver menos" : "Ver mais");
-
-            // garante leitura confortável após expandir
-            if(next){
-              requestAnimationFrame(() => {
-                card.scrollIntoView({ block: "start", behavior: prefersReduced() ? "auto" : "smooth" });
-              });
-            }
-          });
-
-          // coloca logo após o scroll interno
-          sc.insertAdjacentElement("afterend", btn);
-        });
-      }
-
-      function setupMobileNav(){
-        const btnPrev = document.getElementById("btnPrevCard");
-        const btnNext = document.getElementById("btnNextCard");
-        if(!btnPrev || !btnNext) return;
-
-        btnPrev.addEventListener("click", () => {
-          if(phase === "opening" || phase === "closing") return;
-          cards.forEach(c => c.classList.remove("is-expanded"));
-          requestPrev();
-        });
-
-        btnNext.addEventListener("click", () => {
-          if(phase === "opening" || phase === "closing") return;
-          cards.forEach(c => c.classList.remove("is-expanded"));
-          requestNext();
-        });
-      }
-
-      setupMoreButtons();
-      setupMobileNav();
-
 
       function goToScene(i){
         setFooterDocked(false);
@@ -2957,23 +2965,27 @@
       // init
       buildBubbles();
       applyHeroState();
+
+      if(isMobileMode()){
+        enableMobileStack();
+        // no mobile: cards em lista, sem engine de troca por gesto
+        updateFooterGate();
+        initMobileVerMais();
+        // recalcula "ver mais" ao girar a tela
+        window.addEventListener("resize", () => {
+          if(isMobileMode()) initMobileVerMais();
+        }, { passive: true });
+
+        initContact();
+        return;
+      }
+
       hideAllCards();
       updateBubbles(flowStarted, 0, 0);
       updateFooterGate();
       scheduleRender();
       initContact();
-    })();
+})();
   </script>
-
-  <!-- MOBILE NAV (touch) -->
-  <div class="mobile-nav" id="mobileNav" aria-label="Navegação de cards (mobile)">
-    <button class="navbtn" id="btnPrevCard" type="button" aria-label="Card anterior">
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-    <button class="navbtn" id="btnNextCard" type="button" aria-label="Próximo card">
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9.5 5.5L16 12l-6.5 6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-  </div>
-
 </body>
 </html>
