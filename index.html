@@ -170,7 +170,7 @@
         --sceneLockMs: 1180ms;
         --cardStickyTop: calc(var(--headerH) + var(--safeT) + 14px);
         --cardScrollMaxH: calc(100dvh - var(--cardStickyTop) - 18px);
-        --cardEndSpacer: 84px;
+        --cardEndSpacer: 96px;
         --bubbleSize: 16px;
       }
     }
@@ -1213,7 +1213,8 @@
       .cards-track{ padding: calc(var(--cardStickyTop) + 8px) calc(var(--padX) + var(--safeR)) calc(46px + var(--safeB)) calc(var(--padX) + var(--safeL)); }
     }
     .cards-track .track-spacer{ height: 320vh; }
-    @media (max-width: 720px){ .cards-track .track-spacer{ height: 420vh; } }
+    @media (max-width: 720px){ .cards-track .track-spacer{ height: 500vh; } }
+    @media (max-width: 420px){ .cards-track .track-spacer{ height: 520vh; } }
 
     .cards-stage{
       position: sticky;
