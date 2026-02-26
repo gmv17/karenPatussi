@@ -1374,18 +1374,19 @@
         min-height: unset;
         display: flex;
         flex-direction: column;
-        gap: 14px;
+        gap: 36px;
         place-items: unset;
         pointer-events: auto;
-        padding: 10px 0 24px;
+        padding: 20px 0 56px;
       }
 
       .section-card{
         grid-area: auto;
         position: relative;
-        width: min(96vw, 560px);
+        width: min(94vw, 560px);
         max-width: 560px;
         margin: 0 auto;
+        scroll-margin-top: calc(var(--headerH) + var(--safeT) + 18px);
         opacity: 1 !important;
         filter: none !important;
         transform: none !important;
@@ -2971,6 +2972,69 @@
         // no mobile: cards em lista, sem engine de troca por gesto
         updateFooterGate();
         initMobileVerMais();
+
+        // Mantém o HERO com o mesmo comportamento do desktop:
+        // no mobile, o "step" acompanha o scroll (hero -> cards).
+        function setupMobileHeroScroll(){
+          const heroStage = document.querySelector(".hero-stage");
+          const cardEls = [...document.querySelectorAll(".cards-stage .section-card")];
+          if(!heroStage || !cardEls.length) return;
+
+          let ticking = false;
+          const topOffset = () => getNumVar("--cardStickyTop", 80) + 18;
+
+          const computeStep = () => {
+            const y = window.scrollY || window.pageYOffset || 0;
+            const heroH = heroStage.offsetHeight || window.innerHeight;
+
+            // 0 = hero, 1..n = cards
+            let next = 0;
+
+            if(y > heroH * 0.30){
+              const targetTop = topOffset();
+              let bestI = 0;
+              let bestD = Infinity;
+
+              cardEls.forEach((el, i) => {
+                const r = el.getBoundingClientRect();
+                // ignora cards muito acima e já fora da tela
+                if(r.bottom < targetTop + 40) return;
+                const d = Math.abs(r.top - targetTop);
+                if(d < bestD){
+                  bestD = d;
+                  bestI = i;
+                }
+              });
+
+              next = 1 + bestI;
+            }
+
+            next = clamp(next, 0, 1 + cardEls.length); // margem segura
+
+            if(next !== step){
+              step = next;
+              flowStarted = step >= 1;
+              applyHeroState();
+              updateFooterGate();
+            }
+          };
+
+          const onScroll = () => {
+            if(ticking) return;
+            ticking = true;
+            requestAnimationFrame(() => {
+              ticking = false;
+              computeStep();
+            });
+          };
+
+          window.addEventListener("scroll", onScroll, { passive: true });
+          // estado inicial
+          computeStep();
+        }
+
+        setupMobileHeroScroll();
+
         // recalcula "ver mais" ao girar a tela
         window.addEventListener("resize", () => {
           if(isMobileMode()) initMobileVerMais();
