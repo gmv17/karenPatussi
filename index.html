@@ -1429,6 +1429,53 @@ footer, .footer, #footer{
   position: relative;
 }
 
+
+/* ===== MOBILE: touch-only, cards "mais fixos" (scroll-snap) + sem barras ===== */
+@media (max-width: 768px){
+
+  /* rolagem só touch (sem wheel dependency) */
+  body{ overscroll-behavior-y: contain; -webkit-overflow-scrolling: touch; }
+
+  /* esconde a barra de rolagem, mantendo o scroll */
+  html, body{
+    scrollbar-width: none; /* Firefox */
+  }
+  html::-webkit-scrollbar, body::-webkit-scrollbar{
+    width: 0;
+    height: 0;
+    display: none;
+  }
+
+  /* sensação de cards "fixos": snap vertical */
+  body{
+    scroll-snap-type: y proximity;
+  }
+
+  .card{
+    scroll-snap-align: start;
+    scroll-snap-stop: normal;
+
+    /* padrão mais estável */
+    min-height: 68vh;
+    margin: 88px auto !important; /* MAIS espaço entre cards */
+  }
+
+  /* mais respiro interno (pra leitura e dedo) */
+  .card{
+    padding-bottom: 26px !important;
+  }
+}
+
+
+@media (max-width: 768px){
+  .card, .card *{
+    scrollbar-width: none;
+  }
+  .card::-webkit-scrollbar, .card *::-webkit-scrollbar{
+    width:0; height:0; display:none;
+  }
+}
+
 </style>
 
   <style>
