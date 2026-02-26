@@ -879,6 +879,8 @@
       scrollbar-color: rgba(0,0,0,.18) transparent;
       scrollbar-gutter: stable both-edges;
     }
+
+    /* Scrollbar discreta (desktop) */
     @media (min-width: 981px){
       .card-scroll::-webkit-scrollbar{ width: 3px; height: 3px; }
       .card-scroll::-webkit-scrollbar-track{ background: transparent; }
@@ -899,7 +901,62 @@
     @supports (-webkit-touch-callout: none){ .card-scroll{ overflow: overlay; } }
     .card-scroll::before, .card-scroll::after{ content: none !important; display: none !important; }
 
-    /* ========================= SOBRE ========================= */
+    /* ========================= MOBILE (touch) UX ========================= */
+    /* Mobile: sem scroll interno + "Ver mais" para expandir o card inteiro */
+    @media (hover:none) and (pointer:coarse){
+      /* remove scroll interno */
+      .card-scroll{
+        max-height: none;
+        overflow: visible;
+        padding-bottom: 0;
+        scrollbar-width: none;
+        scrollbar-color: transparent transparent;
+      }
+      .card-scroll::-webkit-scrollbar{ width:0 !important; height:0 !important; display:none !important; }
+
+      /* card colapsado */
+      .section-card{
+        max-height: 62vh;
+        overflow: hidden;
+        transition: max-height 600ms cubic-bezier(.4,0,.2,1);
+      }
+      .section-card.is-expanded{
+        max-height: 200vh;
+      }
+
+      /* botão discreto (apenas mobile) */
+      .more-toggle{
+        margin-top: 10px;
+        align-self: flex-start;
+        display:inline-flex;
+        align-items:center;
+        gap: 8px;
+        padding: 9px 11px;
+        border-radius: 999px;
+        background: rgba(255,255,255,.60);
+        border: 1px solid rgba(0,0,0,.07);
+        box-shadow: 0 12px 22px rgba(0,0,0,.06);
+        color: rgba(20,28,32,.80);
+        font-weight: 850;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        font-size: 11px;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+      }
+      .more-toggle:active{ transform: scale(.99); }
+      .more-toggle .chev{ width: 14px; height: 14px; opacity: .9; transform: rotate(90deg); transition: transform 240ms ease; }
+      .section-card.is-expanded .more-toggle .chev{ transform: rotate(-90deg); }
+      .section-card.is-expanded .more-toggle .txt::after{ content: " ver menos"; }
+      .more-toggle .txt::after{ content: " ver mais"; }
+
+      /* mais espaço pro dedo */
+      @media (max-width: 720px){
+        .section-card{ max-height: 64vh; }
+      }
+    }
+/* ========================= SOBRE ========================= */
     .about{ display: grid; gap: 14px; margin-top: 6px; }
     .about .editorial{ display:grid; grid-template-columns: 190px 1fr; gap: 14px; align-items: start; }
     @media (min-width: 720px){ .about .editorial{ grid-template-columns: 220px 1fr; gap: 16px; } }
@@ -2588,6 +2645,79 @@
 
       window.addEventListener("touchend", () => { touchY = null; touchAccum = 0; }, { passive: true });
 
+      /* ========================= MOBILE HELPERS ========================= */
+      // "Ver mais" (expande o card atual) + botões Prev/Next (touch)
+      function setupMoreButtons(){
+        // só no touch (mobile/tablet)
+        const isTouch = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+        if(!isTouch) return;
+
+        cards.forEach((card) => {
+          const sc = card.querySelector("[data-scroll]");
+          const inner = card.querySelector(".card-inner");
+          if(!sc || !inner) return;
+
+          // evita duplicar
+          if(inner.querySelector(".more-toggle")) return;
+
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "more-toggle";
+          btn.setAttribute("aria-expanded", "false");
+          btn.setAttribute("aria-label", "Ver mais");
+
+          btn.innerHTML = `
+            <svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M9.5 5.5L16 12l-6.5 6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="txt"></span>
+          `;
+
+          btn.addEventListener("click", () => {
+            const next = !card.classList.contains("is-expanded");
+
+            // um card expandido por vez (mantém fluido no mobile)
+            cards.forEach(c => c.classList.remove("is-expanded"));
+            card.classList.toggle("is-expanded", next);
+
+            btn.setAttribute("aria-expanded", next ? "true" : "false");
+            btn.setAttribute("aria-label", next ? "Ver menos" : "Ver mais");
+
+            // garante leitura confortável após expandir
+            if(next){
+              requestAnimationFrame(() => {
+                card.scrollIntoView({ block: "start", behavior: prefersReduced() ? "auto" : "smooth" });
+              });
+            }
+          });
+
+          // coloca logo após o scroll interno
+          sc.insertAdjacentElement("afterend", btn);
+        });
+      }
+
+      function setupMobileNav(){
+        const btnPrev = document.getElementById("btnPrevCard");
+        const btnNext = document.getElementById("btnNextCard");
+        if(!btnPrev || !btnNext) return;
+
+        btnPrev.addEventListener("click", () => {
+          if(phase === "opening" || phase === "closing") return;
+          cards.forEach(c => c.classList.remove("is-expanded"));
+          requestPrev();
+        });
+
+        btnNext.addEventListener("click", () => {
+          if(phase === "opening" || phase === "closing") return;
+          cards.forEach(c => c.classList.remove("is-expanded"));
+          requestNext();
+        });
+      }
+
+      setupMoreButtons();
+      setupMobileNav();
+
+
       function goToScene(i){
         setFooterDocked(false);
         if(i < 0){ returnToHeroWithSameMotion(); return; }
@@ -2742,5 +2872,16 @@
       initContact();
     })();
   </script>
+
+  <!-- MOBILE NAV (touch) -->
+  <div class="mobile-nav" id="mobileNav" aria-label="Navegação de cards (mobile)">
+    <button class="navbtn" id="btnPrevCard" type="button" aria-label="Card anterior">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="navbtn" id="btnNextCard" type="button" aria-label="Próximo card">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9.5 5.5L16 12l-6.5 6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+
 </body>
 </html>
