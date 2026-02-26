@@ -1416,6 +1416,55 @@
     @media (prefers-reduced-motion: reduce){
       footer.site-footer{ opacity: 1 !important; transform: none !important; filter: none !important; pointer-events: auto !important; }
     }
+    /* ======================= MOBILE FIX: cards fixos + movimento suave ======================= */
+    @media (max-width: 720px){
+      :root{
+        --cardLag: .80;          /* transições mais sedosas */
+        --sceneLockMs: 920ms;    /* evita pulos duplos no touch */
+      }
+
+      /* cards "fixados" no viewport */
+      .cards-stage{
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: var(--cardStickyTop);
+        height: calc(100dvh - var(--cardStickyTop) - 10px);
+        min-height: 520px;
+        z-index: 30;
+      }
+
+      /* reduz a necessidade de scroll de página no mobile */
+      .cards-track .track-spacer{ height: 120vh; }
+
+      /* remove scroll interno / barra dentro do card (o "ver mais" expande) */
+      .card-scroll{
+        max-height: none !important;
+        overflow: hidden !important;
+        -webkit-overflow-scrolling: auto !important;
+        overscroll-behavior: none !important;
+      }
+
+      /* esconde barras de rolagem (sem travar o layout) */
+      html, body{ scrollbar-width: none; }
+      html::-webkit-scrollbar, body::-webkit-scrollbar{ width:0; height:0; }
+
+      /* sem "hover" / micro efeitos no touch */
+      .section-card{ filter: none; }
+    }
+
+  
+    /* ======================= DESKTOP: flutuação sutil (apenas notebook/desktop) ======================= */
+    @keyframes cardDesktopFloat{
+      0%, 100%{ transform: translate3d(var(--tx), calc(var(--ty) - var(--cardFloatAmp)), 0) scale(var(--ts)); }
+      50%{ transform: translate3d(var(--tx), calc(var(--ty) + var(--cardFloatAmp)), 0) scale(var(--ts)); }
+    }
+    @media (min-width: 721px){
+      .section-card.is-active{
+        animation: cardDesktopFloat var(--cardFloatDur) ease-in-out infinite;
+      }
+    }
+
   </style>
 
   <style>
@@ -1433,6 +1482,43 @@
     .progress-bar {
       height: 6px !important;
     }
+    /* ======================= MOBILE FIX: cards fixos + movimento suave ======================= */
+    @media (max-width: 720px){
+      :root{
+        --cardLag: .80;          /* transições mais sedosas */
+        --sceneLockMs: 920ms;    /* evita pulos duplos no touch */
+      }
+
+      /* cards "fixados" no viewport */
+      .cards-stage{
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: var(--cardStickyTop);
+        height: calc(100dvh - var(--cardStickyTop) - 10px);
+        min-height: 520px;
+        z-index: 30;
+      }
+
+      /* reduz a necessidade de scroll de página no mobile */
+      .cards-track .track-spacer{ height: 120vh; }
+
+      /* remove scroll interno / barra dentro do card (o "ver mais" expande) */
+      .card-scroll{
+        max-height: none !important;
+        overflow: hidden !important;
+        -webkit-overflow-scrolling: auto !important;
+        overscroll-behavior: none !important;
+      }
+
+      /* esconde barras de rolagem (sem travar o layout) */
+      html, body{ scrollbar-width: none; }
+      html::-webkit-scrollbar, body::-webkit-scrollbar{ width:0; height:0; }
+
+      /* sem "hover" / micro efeitos no touch */
+      .section-card{ filter: none; }
+    }
+
   </style>
 </head>
 
@@ -2413,6 +2499,8 @@
         if(phase === "opening") return;
         if(footerDocked) return; // no fim: não passa do rodapé
         setLock();
+        // fecha "Ver mais" antes de trocar de card (melhor no mobile)
+        cards.forEach(c => c.classList.remove("is-expanded"));
         closeScene();
         pendingDir = +1;
         returnToHeroAfterClose = false;
@@ -2430,6 +2518,8 @@
 
         if(sceneIndex === 0){
           setLock();
+        // fecha "Ver mais" antes de trocar de card (melhor no mobile)
+        cards.forEach(c => c.classList.remove("is-expanded"));
           closeScene();
           pendingDir = -1;
           returnToHeroAfterClose = true;
@@ -2437,6 +2527,8 @@
         }
 
         setLock();
+        // fecha "Ver mais" antes de trocar de card (melhor no mobile)
+        cards.forEach(c => c.classList.remove("is-expanded"));
         closeScene();
         pendingDir = -1;
         returnToHeroAfterClose = false;
