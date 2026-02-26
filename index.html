@@ -2981,10 +2981,14 @@
       }
 
       hideAllCards();
-      updateBubbles(flowStarted, 0, 0);
-      updateFooterGate();
-      scheduleRender();
-      initContact();
+        updateBubbles(flowStarted, 0, 0);
+        updateFooterGate();
+
+        // Desktop: garante que os cards apareçam sem depender do primeiro gesto no hero
+        goToScene(0);
+
+        scheduleRender();
+        initContact();
 })();
   </script>
 
