@@ -1377,6 +1377,58 @@
 
 }
 
+
+/* ===== MOBILE: cards em lista vertical (touch) + sem flutuação ===== */
+@media (max-width: 768px){
+
+  /* garante scroll vertical normal */
+  html, body{ height:auto !important; overflow-x:hidden; }
+
+  /* hero continua como desktop (não mexemos nele aqui) */
+
+  /* qualquer wrapper/scene que tentava "pinar" cards vira fluxo normal */
+  .cards, .cardsWrap, .cards-container, .stack, .stackWrap, .sections, .scene, .pin, .pinWrap, .rail{
+    position: relative !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    transform: none !important;
+  }
+
+  /* cards em coluna, sem transform/float e com espaçamento destacado */
+  .card{
+    position: relative !important;
+    inset: auto !important;
+    transform: none !important;
+    opacity: 1 !important;
+    animation: none !important;
+    will-change: auto !important;
+
+    width: min(92vw, 720px) !important;
+    margin: 72px auto !important; /* MAIS espaço entre cards */
+  }
+
+  /* evita "scroll interno" do card no mobile */
+  .card .content, .card .body, .card .scroll, .card .inner{
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  /* rodapé no final da página (não fixo na viewport) */
+  footer, .footer, #footer{
+    position: static !important;
+    inset: auto !important;
+    transform: none !important;
+    margin: 88px 0 24px !important;
+  }
+}
+
+
+/* Footer: no final da página por padrão */
+footer, .footer, #footer{
+  position: relative;
+}
+
 </style>
 
   <style>
@@ -1886,6 +1938,10 @@
   </div>
 
   <script>
+
+/* ===== Guard de responsividade ===== */
+const IS_MOBILE = window.matchMedia("(max-width: 768px)").matches;
+
     (() => {
       const root = document.documentElement;
       const loader = document.getElementById("loader");
