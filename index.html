@@ -381,17 +381,18 @@
       z-index: 800;
       height: calc(var(--headerH) + var(--safeT));
       padding-top: var(--safeT);
-      padding-left: calc(14px + var(--safeL));
-      padding-right: calc(14px + var(--safeR));
+      padding-left: calc(18px + var(--safeL));
+      padding-right: calc(18px + var(--safeR));
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap: 12px;
+      gap: 18px;
 
-      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.72));
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.76));
+      backdrop-filter: blur(12px) saturate(1.08);
+      -webkit-backdrop-filter: blur(12px) saturate(1.08);
       border-bottom: 1px solid rgba(0,0,0,.07);
+      box-shadow: 0 10px 30px rgba(0,0,0,.04);
 
       transform: translateZ(0);
       opacity: 1;
@@ -466,39 +467,85 @@
       white-space: nowrap;
     }
 
-    .menu-btn{
-      appearance: none;
-      border: 1px solid rgba(0,0,0,.08);
-      background: rgba(255,255,255,.52);
-      border-radius: 999px;
-      padding: 10px 12px;
+    .bar-nav{
+      margin-left: auto;
       display:flex;
       align-items:center;
-      justify-content:center;
-      cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
-      z-index: 810;
-      box-shadow: 0 10px 30px rgba(0,0,0,.06);
-      transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+      gap: 8px;
+      padding: 6px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.58);
+      border: 1px solid rgba(0,0,0,.06);
+      box-shadow: 0 10px 26px rgba(0,0,0,.05);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
-    .menu-btn:hover{ background: rgba(255,255,255,.68); box-shadow: 0 14px 34px rgba(0,0,0,.09); }
-    .menu-btn:active{ transform: translateY(1px); }
+    .bar-nav a{
+      text-decoration: none;
+      color: rgba(20,28,32,.84);
+      font-family: var(--bodyFont);
+      font-size: 13px;
+      font-weight: 650;
+      letter-spacing: .02em;
+      padding: 10px 14px;
+      border-radius: 999px;
+      transition:
+        color .22s ease,
+        background .22s ease,
+        transform .22s ease,
+        box-shadow .22s ease;
+      white-space: nowrap;
+    }
+    .bar-nav a:hover{
+      color: var(--brand);
+      background: rgba(26,93,102,.08);
+      transform: translateY(-1px);
+    }
+    .bar-nav a.is-active{
+      color: var(--brand);
+      background: rgba(26,93,102,.10);
+      box-shadow: inset 0 0 0 1px rgba(26,93,102,.10);
+    }
+    .bar-nav a.cta{
+      background: rgba(26,93,102,.10);
+      color: var(--brand);
+      box-shadow: inset 0 0 0 1px rgba(26,93,102,.12);
+    }
+    .bar-nav a.cta:hover{
+      background: rgba(26,93,102,.14);
+    }
 
-    .burger{ width: 18px; height: 12px; position: relative; display:block; }
-    .burger span{
-      position: absolute; left:0; right:0;
-      height: 2px; background: rgba(17,17,17,.64); border-radius: 999px;
-      transition: transform .28s cubic-bezier(.2,.9,.2,1), top .28s cubic-bezier(.2,.9,.2,1), bottom .28s cubic-bezier(.2,.9,.2,1), opacity .2s ease;
+    @media (max-width: 980px){
+      .topbar{
+        padding-left: calc(12px + var(--safeL));
+        padding-right: calc(12px + var(--safeR));
+      }
+      .bar-nav{
+        gap: 4px;
+        padding: 4px;
+      }
+      .bar-nav a{
+        font-size: 12px;
+        padding: 9px 10px;
+      }
     }
-    .burger span:nth-child(1){ top:0; }
-    .burger span:nth-child(2){ top:5px; }
-    .burger span:nth-child(3){ bottom:0; }
-    .menu-btn.is-open .burger span:nth-child(1){ transform: rotate(45deg); top: 5px; }
-    .menu-btn.is-open .burger span:nth-child(2){ opacity: 0; }
-    .menu-btn.is-open .burger span:nth-child(3){ transform: rotate(-45deg); bottom: 5px; }
+
+    @media (max-width: 760px){
+      .topbar{
+        overflow-x: auto;
+        justify-content: flex-start;
+        gap: 12px;
+        scrollbar-width: none;
+      }
+      .topbar::-webkit-scrollbar{ display:none; }
+      .bar-nav{
+        flex: 0 0 auto;
+      }
+    }
 
     /* ========================= MENU OVERLAY ========================= */
-    .overlay{
+    .overlay{ display:none !important;
+
       position: fixed;
       inset: 0;
       z-index: 900;
@@ -1281,7 +1328,7 @@
     </div>
   </div>
 
-  <!-- TOPBAR -->
+    <!-- TOPBAR -->
   <header class="topbar" id="topbar" aria-label="Barra superior">
     <div class="bar-title" id="barTitle">
       <span class="logo-mark" aria-hidden="true"></span>
@@ -1289,44 +1336,15 @@
       <span class="bar-name">Káren Patussi</span>
     </div>
 
-    <button class="menu-btn" id="openMenu" type="button" aria-label="Abrir menu" aria-controls="menuOverlay" aria-expanded="false">
-      <span class="burger" aria-hidden="true"><span></span><span></span><span></span></span>
-    </button>
+    <nav class="bar-nav" aria-label="Navegação principal">
+      <a href="#home" data-link data-index="-1">Home</a>
+      <a href="#sobre" data-link data-index="0">Sobre</a>
+      <a href="#como-funciona" data-link data-index="1">Como funciona</a>
+      <a href="#areas" data-link data-index="2">Áreas</a>
+      <a href="#faq" data-link data-index="3">FAQ</a>
+      <a href="#contato" data-link data-index="4" class="cta">Contato</a>
+    </nav>
   </header>
-
-  <!-- MENU OVERLAY -->
-  <div class="overlay" id="menuOverlay" aria-hidden="true">
-    <div class="overlay-bg" id="overlayBg" aria-hidden="true"></div>
-
-    <aside class="drawer" role="dialog" aria-modal="true" aria-label="Menu" tabindex="-1" id="drawer">
-      <span class="grain" aria-hidden="true"></span>
-
-      <div class="drawer-head">
-        <div class="drawer-brand" aria-hidden="true">
-          <strong>Káren Patussi</strong>
-          <span>Menu</span>
-        </div>
-        <button class="close-btn" id="closeMenu" type="button" aria-label="Fechar menu">
-          <span class="close-x" aria-hidden="true"></span>
-        </button>
-      </div>
-
-      <nav class="drawer-nav" aria-label="Navegação">
-        <a href="#home" data-link data-index="-1">Home</a>
-        <a href="#sobre" data-link data-index="0">Sobre</a>
-        <a href="#como-funciona" data-link data-index="1">Como funciona</a>
-        <a href="#areas" data-link data-index="2">Áreas de atuação</a>
-        <a href="#faq" data-link data-index="3">FAQ</a>
-        <a href="#contato" data-link data-index="4">Contato</a>
-      </nav>
-
-      <div class="menu-logo" aria-hidden="true">
-        <div class="logo-box">
-          <img src="imagens/Logo.PNG" alt="">
-        </div>
-      </div>
-    </aside>
-  </div>
 
   <!-- SITE -->
   <div class="site" id="siteRoot">
@@ -1354,7 +1372,7 @@
     <section class="cards-track" id="cardsTrack" aria-label="Conteúdo">
       <div class="cards-stage" id="cardsStage">
 
-                <!-- SOBRE -->
+        <!-- SOBRE -->
         <article class="section-card glass-card card--about" data-card data-origin="tl" id="sobre">
           <div class="card-inner">
             <div class="card-kicker">Quem eu sou</div>
@@ -1367,21 +1385,70 @@
                   <div class="portrait" aria-label="Foto da psicóloga">
                     <img
                       src="imagens/Foto Karen Sobre.png"
+                      onerror="this.src='https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=900&q=80';"
                       alt="Foto profissional da psicóloga">
                   </div>
 
                   <div class="lead" aria-label="Síntese profissional">
                     <p>
-                      Sou psicóloga com mais de <strong>20 anos de atuação profissional</strong> nas esferas pública e privada, com vasta experiência no atendimento a <strong>crianças, adolescentes, adultos, casais e famílias</strong>. Ao longo da minha trajetória, especializei-me em <strong>Terapia Sexual</strong>, <strong>Psicoterapia Sistêmica</strong> e em <strong>Estudos de Gênero</strong>, com foco na subjetividade feminina e suas intersecções com a sociedade e a cultura.
-                    </p>
-                    <p>
-                      Para além de certificações internacionais, a vivência de ter residido em <strong>outros três países</strong> proporcionou-me uma imersão cultural aprofundada, conferindo-me uma sensibilidade fenomenológica diferenciada. Bagagem esta que considero fundamental para o acolhimento ético de populações em transição, <strong>migrantes e expatriados</strong>.
-                    </p>
-                    <p>
-                      Mantendo um compromisso rigoroso com a atualização técnica e a excelência clínica, sou membro da <strong>Sociedade Brasileira de Estudos em Sexualidade Humana (SBRASH)</strong> e da <strong>Sociedade Portuguesa de Sexologia Clínica (SPSC)</strong>. Atualmente, dedico minha prática ao atendimento de <strong>adultos, casais e famílias</strong>, integrando ética, técnica e sensibilidade humana no cuidado em saúde mental.
+                      Sou <strong>psicóloga clínica</strong>, com experiência iniciada em <strong>2006</strong> no atendimento a
+                      crianças, adolescentes e adultos — com foco na promoção da saúde mental e emocional.
+                      Após mais de uma década no <strong>setor público</strong>, retomei o consultório em <strong>Itapema (SC)</strong>
+                      e ampliei minha prática com especialização em <strong>Sexualidade Humana e Terapia Sexual</strong>.
                     </p>
                   </div>
                 </div>
+
+                <div class="grid" aria-label="Público e trajetória">
+                  <section class="box" aria-label="Para quem atendo">
+                    <h3>Para quem atendo</h3>
+                    <p>
+                      Atendo principalmente <strong>adultos</strong>, <strong>casais</strong> e <strong>famílias</strong>,
+                      com escuta qualificada e responsabilidade técnica.
+                    </p>
+                  </section>
+
+                  <section class="box" aria-label="Trajetória">
+                    <h3>Trajetória</h3>
+                    <p>
+                      Minha trajetória inclui forte atuação em contextos de <strong>vulnerabilidade social</strong>, violência e fragilidade psicossocial,
+                      o que amplia meu olhar para as diferentes realidades e marcas emocionais que atravessam a vida das pessoas.
+                    </p>
+                  </section>
+                </div>
+
+                <div class="grid" aria-label="Temas e sexologia">
+                  <section class="box" aria-label="Principais temas">
+                    <h3>Principais temas</h3>
+                    <ul>
+                      <li>Relações afetivas e conflitos conjugais</li>
+                      <li>Autoestima, ansiedade e depressão</li>
+                      <li>Luto e processos de mudança</li>
+                      <li>Comunicação e construção de vínculos saudáveis</li>
+                    </ul>
+                  </section>
+
+                  <section class="box" aria-label="Sexologia">
+                    <h3>Sexologia</h3>
+                    <ul>
+                      <li>Saúde sexual, intimidade e prazer</li>
+                      <li>Comunicação nas relações</li>
+                      <li>Manejo de dificuldades e disfunções sexuais</li>
+                      <li>Reconexão com o corpo e com o desejo</li>
+                    </ul>
+                  </section>
+                </div>
+
+                <section class="box" aria-label="Principais competências">
+                  <h3>Principais competências</h3>
+                  <div class="skills-grid" aria-label="Lista de competências">
+                    <div class="skill-item">Psicoterapia</div>
+                    <div class="skill-item">Sexualidade</div>
+                    <div class="skill-item">Acolhimento</div>
+                    <div class="skill-item">Gestão de conflitos</div>
+                    <div class="skill-item">Autoestima</div>
+                  </div>
+                </section>
 
                 <section class="box" aria-label="Formação acadêmica e complementar">
                   <h3>Formação</h3>
@@ -1446,6 +1513,11 @@
 
                   </div>
                 </section>
+
+                <div class="cta-soft" aria-label="Convite">
+                  <span class="dot" aria-hidden="true"></span>
+                  Se você busca um espaço de escuta qualificada, estou à disposição.
+                </div>
 
                 <div class="end-spacer" aria-hidden="true"></div>
               </div>
@@ -1546,12 +1618,12 @@
       const loader = document.getElementById("loader");
       const topbar = document.getElementById("topbar");
 
-      const overlay = document.getElementById("menuOverlay");
-      const openBtn = document.getElementById("openMenu");
-      const closeBtn = document.getElementById("closeMenu");
-      const overlayBg = document.getElementById("overlayBg");
-      const drawer = document.getElementById("drawer");
-      const links = Array.from(document.querySelectorAll(".drawer-nav a[data-link]"));
+      const overlay = null;
+      const openBtn = null;
+      const closeBtn = null;
+      const overlayBg = null;
+      const drawer = null;
+      const links = Array.from(document.querySelectorAll(".bar-nav a[data-link]"));
 
       const heroStage = document.getElementById("home");
       const cardsTrack = document.getElementById("cardsTrack");
@@ -1576,6 +1648,32 @@
 
       links.forEach((a, i) => a.style.setProperty("--i", String(i)));
 
+      function updateActiveNav(index){
+        links.forEach((a) => {
+          const linkIndex = Number(a.dataset.index);
+          a.classList.toggle("is-active", linkIndex === index);
+        });
+      }
+
+      
+      links.forEach((a) => {
+        a.addEventListener("click", (e) => {
+          e.preventDefault();
+          const idx = Number(a.dataset.index);
+
+          if(idx < 0){
+            window.scrollTo({ top: 0, behavior: prefersReduced() ? "auto" : "smooth" });
+            return;
+          }
+
+          if(typeof goToScene === "function"){
+            goToScene(idx);
+          }else{
+            document.getElementById(a.getAttribute("href").slice(1))?.scrollIntoView({ behavior: prefersReduced() ? "auto" : "smooth" });
+          }
+        });
+      });
+
       function finishLoader(){
         if(!loader) return;
         document.body.classList.add("is-ready");
@@ -1589,30 +1687,8 @@
       if(document.readyState === "complete") window.setTimeout(finishLoader, Math.max(3000, LOADER_DUR));
       window.addEventListener("pageshow", (e) => { if(e.persisted) finishLoader(); });
 
-      function openMenu(){
-        if(overlay.classList.contains("is-open")) return;
-        overlay.classList.add("is-open");
-        overlay.setAttribute("aria-hidden","false");
-        openBtn.setAttribute("aria-expanded", "true");
-        openBtn.classList.add("is-open");
-        document.body.style.overflow = "hidden";
-        setTimeout(() => {
-          const first = drawer.querySelector(".drawer-nav a[data-link]");
-          (first || drawer).focus();
-        }, 0);
-      }
-      function closeMenu(){
-        if(!overlay.classList.contains("is-open")) return;
-        overlay.classList.remove("is-open");
-        overlay.setAttribute("aria-hidden","true");
-        openBtn.setAttribute("aria-expanded", "false");
-        openBtn.classList.remove("is-open");
-        document.body.style.overflow = "";
-      }
-      openBtn.addEventListener("click", () => overlay.classList.contains("is-open") ? closeMenu() : openMenu());
-      closeBtn.addEventListener("click", closeMenu);
-      overlayBg.addEventListener("click", closeMenu);
-      window.addEventListener("keydown", (e) => { if(e.key === "Escape" && overlay.classList.contains("is-open")) closeMenu(); });
+      function openMenu(){}
+      function closeMenu(){}
 
       /* =========================
          HERO: 1 scroll = nome some; frase some automaticamente
@@ -1639,6 +1715,7 @@
       }
 
       function applyHeroState(){
+        updateActiveNav(step >= 3 ? sceneIndex : -1);
         const liftName = getNumVar("--liftName", 140);
         const liftRole = getNumVar("--liftRole", 120);
         const blurMax  = getNumVar("--fadeBlur", 1.6);
@@ -1657,7 +1734,7 @@
         root.style.setProperty("--roleO", String(roleO));
         root.style.setProperty("--roleB", roleB + "px");
 
-        topbar.classList.toggle("show-brand", flowStarted || step >= 1);
+        topbar.classList.toggle("show-brand", step >= 2);
       }
 
       function setCooldown(){
@@ -1711,6 +1788,7 @@
             animating = false;
             if(step < 3) unlockBody();
             if(step >= 3) handoffToCards();
+            updateActiveNav(sceneIndex);
             resolve();
           }, dur + 40);
         });
