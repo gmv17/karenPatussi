@@ -2462,7 +2462,91 @@
 
       window.addEventListener("touchend", () => { touchY = null; touchAccum = 0; }, { passive: true });
 
+      function isTypingContext(){
+        const el = document.activeElement;
+        if(!el) return false;
+        const tag = (el.tagName || "").toUpperCase();
+        return tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || el.isContentEditable;
+      }
+
+      function handleKeyboardDirection(dir){
+        if(document.body.classList.contains("is-loading")) return false;
+        if(overlay.classList.contains("is-open")) return false;
+        if(isTypingContext()) return false;
+
+        if(flowStarted && !prefersReduced()){
+          if(dir > 0) requestNext();
+          else requestPrev();
+          scheduleRender();
+          return true;
+        }
+
+        if(flowStarted) return false;
+        if(!inHeroViewport()) return false;
+
+        lockBody();
+
+        if(dir > 0){
+          handleDelta(Math.max(
+            getNumVar("--stepDistanceDown", 320) + 12,
+            getNumVar("--wheelTrigger", 135) + 18
+          ));
+        }else{
+          handleDelta(-Math.max(
+            getNumVar("--stepDistanceUp", 380) + 12,
+            getNumVar("--wheelTrigger", 135) + 18
+          ));
+        }
+
+        return true;
+      }
+
+      window.addEventListener("keydown", (e) => {
+        if(document.body.classList.contains("is-loading")) return;
+
+        if(overlay.classList.contains("is-open")){
+          if(e.key === "Escape"){
+            e.preventDefault();
+            closeMenu();
+          }
+          return;
+        }
+
+        if(isTypingContext()) return;
+
+        if(["ArrowDown", "PageDown"].includes(e.key)){
+          if(handleKeyboardDirection(+1)) e.preventDefault();
+          return;
+        }
+
+        if(["ArrowUp", "PageUp"].includes(e.key)){
+          if(handleKeyboardDirection(-1)) e.preventDefault();
+          return;
+        }
+
+        if(e.key === " " || e.code === "Space"){
+          if(handleKeyboardDirection(e.shiftKey ? -1 : +1)) e.preventDefault();
+          return;
+        }
+
+        if(e.key === "Home"){
+          e.preventDefault();
+          closeMenu();
+          unlockBody();
+          goToScene(-1);
+          return;
+        }
+
+        if(e.key === "End"){
+          e.preventDefault();
+          closeMenu();
+          unlockBody();
+          goToScene(cards.length - 1);
+        }
+      });
+
       window.addEventListener("resize", () => scheduleRender(), { passive:true });
+      window.addEventListener("orientationchange", () => setTimeout(scheduleRender, 120), { passive:true });
 
       function goToScene(i){
         if(i < 0){
