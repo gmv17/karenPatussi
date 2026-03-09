@@ -84,6 +84,12 @@
       --loaderFade: 820ms;
       --loaderEase: cubic-bezier(.16, 1, .18, 1);
       --siteReveal: 980ms;
+
+      --brandRevealDur: 760ms;
+      --brandRevealDelay: 90ms;
+      --brandRevealScaleFrom: .965;
+      --brandRevealLift: 10px;
+      --brandRevealBlurFrom: 7px;
       --siteRevealEase: cubic-bezier(.14, 1, .16, 1);
 
       --cardStickyTop: calc(var(--headerH) + var(--safeT) + 26px);
@@ -163,7 +169,7 @@
       position: fixed;
       inset: 0;
       z-index: -6;
-      background-image: url("imagens/fundo%20textura.png");
+      background-image: url("fundo textura.png");
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -242,12 +248,12 @@
       filter: blur(var(--glowBlur));
       mix-blend-mode: screen;
 
-      -webkit-mask-image: url("imagens/Tree%20ring%20hero.png");
+      -webkit-mask-image: url("Tree ring hero.png");
       -webkit-mask-repeat: no-repeat;
       -webkit-mask-size: contain;
       -webkit-mask-position: center;
 
-      mask-image: url("imagens/Tree%20ring%20hero.png");
+      mask-image: url("Tree ring hero.png");
       mask-repeat: no-repeat;
       mask-size: contain;
       mask-position: center;
@@ -311,12 +317,12 @@
       position: relative;
       background: rgba(255,255,255,.18);
 
-      -webkit-mask-image: url("imagens/Logo.PNG");
+      -webkit-mask-image: url("Logo.png");
       -webkit-mask-repeat: no-repeat;
       -webkit-mask-position: center;
       -webkit-mask-size: contain;
 
-      mask-image: url("imagens/Logo.PNG");
+      mask-image: url("Logo.png");
       mask-repeat: no-repeat;
       mask-position: center;
       mask-size: contain;
@@ -386,93 +392,79 @@
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap: 16px;
+      gap: 12px;
 
-      background: linear-gradient(180deg, rgba(255,255,255,.84), rgba(255,255,255,.54));
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(0,0,0,.06);
-      box-shadow: 0 12px 36px rgba(0,0,0,.05);
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.72));
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0,0,0,.07);
 
       transform: translateZ(0);
       opacity: 1;
       pointer-events: auto;
       will-change: transform;
     }
-    .topbar::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-      background: linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,0));
-    }
 
     .bar-title{
       position: relative;
-      z-index: 1;
       display:flex;
       align-items:center;
       gap: 10px;
       min-width: 0;
-      flex: 0 1 auto;
+      padding: 6px 10px 6px 4px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0);
 
-      opacity: 1;
-      transform: translate3d(0, 0, 0);
-      filter: blur(0);
-      pointer-events: auto;
+      opacity: 0;
+      transform: translate3d(0, calc(var(--brandRevealLift) * -1), 0) scale(var(--brandRevealScaleFrom));
+      filter: blur(var(--brandRevealBlurFrom));
+      pointer-events: none;
+      box-shadow: 0 0 0 rgba(0,0,0,0);
 
       transition:
-        opacity 520ms cubic-bezier(.14, 1, .16, 1),
-        transform 520ms cubic-bezier(.14, 1, .16, 1),
-        filter 520ms cubic-bezier(.14, 1, .16, 1);
+        opacity var(--brandRevealDur) cubic-bezier(.14, 1, .16, 1),
+        transform var(--brandRevealDur) cubic-bezier(.14, 1, .16, 1),
+        filter calc(var(--brandRevealDur) * .88) cubic-bezier(.14, 1, .16, 1),
+        background-color 320ms ease,
+        box-shadow 420ms ease;
+      will-change: opacity, transform, filter;
+    }
+    .bar-title::after{
+      content:"";
+      position:absolute;
+      inset:-2px -4px;
+      border-radius: 999px;
+      pointer-events:none;
+      background:
+        radial-gradient(74% 130% at 50% 50%, rgba(255,255,255,.62), rgba(255,255,255,0) 72%),
+        linear-gradient(180deg, rgba(255,255,255,.24), rgba(255,255,255,0));
+      opacity: 0;
+      transform: scale(.92);
+      filter: blur(8px);
+      transition:
+        opacity var(--brandRevealDur) cubic-bezier(.14, 1, .16, 1),
+        transform var(--brandRevealDur) cubic-bezier(.14, 1, .16, 1);
     }
     .topbar.show-brand .bar-title{
       opacity: 1;
-      transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0) scale(1);
       filter: blur(0);
       pointer-events: auto;
+      background: rgba(255,255,255,.30);
+      box-shadow:
+        0 10px 24px rgba(0,0,0,.05),
+        inset 0 1px 0 rgba(255,255,255,.34);
+      transition-delay:
+        var(--brandRevealDelay),
+        var(--brandRevealDelay),
+        calc(var(--brandRevealDelay) * .6),
+        0ms,
+        0ms;
     }
-
-    .topbar-actions{
-      position: relative;
-      z-index: 1;
-      margin-left: auto;
-      display:flex;
-      align-items:center;
-      gap: 14px;
-    }
-
-    .desktop-nav{
-      display:none;
-      align-items:center;
-      gap: 8px;
-    }
-    .desktop-nav a{
-      text-decoration:none;
-      color: rgba(20,28,32,.84);
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: .04em;
-      padding: 10px 14px;
-      border-radius: 999px;
-      transition: background .2s ease, color .2s ease, transform .2s ease, box-shadow .2s ease;
-      font-family: var(--bodyFont);
-      white-space: nowrap;
-    }
-    .desktop-nav a:hover{
-      background: rgba(255,255,255,.58);
-      color: var(--brand);
-      transform: translateY(-1px);
-      box-shadow: 0 10px 26px rgba(0,0,0,.06);
-    }
-    .desktop-nav a[data-index="4"]{
-      background: rgba(26,93,102,.11);
-      color: var(--brand);
-      border: 1px solid rgba(26,93,102,.12);
-      box-shadow: 0 12px 28px rgba(0,0,0,.05);
-    }
-    .desktop-nav a[data-index="4"]:hover{
-      background: rgba(26,93,102,.16);
+    .topbar.show-brand .bar-title::after{
+      opacity: .9;
+      transform: scale(1);
+      transition-delay: calc(var(--brandRevealDelay) * .65), calc(var(--brandRevealDelay) * .65);
     }
 
     .logo-mark{
@@ -495,12 +487,12 @@
     @supports ((-webkit-mask-image: url("x.png")) or (mask-image: url("x.png"))){
       .logo-img{ display:none; }
       .logo-mark{
-        -webkit-mask-image: url("imagens/Logo.PNG");
+        -webkit-mask-image: url("Logo.png");
         -webkit-mask-repeat: no-repeat;
         -webkit-mask-position: center;
         -webkit-mask-size: contain;
 
-        mask-image: url("imagens/Logo.PNG");
+        mask-image: url("Logo.png");
         mask-repeat: no-repeat;
         mask-position: center;
         mask-size: contain;
@@ -549,21 +541,6 @@
     .menu-btn.is-open .burger span:nth-child(1){ transform: rotate(45deg); top: 5px; }
     .menu-btn.is-open .burger span:nth-child(2){ opacity: 0; }
     .menu-btn.is-open .burger span:nth-child(3){ transform: rotate(-45deg); bottom: 5px; }
-
-
-    @media (min-width: 980px){
-      .topbar{
-        padding-left: calc(22px + var(--safeL));
-        padding-right: calc(22px + var(--safeR));
-      }
-      .desktop-nav{ display:flex; }
-      .menu-btn{ display:none; }
-      .overlay{ display:none !important; }
-    }
-    @media (max-width: 979px){
-      .desktop-nav{ display:none; }
-      .menu-btn{ display:flex; }
-    }
 
     /* ========================= MENU OVERLAY ========================= */
     .overlay{
@@ -813,7 +790,7 @@
       align-items:center;
       justify-content:center;
       padding:
-        calc(var(--headerH) + var(--safeT) + 28px)
+        calc(22px + var(--safeT))
         calc(var(--padX) + var(--safeR))
         calc(26px + var(--safeB))
         calc(var(--padX) + var(--safeL));
@@ -1337,7 +1314,7 @@
   <div class="loader" id="loader" aria-label="Carregando" role="status" aria-live="polite">
     <div class="loader-wrap">
       <div class="loader-logoMark" aria-hidden="true"></div>
-      <img class="loader-fallbackImg" src="imagens/Logo.PNG" alt="Logo Káren Patussi">
+      <img class="loader-fallbackImg" src="Logo.png" alt="Logo Káren Patussi">
       <p class="loader-sub">Carregando</p>
     </div>
   </div>
@@ -1345,7 +1322,7 @@
   <!-- Árvore fixa -->
   <div class="bg-stage" aria-hidden="true">
     <div class="tree">
-      <img src="imagens/Tree%20ring%20hero.png" alt="">
+      <img src="Tree ring hero.png" alt="">
     </div>
   </div>
 
@@ -1353,24 +1330,13 @@
   <header class="topbar" id="topbar" aria-label="Barra superior">
     <div class="bar-title" id="barTitle">
       <span class="logo-mark" aria-hidden="true"></span>
-      <img class="logo-img" src="imagens/Logo.PNG" alt="Logo">
+      <img class="logo-img" src="Logo.png" alt="Logo">
       <span class="bar-name">Káren Patussi</span>
     </div>
 
-    <div class="topbar-actions">
-      <nav class="desktop-nav" aria-label="Navegação principal">
-        <a href="#home" data-link data-index="-1">Home</a>
-        <a href="#sobre" data-link data-index="0">Sobre</a>
-        <a href="#como-funciona" data-link data-index="1">Como funciona</a>
-        <a href="#areas" data-link data-index="2">Áreas de atuação</a>
-        <a href="#faq" data-link data-index="3">FAQ</a>
-        <a href="#contato" data-link data-index="4">Contato</a>
-      </nav>
-
-      <button class="menu-btn" id="openMenu" type="button" aria-label="Abrir menu" aria-controls="menuOverlay" aria-expanded="false">
-        <span class="burger" aria-hidden="true"><span></span><span></span><span></span></span>
-      </button>
-    </div>
+    <button class="menu-btn" id="openMenu" type="button" aria-label="Abrir menu" aria-controls="menuOverlay" aria-expanded="false">
+      <span class="burger" aria-hidden="true"><span></span><span></span><span></span></span>
+    </button>
   </header>
 
   <!-- MENU OVERLAY -->
@@ -1401,7 +1367,7 @@
 
       <div class="menu-logo" aria-hidden="true">
         <div class="logo-box">
-          <img src="imagens/Logo.PNG" alt="">
+          <img src="Logo.png" alt="">
         </div>
       </div>
     </aside>
@@ -1445,7 +1411,7 @@
                 <div class="editorial" aria-label="Foto e síntese">
                   <div class="portrait" aria-label="Foto da psicóloga">
                     <img
-                      src="imagens/Foto%20Karen%20Sobre.png"
+                      src="Foto Karen Sobre.png"
                       onerror="this.src='https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=900&q=80';"
                       alt="Foto profissional da psicóloga">
                   </div>
@@ -1684,7 +1650,7 @@
       const closeBtn = document.getElementById("closeMenu");
       const overlayBg = document.getElementById("overlayBg");
       const drawer = document.getElementById("drawer");
-      const links = Array.from(document.querySelectorAll("[data-link]"));
+      const links = Array.from(document.querySelectorAll(".drawer-nav a[data-link]"));
 
       const heroStage = document.getElementById("home");
       const cardsTrack = document.getElementById("cardsTrack");
@@ -1723,7 +1689,6 @@
       window.addEventListener("pageshow", (e) => { if(e.persisted) finishLoader(); });
 
       function openMenu(){
-        if(window.innerWidth >= 980) return;
         if(overlay.classList.contains("is-open")) return;
         overlay.classList.add("is-open");
         overlay.setAttribute("aria-hidden","false");
@@ -1791,7 +1756,7 @@
         root.style.setProperty("--roleO", String(roleO));
         root.style.setProperty("--roleB", roleB + "px");
 
-        topbar.classList.toggle("show-brand", flowStarted || step >= 1);
+        topbar.classList.toggle("show-brand", step >= 2);
       }
 
       function setCooldown(){
@@ -2035,7 +2000,6 @@
       function handoffToCards(){
         if(flowStarted) return;
         flowStarted = true;
-        topbar.classList.add("show-brand");
 
         lockBody();
 
@@ -2072,8 +2036,6 @@
         step = 2;
         applyHeroState();
         hideAllCards();
-
-        topbar.classList.remove("show-brand");
 
         document.getElementById("home").scrollIntoView({ behavior:"smooth", block:"start" });
 
@@ -2314,7 +2276,6 @@
           step = 3;
           applyHeroState();
           flowStarted = true;
-          topbar.classList.add("show-brand");
         }
 
         sceneIndex = clamp(i, 0, cards.length - 1);
@@ -2335,10 +2296,8 @@
       links.forEach(a => a.addEventListener("click", (e) => {
         e.preventDefault();
         const idx = parseInt(a.dataset.index || "-1", 10);
-        if(window.innerWidth < 980){
-          closeMenu();
-          unlockBody();
-        }
+        closeMenu();
+        unlockBody();
         requestAnimationFrame(() => setTimeout(() => goToScene(idx), 40));
       }));
 
