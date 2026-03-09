@@ -386,29 +386,40 @@
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap: 12px;
+      gap: 16px;
 
-      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.72));
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(0,0,0,.07);
+      background: linear-gradient(180deg, rgba(255,255,255,.84), rgba(255,255,255,.54));
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0,0,0,.06);
+      box-shadow: 0 12px 36px rgba(0,0,0,.05);
 
       transform: translateZ(0);
       opacity: 1;
       pointer-events: auto;
       will-change: transform;
     }
+    .topbar::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background: linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,0));
+    }
 
     .bar-title{
+      position: relative;
+      z-index: 1;
       display:flex;
       align-items:center;
       gap: 10px;
       min-width: 0;
+      flex: 0 1 auto;
 
-      opacity: 0;
-      transform: translate3d(0, -6px, 0);
-      filter: blur(1.2px);
-      pointer-events: none;
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+      filter: blur(0);
+      pointer-events: auto;
 
       transition:
         opacity 520ms cubic-bezier(.14, 1, .16, 1),
@@ -420,6 +431,48 @@
       transform: translate3d(0, 0, 0);
       filter: blur(0);
       pointer-events: auto;
+    }
+
+    .topbar-actions{
+      position: relative;
+      z-index: 1;
+      margin-left: auto;
+      display:flex;
+      align-items:center;
+      gap: 14px;
+    }
+
+    .desktop-nav{
+      display:none;
+      align-items:center;
+      gap: 8px;
+    }
+    .desktop-nav a{
+      text-decoration:none;
+      color: rgba(20,28,32,.84);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      padding: 10px 14px;
+      border-radius: 999px;
+      transition: background .2s ease, color .2s ease, transform .2s ease, box-shadow .2s ease;
+      font-family: var(--bodyFont);
+      white-space: nowrap;
+    }
+    .desktop-nav a:hover{
+      background: rgba(255,255,255,.58);
+      color: var(--brand);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 26px rgba(0,0,0,.06);
+    }
+    .desktop-nav a[data-index="4"]{
+      background: rgba(26,93,102,.11);
+      color: var(--brand);
+      border: 1px solid rgba(26,93,102,.12);
+      box-shadow: 0 12px 28px rgba(0,0,0,.05);
+    }
+    .desktop-nav a[data-index="4"]:hover{
+      background: rgba(26,93,102,.16);
     }
 
     .logo-mark{
@@ -466,61 +519,6 @@
       white-space: nowrap;
     }
 
-
-    .desktop-nav{
-      display:none;
-      align-items:center;
-      justify-content:center;
-      gap: 6px;
-      padding: 6px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.52);
-      border: 1px solid rgba(0,0,0,.07);
-      box-shadow: 0 14px 38px rgba(0,0,0,.07);
-      backdrop-filter: blur(14px) saturate(1.08);
-      -webkit-backdrop-filter: blur(14px) saturate(1.08);
-    }
-    .desktop-nav a{
-      position: relative;
-      text-decoration:none;
-      color: rgba(20,28,32,.84);
-      font-size: 13px;
-      font-weight: 650;
-      letter-spacing: .01em;
-      padding: 10px 14px;
-      border-radius: 999px;
-      transition:
-        color .22s ease,
-        background .22s ease,
-        transform .22s ease,
-        box-shadow .22s ease;
-      white-space: nowrap;
-    }
-    .desktop-nav a:hover,
-    .desktop-nav a:focus-visible{
-      color: var(--brand);
-      background: rgba(255,255,255,.82);
-      box-shadow: 0 10px 26px rgba(0,0,0,.06);
-      outline: none;
-    }
-    .desktop-nav a.is-current{
-      color: var(--brand);
-      background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.72));
-      box-shadow:
-        inset 0 0 0 1px rgba(26,93,102,.10),
-        0 10px 24px rgba(0,0,0,.06);
-    }
-    .desktop-nav .nav-cta{
-      margin-left: 4px;
-      background: linear-gradient(180deg, rgba(26,93,102,.16), rgba(26,93,102,.10));
-      color: var(--brand);
-      box-shadow: inset 0 0 0 1px rgba(26,93,102,.12);
-    }
-    .desktop-nav .nav-cta:hover,
-    .desktop-nav .nav-cta:focus-visible{
-      background: linear-gradient(180deg, rgba(26,93,102,.20), rgba(26,93,102,.14));
-    }
-
     .menu-btn{
       appearance: none;
       border: 1px solid rgba(0,0,0,.08);
@@ -551,6 +549,21 @@
     .menu-btn.is-open .burger span:nth-child(1){ transform: rotate(45deg); top: 5px; }
     .menu-btn.is-open .burger span:nth-child(2){ opacity: 0; }
     .menu-btn.is-open .burger span:nth-child(3){ transform: rotate(-45deg); bottom: 5px; }
+
+
+    @media (min-width: 980px){
+      .topbar{
+        padding-left: calc(22px + var(--safeL));
+        padding-right: calc(22px + var(--safeR));
+      }
+      .desktop-nav{ display:flex; }
+      .menu-btn{ display:none; }
+      .overlay{ display:none !important; }
+    }
+    @media (max-width: 979px){
+      .desktop-nav{ display:none; }
+      .menu-btn{ display:flex; }
+    }
 
     /* ========================= MENU OVERLAY ========================= */
     .overlay{
@@ -800,7 +813,7 @@
       align-items:center;
       justify-content:center;
       padding:
-        calc(22px + var(--safeT))
+        calc(var(--headerH) + var(--safeT) + 28px)
         calc(var(--padX) + var(--safeR))
         calc(26px + var(--safeB))
         calc(var(--padX) + var(--safeL));
@@ -1344,18 +1357,20 @@
       <span class="bar-name">Káren Patussi</span>
     </div>
 
-    <nav class="desktop-nav" aria-label="Navegação principal">
-      <a href="#home" data-link data-index="-1">Início</a>
-      <a href="#sobre" data-link data-index="0">Sobre</a>
-      <a href="#como-funciona" data-link data-index="1">Como funciona</a>
-      <a href="#areas" data-link data-index="2">Áreas</a>
-      <a href="#faq" data-link data-index="3">FAQ</a>
-      <a href="#contato" data-link data-index="4" class="nav-cta">Contato</a>
-    </nav>
+    <div class="topbar-actions">
+      <nav class="desktop-nav" aria-label="Navegação principal">
+        <a href="#home" data-link data-index="-1">Home</a>
+        <a href="#sobre" data-link data-index="0">Sobre</a>
+        <a href="#como-funciona" data-link data-index="1">Como funciona</a>
+        <a href="#areas" data-link data-index="2">Áreas de atuação</a>
+        <a href="#faq" data-link data-index="3">FAQ</a>
+        <a href="#contato" data-link data-index="4">Contato</a>
+      </nav>
 
-    <button class="menu-btn" id="openMenu" type="button" aria-label="Abrir menu" aria-controls="menuOverlay" aria-expanded="false">
-      <span class="burger" aria-hidden="true"><span></span><span></span><span></span></span>
-    </button>
+      <button class="menu-btn" id="openMenu" type="button" aria-label="Abrir menu" aria-controls="menuOverlay" aria-expanded="false">
+        <span class="burger" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+    </div>
   </header>
 
   <!-- MENU OVERLAY -->
@@ -1669,7 +1684,7 @@
       const closeBtn = document.getElementById("closeMenu");
       const overlayBg = document.getElementById("overlayBg");
       const drawer = document.getElementById("drawer");
-      const links = Array.from(document.querySelectorAll("a[data-link]"));
+      const links = Array.from(document.querySelectorAll("[data-link]"));
 
       const heroStage = document.getElementById("home");
       const cardsTrack = document.getElementById("cardsTrack");
@@ -1693,13 +1708,6 @@
       }
 
       links.forEach((a, i) => a.style.setProperty("--i", String(i)));
-
-      function setActiveNav(idx){
-        links.forEach((a) => {
-          const linkIdx = Number(a.dataset.index);
-          a.classList.toggle("is-current", linkIdx === idx);
-        });
-      }
 
       function finishLoader(){
         if(!loader) return;
@@ -2037,7 +2045,6 @@
         window.scrollTo({ top: y + 1, behavior: "auto" });
 
         sceneIndex = 0;
-        setActiveNav(sceneIndex);
         pendingDir = +1;
         returnToHeroAfterClose = false;
 
@@ -2067,7 +2074,6 @@
         hideAllCards();
 
         topbar.classList.remove("show-brand");
-        setActiveNav(-1);
 
         document.getElementById("home").scrollIntoView({ behavior:"smooth", block:"start" });
 
@@ -2152,7 +2158,6 @@
           const nextIdx = clamp(sceneIndex + pendingDir, 0, cards.length - 1);
           if(nextIdx !== sceneIndex){
             sceneIndex = nextIdx;
-            setActiveNav(sceneIndex);
             phase = "opening";
             pTarget = 1;
             resetActiveScroll();
@@ -2313,7 +2318,6 @@
         }
 
         sceneIndex = clamp(i, 0, cards.length - 1);
-        setActiveNav(sceneIndex);
         returnToHeroAfterClose = false;
 
         setLock();
@@ -2331,12 +2335,13 @@
       links.forEach(a => a.addEventListener("click", (e) => {
         e.preventDefault();
         const idx = parseInt(a.dataset.index || "-1", 10);
-        closeMenu();
-        unlockBody();
+        if(window.innerWidth < 980){
+          closeMenu();
+          unlockBody();
+        }
         requestAnimationFrame(() => setTimeout(() => goToScene(idx), 40));
       }));
 
-      setActiveNav(-1);
       applyHeroState();
       hideAllCards();
       scheduleRender();
