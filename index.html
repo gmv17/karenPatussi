@@ -226,7 +226,7 @@
       position: fixed;
       inset: 0;
       z-index: -6;
-      background-image: url("imagens/fundo textura.png");
+      background-image: url("imagens/fundo%20textura.png");
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -305,12 +305,12 @@
       filter: blur(var(--glowBlur));
       mix-blend-mode: screen;
 
-      -webkit-mask-image: url("imagens/Tree ring hero.png");
+      -webkit-mask-image: url("imagens/Tree%20ring%20hero.png");
       -webkit-mask-repeat: no-repeat;
       -webkit-mask-size: contain;
       -webkit-mask-position: center;
 
-      mask-image: url("imagens/Tree ring hero.png");
+      mask-image: url("imagens/Tree%20ring%20hero.png");
       mask-repeat: no-repeat;
       mask-size: contain;
       mask-position: center;
@@ -1147,7 +1147,7 @@
       .card-scroll{ scrollbar-color: rgba(0,0,0,.14) transparent; }
     }
     @supports (-webkit-touch-callout: none){
-      .card-scroll{ overflow: auto; }
+      .card-scroll{ overflow: overlay; }
     }
 
     .card-scroll::before,
@@ -2189,7 +2189,7 @@
   <!-- Árvore fixa -->
   <div class="bg-stage" aria-hidden="true">
     <div class="tree">
-      <img src="imagens/Tree ring hero.png" alt="">
+      <img src="imagens/Tree%20ring%20hero.png" alt="">
     </div>
   </div>
 
@@ -2266,22 +2266,22 @@
           <section class="contact-card" aria-label="Formulário">
             <h3>Dados</h3>
 
-            <form class="contact-form" id="contactForm" autocomplete="on">
+            <form class="contact-form" id="contactForm" autocomplete="on" novalidate>
               <div class="form-row two">
                 <div class="field">
-                  <label class="label" for="fName">Nome</label>
+                  <div class="label">Nome</div>
                   <input class="input" id="fName" name="name" type="text" placeholder="Seu nome completo" required>
                 </div>
 
                 <div class="field">
-                  <label class="label" for="fWhats">WhatsApp</label>
+                  <div class="label">WhatsApp</div>
                   <input class="input" id="fWhats" name="whats" type="tel" inputmode="tel" placeholder="(DDD) 9XXXX-XXXX" required>
                 </div>
               </div>
 
               <div class="field">
-                <div class="label" id="modeLegend">Modalidade</div>
-                <div class="radio-row" role="radiogroup" aria-labelledby="modeLegend">
+                <div class="label">Modalidade</div>
+                <div class="radio-row" role="radiogroup" aria-label="Modalidade">
                   <label class="pill-radio"><input type="radio" name="mode" value="Online" checked><i aria-hidden="true"></i>Online</label>
                   <label class="pill-radio"><input type="radio" name="mode" value="Presencial"><i aria-hidden="true"></i>Presencial</label>
                 </div>
@@ -2289,7 +2289,7 @@
 
               <div class="form-row two">
                 <div class="field">
-                  <label class="label" for="fPeriod">Período</label>
+                  <div class="label">Período</div>
                   <select class="select" id="fPeriod" name="period">
                     <option>Manhã</option>
                     <option>Tarde</option>
@@ -2298,7 +2298,7 @@
                 </div>
 
                 <div class="field">
-                  <label class="label" for="fDay">Dia preferido</label>
+                  <div class="label">Dia preferido</div>
                   <select class="select" id="fDay" name="day">
                     <option>Segunda</option>
                     <option>Terça</option>
@@ -2310,7 +2310,7 @@
               </div>
 
               <div class="field">
-                <label class="label" for="fMsg">Mensagem (opcional)</label>
+                <div class="label">Mensagem (opcional)</div>
                 <textarea class="textarea" id="fMsg" name="msg" placeholder="Se desejar, conte em uma frase o que está buscando."></textarea>
               </div>
 
@@ -2321,8 +2321,8 @@
                 </label>
 
                 <div class="form-actions" aria-label="Ações do formulário">
-                  <button class="btn-ghost" type="submit" id="btnMail" data-submit-action="mail">Enviar por e-mail</button>
-                  <button class="btn-primary" type="submit" id="btnWhats" data-submit-action="whats">Enviar por WhatsApp</button>
+                  <button class="btn-ghost" type="button" id="btnMail">Enviar por e-mail</button>
+                  <button class="btn-primary" type="button" id="btnWhats">Enviar por WhatsApp</button>
                 </div>
               </div>
 
@@ -2383,7 +2383,7 @@
                 <div class="editorial" aria-label="Foto e síntese">
                   <div class="portrait" aria-label="Foto da psicóloga">
                     <img
-                      src="imagens/Foto Karen Sobre.png"
+                      src="imagens/Foto%20Karen%20Sobre.png"
                       onerror="this.src='https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=900&q=80';"
                       alt="Foto profissional da psicóloga">
                   </div>
@@ -2759,8 +2759,6 @@
       const overlayBg = document.getElementById("overlayBg");
       const drawer = document.getElementById("drawer");
       const links = Array.from(document.querySelectorAll(".drawer-nav a[data-link]"));
-      const siteRoot = document.getElementById("siteRoot");
-      const contactForm = document.getElementById("contactForm");
 
       const heroStage = document.getElementById("home");
       const cardsTrack = document.getElementById("cardsTrack");
@@ -2891,36 +2889,6 @@
         }
       }
 
-      function getFocusableElements(container){
-        if(!container) return [];
-        return Array.from(container.querySelectorAll(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        )).filter(el => !el.disabled && el.getAttribute("aria-hidden") !== "true" && el.offsetParent !== null);
-      }
-
-      function trapFocusInContainer(e, container){
-        if(e.key !== "Tab" || !container) return;
-        const list = getFocusableElements(container);
-        if(!list.length) return;
-
-        const first = list[0];
-        const last = list[list.length - 1];
-
-        if(e.shiftKey && document.activeElement === first){
-          e.preventDefault();
-          last.focus();
-        } else if(!e.shiftKey && document.activeElement === last){
-          e.preventDefault();
-          first.focus();
-        }
-      }
-
-      function setPageInert(isInert){
-        if(siteRoot && "inert" in siteRoot){
-          siteRoot.inert = isInert;
-        }
-      }
-
       /* ========================= LOADER ========================= */
       function finishLoader(){
         if(!loader) return;
@@ -2930,23 +2898,19 @@
         const fade = getMsVar("--loaderFade", 820);
         window.setTimeout(() => { loader.style.display = "none"; }, Math.max(560, fade + 80));
       }
-      const LOADER_DUR = Math.max(0, getMsVar("--loaderDur", 3000));
-      window.addEventListener("load", () => window.setTimeout(finishLoader, LOADER_DUR), { once: true });
-      if(document.readyState === "complete") window.setTimeout(finishLoader, LOADER_DUR);
+      const LOADER_DUR = getMsVar("--loaderDur", 3000);
+      window.addEventListener("load", () => window.setTimeout(finishLoader, Math.max(3000, LOADER_DUR)), { once: true });
+      if(document.readyState === "complete") window.setTimeout(finishLoader, Math.max(3000, LOADER_DUR));
       window.addEventListener("pageshow", (e) => { if(e.persisted) finishLoader(); });
 
       /* ========================= MENU ========================= */
-      let lastMenuFocus = null;
-
       function openMenu(){
         if(overlay.classList.contains("is-open")) return;
-        lastMenuFocus = document.activeElement;
         overlay.classList.add("is-open");
         overlay.setAttribute("aria-hidden","false");
         openBtn.setAttribute("aria-expanded", "true");
         openBtn.classList.add("is-open");
         document.body.style.overflow = "hidden";
-        setPageInert(true);
         setTimeout(() => {
           const first = drawer.querySelector(".drawer-nav a[data-link]");
           (first || drawer).focus();
@@ -2958,19 +2922,12 @@
         overlay.setAttribute("aria-hidden","true");
         openBtn.setAttribute("aria-expanded", "false");
         openBtn.classList.remove("is-open");
-        document.body.style.overflow = document.body.classList.contains("is-modal-open") ? "hidden" : "";
-        setPageInert(document.body.classList.contains("is-modal-open"));
-        const fallbackFocus = openBtn;
-        const targetFocus = lastMenuFocus && typeof lastMenuFocus.focus === "function" ? lastMenuFocus : fallbackFocus;
-        requestAnimationFrame(() => targetFocus?.focus());
+        document.body.style.overflow = "";
       }
       openBtn.addEventListener("click", () => overlay.classList.contains("is-open") ? closeMenu() : openMenu());
       closeBtn.addEventListener("click", closeMenu);
       overlayBg.addEventListener("click", closeMenu);
-      window.addEventListener("keydown", (e) => {
-        if(e.key === "Escape" && overlay.classList.contains("is-open")) closeMenu();
-        if(overlay.classList.contains("is-open")) trapFocusInContainer(e, drawer);
-      });
+      window.addEventListener("keydown", (e) => { if(e.key === "Escape" && overlay.classList.contains("is-open")) closeMenu(); });
 
       /* ========================= HERO (2 scrolls até o Sobre) ========================= */
       let step = 0, accum = 0, locked = false, animating = false, lastDir = 0, cooldownUntil = 0;
@@ -3559,24 +3516,10 @@
 
       /* ========================= CONTATO — DADOS / ENVIO / MODAL ========================= */
       const CONTACT = {
-        // Troque pelos dados reais quando estiverem prontos.
-        phoneDigits: "55DDDN9XXXXXXX",
+        // ✅ Troque pelos dados reais:
+        phoneDigits: "55DDDN9XXXXXXX",  // só números (55 + DDD + número)
         email: "karen@seudominio.com"
       };
-
-      function hasRealWhats(){
-        return /^\d{12,14}$/.test((CONTACT.phoneDigits || "").trim());
-      }
-
-      function hasRealEmail(){
-        const email = (CONTACT.email || "").trim();
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && !/seudominio\.com$/i.test(email);
-      }
-
-      function warnContactUnavailable(channel){
-        const label = channel === "whats" ? "WhatsApp" : "e-mail";
-        alert(`O ${label} ainda está em configuração nesta versão do site.`);
-      }
 
       const modal = document.getElementById("contactModal");
       const modalBg = document.getElementById("contactModalBg");
@@ -3629,22 +3572,22 @@
       }
 
       function validateContactForm(){
-        if(!contactForm) return false;
+        const name = (document.getElementById("fName")?.value || "").trim();
+        const whats = (document.getElementById("fWhats")?.value || "").trim();
+        const consent = document.getElementById("fConsent")?.checked;
 
-        const whatsField = document.getElementById("fWhats");
-        const rawWhats = (whatsField?.value || "").trim();
-        const digits = rawWhats.replace(/\D+/g, "");
-
-        if(whatsField){
-          if(digits && digits.length < 10){
-            whatsField.setCustomValidity("Informe um WhatsApp com DDD válido.");
-          } else {
-            whatsField.setCustomValidity("");
-          }
+        if(!name){
+          alert("Por favor, informe seu nome.");
+          return false;
         }
-
-        const isValid = contactForm.reportValidity();
-        if(!isValid) return false;
+        if(!whats){
+          alert("Por favor, informe seu WhatsApp.");
+          return false;
+        }
+        if(!consent){
+          alert("Para enviar, marque o consentimento (LGPD).");
+          return false;
+        }
         return true;
       }
 
@@ -3655,8 +3598,6 @@
         modal.classList.add("is-open");
         modal.setAttribute("aria-hidden","false");
         document.body.classList.add("is-modal-open");
-        document.body.style.overflow = "hidden";
-        setPageInert(true);
 
         updateSummary();
 
@@ -3671,8 +3612,6 @@
         modal.classList.remove("is-open");
         modal.setAttribute("aria-hidden","true");
         document.body.classList.remove("is-modal-open");
-        document.body.style.overflow = overlay.classList.contains("is-open") ? "hidden" : "";
-        setPageInert(overlay.classList.contains("is-open"));
 
         if(lastFocus && typeof lastFocus.focus === "function"){
           lastFocus.focus();
@@ -3681,21 +3620,36 @@
 
       function trapFocusInModal(e){
         if(!modal || !modal.classList.contains("is-open")) return;
-        trapFocusInContainer(e, modalPanel);
+        if(e.key !== "Tab") return;
+
+        const focusables = modal.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        const list = Array.from(focusables).filter(el => !el.disabled && el.offsetParent !== null);
+        if(!list.length) return;
+
+        const first = list[0];
+        const last = list[list.length - 1];
+
+        if(e.shiftKey && document.activeElement === first){
+          e.preventDefault();
+          last.focus();
+        } else if(!e.shiftKey && document.activeElement === last){
+          e.preventDefault();
+          first.focus();
+        }
       }
 
       function initContact(){
         // botões rápidos (sem formulário)
         if(btnQuickWhats){
           btnQuickWhats.addEventListener("click", () => {
-            if(!hasRealWhats()) return warnContactUnavailable("whats");
             const text = "Olá, Káren! Gostaria de informações sobre agendamento.";
             window.open(waUrl(text), "_blank", "noopener");
           });
         }
         if(btnQuickMail){
           btnQuickMail.addEventListener("click", () => {
-            if(!hasRealEmail()) return warnContactUnavailable("mail");
             const subject = "Contato — agendamento";
             const body = "Olá, Káren! Gostaria de informações sobre agendamento.\n\nNome:\nWhatsApp:\nPreferência (online/presencial):\n";
             window.location.href =
@@ -3722,29 +3676,25 @@
         fields.forEach(id => document.getElementById(id)?.addEventListener("input", updateSummary));
         document.querySelectorAll('input[name="mode"]').forEach(r => r.addEventListener("change", updateSummary));
 
-        if(contactForm){
-          contactForm.addEventListener("submit", (e) => {
-            e.preventDefault();
+        // envio do form
+        const btnW = document.getElementById("btnWhats");
+        const btnM = document.getElementById("btnMail");
 
-            const submitter = e.submitter;
-            const action = submitter?.dataset.submitAction || "";
-
+        if(btnW){
+          btnW.addEventListener("click", () => {
             if(!validateContactForm()) return;
+            const text = buildContactMessage();
+            window.open(waUrl(text), "_blank", "noopener");
+          });
+        }
 
-            if(action === "whats") {
-              if(!hasRealWhats()) return warnContactUnavailable("whats");
-              const text = buildContactMessage();
-              window.open(waUrl(text), "_blank", "noopener");
-              return;
-            }
-
-            if(action === "mail") {
-              if(!hasRealEmail()) return warnContactUnavailable("mail");
-              const body = buildContactMessage();
-              const subject = "Solicitação de agendamento";
-              window.location.href =
-                `mailto:${CONTACT.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-            }
+        if(btnM){
+          btnM.addEventListener("click", () => {
+            if(!validateContactForm()) return;
+            const body = buildContactMessage();
+            const subject = "Solicitação de agendamento";
+            window.location.href =
+              `mailto:${CONTACT.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
           });
         }
       }
