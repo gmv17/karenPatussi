@@ -1360,11 +1360,6 @@
 
     body.is-locked{ overflow: hidden; touch-action: none; }
 
-    body.mobile-hero-lock{
-      overflow: hidden;
-      touch-action: pan-x;
-    }
-
 
     @media (min-width: 980px){
       .topbar{
@@ -1379,8 +1374,7 @@
 
     @media (max-width: 979.98px){
       .topbar-nav{ display:none !important; }
-    }
-    @media (max-width: 979.98px){
+
       :root{
         --padX: 18px;
         --cardStickyTop: calc(var(--headerH) + var(--safeT) + 18px);
@@ -1389,33 +1383,9 @@
       .cards-track{
         padding:
           10px
-          calc(16px + var(--safeR))
+          calc(14px + var(--safeR))
           calc(34px + var(--safeB))
-          calc(16px + var(--safeL));
-      }
-      body:not(.mobile-flow-started) .cards-track{
-        opacity: 0;
-        pointer-events: none;
-        transform: translate3d(0, 28px, 0);
-        max-height: 0;
-        overflow: hidden;
-        padding-top: 0;
-        padding-bottom: 0;
-        transition:
-          opacity 560ms cubic-bezier(.16, 1, .18, 1),
-          transform 760ms cubic-bezier(.16, 1, .18, 1),
-          max-height 0ms linear 760ms,
-          padding 0ms linear 760ms;
-      }
-      body.mobile-flow-started .cards-track{
-        opacity: 1;
-        pointer-events: auto;
-        transform: translate3d(0, 0, 0);
-        max-height: none;
-        overflow: visible;
-        transition:
-          opacity 560ms cubic-bezier(.16, 1, .18, 1),
-          transform 760ms cubic-bezier(.16, 1, .18, 1);
+          calc(14px + var(--safeL));
       }
       .cards-track .track-spacer{ display:none; height:0 !important; }
       .cards-stage{
@@ -1423,7 +1393,7 @@
         height: auto;
         min-height: 0;
         display: grid;
-        gap: 16px;
+        gap: 14px;
         place-items: stretch;
         pointer-events: auto;
       }
@@ -1432,6 +1402,7 @@
         position: static !important;
         width: 100% !important;
         max-width: none;
+        min-width: 0;
         opacity: 1 !important;
         filter: none !important;
         transform: none !important;
@@ -1439,28 +1410,160 @@
         margin: 0;
         border-radius: 18px;
         animation: none !important;
+        overflow: hidden;
       }
       .glass-card{
-        background: rgba(255,255,255,.88);
+        background: rgba(255,255,255,.90);
         backdrop-filter: blur(10px) saturate(1.02);
         -webkit-backdrop-filter: blur(10px) saturate(1.02);
         box-shadow: 0 10px 26px rgba(0,0,0,.08);
       }
-      .glass-card::before{ opacity:.25; }
+      .glass-card::before{ opacity:.22; }
       .card-inner{
-        padding: 20px 16px;
+        padding: 18px 15px 16px;
         gap: 12px;
+        min-width: 0;
       }
-      .card-title{ font-size: clamp(24px, 7vw, 30px); }
+      .card-kicker{
+        font-size: 10.5px;
+        letter-spacing: .16em;
+      }
+      .card-title{
+        font-size: clamp(23px, 6.5vw, 29px);
+        line-height: 1.02;
+      }
+      .card-text,
+      .about .lead p,
+      .about .body-copy p,
+      .about .box p,
+      .about li,
+      .skill-item,
+      .edu-desc{
+        font-size: 14px;
+        line-height: 1.78;
+      }
       .card-scroll{
-        max-height: none !important;
-        overflow: visible !important;
+        position: relative;
+        max-height: 300px !important;
+        overflow: hidden !important;
         padding-top: 0;
         padding-bottom: 0;
+        transition: max-height 420ms cubic-bezier(.16, 1, .18, 1);
+      }
+      .section-card.is-expanded .card-scroll{
+        max-height: 4000px !important;
       }
       .card-scroll::before,
       .card-scroll::after{ display:none !important; }
+      .section-card.has-toggle:not(.is-expanded) .card-scroll::after{
+        content:"";
+        position:absolute;
+        left:0;
+        right:0;
+        bottom:0;
+        height:84px;
+        display:block !important;
+        background: linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,.94) 72%);
+        pointer-events:none;
+      }
+      .section-card.is-expanded .card-scroll::after{ display:none !important; }
+      .card-toggle{
+        appearance:none;
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        gap:10px;
+        align-self:flex-start;
+        margin-top: 2px;
+        min-height: 42px;
+        padding: 11px 14px;
+        border-radius: 999px;
+        border: 1px solid rgba(26,93,102,.16);
+        background: rgba(255,255,255,.94);
+        color: var(--brand);
+        box-shadow: 0 10px 24px rgba(0,0,0,.05);
+        font: 700 11px/1 var(--bodyFont);
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .card-toggle::after{
+        content: "+";
+        font-size: 15px;
+        line-height: 1;
+        letter-spacing: 0;
+      }
+      .section-card.is-expanded .card-toggle::after{ content: "−"; }
       .end-spacer{ display:none; }
+
+      .about,
+      .about .grid,
+      .about .editorial,
+      .about .lead,
+      .about .body-copy,
+      .about .box,
+      .edu-timeline,
+      .edu-item,
+      .edu-main,
+      .edu-top{
+        min-width: 0;
+      }
+      .about{ gap: 14px; }
+      .about .editorial{
+        grid-template-columns: 1fr !important;
+        gap: 14px;
+      }
+      .about .portrait{
+        aspect-ratio: 4 / 4.8;
+        min-height: 0;
+        max-height: 420px;
+      }
+      .about .lead,
+      .about .body-copy,
+      .about .box{
+        padding: 15px 14px;
+        border-radius: 16px;
+      }
+      .about .intro-kicker,
+      .about .box h3,
+      .edu-year,
+      .edu-tag{
+        font-size: 10.5px;
+      }
+      .about .signature{
+        font-size: clamp(20px, 6vw, 26px);
+      }
+      .about .grid{
+        grid-template-columns: 1fr !important;
+        gap: 10px;
+      }
+      .skills-grid{
+        grid-template-columns: 1fr !important;
+        gap: 8px;
+      }
+      .edu-timeline{
+        gap: 8px;
+        padding-left: 12px;
+      }
+      .edu-item{
+        padding: 12px 11px;
+        gap: 8px;
+      }
+      .edu-top{
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .edu-meta{
+        white-space: normal;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .edu-inst{
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+      }
 
       #sobre,
       #como-funciona,
@@ -1470,7 +1573,6 @@
         scroll-margin-top: calc(var(--headerH) + var(--safeT) + 18px);
       }
     }
-
     @media (prefers-reduced-motion: reduce){
       html{ scroll-behavior:auto; }
       .tree, .tree img{ animation:none !important; }
@@ -1963,6 +2065,48 @@
 
       links.forEach((a, i) => a.style.setProperty("--i", String(i)));
 
+      function setupMobileCardToggles(){
+        cards.forEach((card, index) => {
+          const scroll = card.querySelector(".card-scroll");
+          if(!scroll) return;
+
+          if(!scroll.id) scroll.id = `card-content-${index + 1}`;
+
+          let toggle = card.querySelector(".card-toggle");
+          if(!toggle){
+            toggle = document.createElement("button");
+            toggle.type = "button";
+            toggle.className = "card-toggle";
+            toggle.setAttribute("aria-controls", scroll.id);
+            toggle.setAttribute("aria-expanded", "false");
+            toggle.textContent = "Ver mais";
+            scroll.insertAdjacentElement("afterend", toggle);
+          }
+
+          const shouldCollapse = scroll.scrollHeight > 360;
+          card.classList.toggle("has-toggle", shouldCollapse);
+
+          if(!toggle.dataset.bound){
+            toggle.addEventListener("click", () => {
+              const expanded = card.classList.toggle("is-expanded");
+              toggle.setAttribute("aria-expanded", String(expanded));
+              toggle.textContent = expanded ? "Ver menos" : "Ver mais";
+            });
+            toggle.dataset.bound = "true";
+          }
+
+          if(!shouldCollapse){
+            card.classList.remove("is-expanded");
+            toggle.hidden = true;
+            toggle.setAttribute("aria-expanded", "false");
+            toggle.textContent = "Ver mais";
+            return;
+          }
+
+          toggle.hidden = !isMobileLayout();
+        });
+      }
+
       function finishLoader(){
         if(!loader) return;
         document.body.classList.add("is-ready");
@@ -2014,10 +2158,6 @@
       let autoRoleTimer = 0;
       let autoRolePending = false;
 
-      function isMobileLayout(){
-        return window.matchMedia("(max-width: 979.98px)").matches;
-      }
-
       function inHeroViewport(){
         const r = heroStage.getBoundingClientRect();
         const vh = window.innerHeight || 800;
@@ -2031,12 +2171,6 @@
       function unlockBody(){
         locked = false;
         document.body.classList.remove("is-locked");
-      }
-
-      function syncMobileFlowState(){
-        const mobile = isMobileLayout();
-        document.body.classList.toggle("mobile-flow-started", mobile && flowStarted);
-        document.body.classList.toggle("mobile-hero-lock", mobile && !flowStarted && !document.body.classList.contains("is-loading"));
       }
 
       function applyHeroState(){
@@ -2059,7 +2193,6 @@
         root.style.setProperty("--roleB", roleB + "px");
 
         topbar.classList.toggle("show-brand", flowStarted || step >= 1);
-        syncMobileFlowState();
       }
 
       function setCooldown(){
@@ -2304,15 +2437,6 @@
         if(flowStarted) return;
         flowStarted = true;
         topbar.classList.add("show-brand");
-        syncMobileFlowState();
-
-        if(isMobileLayout()){
-          unlockBody();
-          const mobileTop = cardsTrack.getBoundingClientRect().top + window.scrollY - (getNumVar("--headerH", 56) + 8);
-          window.scrollTo({ top: Math.max(0, mobileTop), behavior: "smooth" });
-          scheduleRender();
-          return;
-        }
 
         lockBody();
 
@@ -2351,7 +2475,6 @@
         hideAllCards();
 
         topbar.classList.remove("show-brand");
-        syncMobileFlowState();
 
         document.getElementById("home").scrollIntoView({ behavior:"smooth", block:"start" });
 
@@ -2391,22 +2514,19 @@
       }
 
       function render(){
-        if(isMobileLayout() || prefersReduced()){
-          cards.forEach((c, i) => {
+        if(prefersReduced()){
+          hideAllCards();
+          if(flowStarted){
+            const c = cards[sceneIndex] || cards[0];
             c.style.setProperty("--p","1");
-            c.style.setProperty("--o", flowStarted || prefersReduced() ? "1" : "0");
-            c.style.setProperty("--wPx", String(Math.min(760, window.innerWidth || 760)));
+            c.style.setProperty("--o","1");
+            c.style.setProperty("--wPx","760");
             c.style.setProperty("--xPx","0");
             c.style.setProperty("--yPx","0");
             c.style.setProperty("--s","1");
-            c.style.zIndex = String(30 - i);
-            c.classList.remove("is-active");
-          });
-          if(flowStarted || prefersReduced()) unlockBody();
-          phase = "closed";
-          p = 1;
-          pTarget = 1;
-          syncMobileFlowState();
+            c.style.zIndex = "30";
+            setActiveCardClass();
+          }
           return;
         }
 
@@ -2488,7 +2608,6 @@
 
       window.addEventListener("wheel", (e) => {
         if(document.body.classList.contains("is-loading")) return;
-        if(isMobileLayout()) return;
         if(overlay.classList.contains("is-open")) return;
 
         if(flowStarted && !prefersReduced()){
@@ -2551,18 +2670,6 @@
         const dy = touchY - yy;
         touchY = yy;
 
-        if(isMobileLayout()){
-          if(flowStarted) return;
-
-          if(inHeroViewport() || window.scrollY <= 8){
-            e.preventDefault();
-            lockBody();
-            handleDelta(dy * 1.75);
-            scheduleRender();
-          }
-          return;
-        }
-
         if(flowStarted && !prefersReduced()){
           e.preventDefault();
 
@@ -2604,7 +2711,6 @@
 
       function handleKeyboardDirection(dir){
         if(document.body.classList.contains("is-loading")) return false;
-        if(isMobileLayout()) return false;
         if(overlay.classList.contains("is-open")) return false;
         if(isTypingContext()) return false;
 
@@ -2680,21 +2786,13 @@
       });
 
       window.addEventListener("resize", () => {
-        if(isMobileLayout()){
-          if(!flowStarted){
-            unlockBody();
-            step = 0;
-            clearAutoRole();
-            applyHeroState();
-          } else {
-            syncMobileFlowState();
-          }
-        } else {
-          document.body.classList.remove("mobile-hero-lock", "mobile-flow-started");
-        }
         scheduleRender();
+        window.setTimeout(setupMobileCardToggles, 80);
       }, { passive:true });
-      window.addEventListener("orientationchange", () => setTimeout(scheduleRender, 120), { passive:true });
+      window.addEventListener("orientationchange", () => {
+        setTimeout(scheduleRender, 120);
+        setTimeout(setupMobileCardToggles, 180);
+      }, { passive:true });
 
       function goToScene(i){
         if(i < 0){
@@ -2726,39 +2824,8 @@
 
       links.forEach((a, idx) => a.style.setProperty("--i", String(idx)));
       links.forEach(a => a.addEventListener("click", (e) => {
-        const idx = parseInt(a.dataset.index || "-1", 10);
-
-        if(isMobileLayout()){
-          closeMenu();
-
-          if(idx < 0){
-            e.preventDefault();
-            flowStarted = false;
-            step = 0;
-            clearAutoRole();
-            unlockBody();
-            applyHeroState();
-            syncMobileFlowState();
-            window.scrollTo({ top: 0, behavior: "smooth" });
-            return;
-          }
-
-          flowStarted = true;
-          step = 3;
-          applyHeroState();
-          syncMobileFlowState();
-          unlockBody();
-
-          const targetId = (a.getAttribute("href") || "").replace("#", "");
-          const target = targetId ? document.getElementById(targetId) : null;
-          if(target){
-            e.preventDefault();
-            target.scrollIntoView({ behavior: "smooth", block: "start" });
-          }
-          return;
-        }
-
         e.preventDefault();
+        const idx = parseInt(a.dataset.index || "-1", 10);
         closeMenu();
         unlockBody();
         requestAnimationFrame(() => setTimeout(() => goToScene(idx), 40));
@@ -2767,6 +2834,8 @@
       applyHeroState();
       hideAllCards();
       scheduleRender();
+      window.setTimeout(setupMobileCardToggles, 60);
+      window.addEventListener("load", () => window.setTimeout(setupMobileCardToggles, 120), { once: true });
     })();
   </script>
 </body>
