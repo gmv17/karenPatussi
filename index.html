@@ -1569,6 +1569,7 @@
         text-overflow: clip;
       }
 
+
       .contact-grid{
         grid-template-columns: 1fr !important;
         gap: 10px;
@@ -1697,6 +1698,7 @@
   0%{ width:0%; }
   100%{ width:100%; }
 }
+
 
 
     /* ========================= CONTATO ========================= */
@@ -1880,8 +1882,9 @@
     }
     .contact-chip strong{
       color: var(--softInk);
-      font-size: 14px;
-      line-height: 1.55;
+      line-height: 1.7;
+      font-size: 13.5px;
+      font-weight: 650;
     }
 
 </style>
@@ -2263,32 +2266,25 @@
         <!-- CONTATO -->
         <article class="section-card glass-card card--process" data-card data-origin="bl" id="agendar-sessao">
           <div class="card-inner">
-            <div class="card-kicker">Primeiro contato</div>
+            <div class="card-kicker">Primeiro passo</div>
             <h2 class="card-title">Agendar sessão</h2>
 
             <div class="card-scroll" data-scroll>
               <div class="contact-wrap">
 
-                <div class="contact-intro">
-                  <div class="lead" aria-label="Convite para contato">
-                    <p class="intro-kicker">Contato</p>
-                    <p class="signature">Vamos conversar</p>
-                    <div class="divider" aria-hidden="true"></div>
+                <section class="contact-intro about about--process" aria-label="Convite para contato">
+                  <div class="editorial">
+                    <div class="lead" aria-label="Texto de acolhimento">
+                      <p class="intro-kicker">Contato inicial</p>
+                      <p class="signature">Vamos conversar</p>
+                      <div class="divider" aria-hidden="true"></div>
 
-                    <p>
-                      Se você deseja agendar uma sessão ou esclarecer alguma dúvida sobre o atendimento, sinta-se à vontade para entrar em contato. Será um prazer acolher sua mensagem.
-                    </p>
+                      <p>
+                        Se você deseja agendar uma sessão ou esclarecer alguma dúvida sobre o atendimento, sinta-se à vontade para entrar em contato. Será um prazer acolher sua mensagem.
+                      </p>
+                    </div>
                   </div>
-
-                  <section class="body-copy" aria-label="Orientações para o primeiro contato">
-                    <p>
-                      Preencha os campos abaixo e escolha o canal pelo qual prefere encaminhar sua mensagem. O texto será preparado automaticamente para <strong>WhatsApp</strong> ou <strong>e-mail</strong>, tornando este primeiro passo mais simples, organizado e acolhedor.
-                    </p>
-                    <p>
-                      O atendimento é realizado de forma <strong>online</strong>, mediante agendamento, com atenção cuidadosa desde o primeiro contato.
-                    </p>
-                  </section>
-                </div>
+                </section>
 
                 <section class="contact-form-shell" aria-label="Formulário de contato">
                   <form
@@ -2306,7 +2302,7 @@
 
                       <div class="field">
                         <label for="contactEmail">E-mail</label>
-                        <input id="contactEmail" name="email" type="email" placeholder="voce@email.com" required>
+                        <input id="contactEmail" name="email" type="email" placeholder="voce@exemplo.com" required>
                       </div>
 
                       <div class="field">
@@ -2316,30 +2312,35 @@
 
                       <div class="field">
                         <label for="contactReason">Motivo do contato</label>
-                        <select id="contactReason" name="reason" required>
-                          <option value="">Selecione</option>
+                        <select id="contactReason" name="reason">
                           <option value="Agendar sessão">Agendar sessão</option>
-                          <option value="Tirar dúvidas">Tirar dúvidas</option>
+                          <option value="Esclarecer dúvidas">Esclarecer dúvidas</option>
                           <option value="Informações sobre atendimento">Informações sobre atendimento</option>
                         </select>
                       </div>
 
                       <div class="field field--full">
                         <label for="contactMessage">Mensagem</label>
-                        <textarea id="contactMessage" name="message" placeholder="Escreva sua mensagem com tranquilidade." required></textarea>
+                        <textarea
+                          id="contactMessage"
+                          name="message"
+                          placeholder="Escreva sua mensagem"
+                          required
+                        ></textarea>
                       </div>
                     </div>
 
                     <div class="contact-actions">
                       <div class="contact-actions-head">
                         <strong>Escolha como prefere enviar sua mensagem</strong>
-                        <span>Os dados serão organizados automaticamente antes de abrir o canal selecionado.</span>
+                        <span>Você pode preencher o formulário uma única vez e encaminhar o conteúdo pelo WhatsApp ou por e-mail.</span>
                       </div>
 
                       <div class="contact-buttons">
                         <button type="button" class="contact-btn contact-btn--wa" data-contact-action="whatsapp">
                           Enviar por WhatsApp
                         </button>
+
                         <button type="button" class="contact-btn contact-btn--mail" data-contact-action="email">
                           Enviar por e-mail
                         </button>
@@ -2352,8 +2353,8 @@
 
                 <section class="contact-meta" aria-label="Informações complementares">
                   <div class="contact-chip">
-                    <span>Atendimento</span>
-                    <strong>Online, com agendamento prévio</strong>
+                    <span>Formato</span>
+                    <strong>Atendimento realizado de forma online, mediante agendamento</strong>
                   </div>
                   <div class="contact-chip">
                     <span>Retorno</span>
@@ -2370,7 +2371,6 @@
             </div>
           </div>
         </article>
-
 
       </div>
 
@@ -2639,68 +2639,8 @@
 
         const dur = stepDurationMs(next);
         step = clamp(next, 0, 3);
-          const emailOk = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(data.email);
-          if(!emailOk){
-            setStatus("Confira o e-mail informado antes de enviar.");
-            return false;
-          }
-          setStatus("");
-          return true;
-        };
 
-        const buildMessage = (data) => {
-          const lines = [
-            "Olá, gostaria de entrar em contato pelo site.",
-            "",
-            `Nome: ${data.name}`,
-            `E-mail: ${data.email}`
-          ];
-
-          if(data.phone) lines.push(`Telefone: ${data.phone}`);
-
-          lines.push(`Motivo do contato: ${data.reason}`, "", "Mensagem:", data.message);
-          return lines.join("\\n");
-        };
-
-        const hasPlaceholder = (value) => !value || /5555000000000|contato@exemplo\\.com/i.test(value);
-
-        whatsappBtn?.addEventListener("click", () => {
-          const data = collectData();
-          if(!validate(data)) return;
-
-          const whatsapp = (form.dataset.whatsapp || "").replace(/\\D/g, "");
-          if(hasPlaceholder(whatsapp)){
-            setStatus("Atualize no código o número do WhatsApp antes de publicar o site.");
-            return;
-          }
-
-          const url = `https://wa.me/${whatsapp}?text=${encodeURIComponent(buildMessage(data))}`;
-          setStatus("Abrindo WhatsApp...", true);
-          window.open(url, "_blank", "noopener");
-        });
-
-        emailBtn?.addEventListener("click", () => {
-          const data = collectData();
-          if(!validate(data)) return;
-
-          const email = (form.dataset.email || "").trim();
-          if(hasPlaceholder(email)){
-            setStatus("Atualize no código o e-mail de atendimento antes de publicar o site.");
-            return;
-          }
-
-          const subject = encodeURIComponent(`${data.reason} — contato pelo site`);
-          const body = encodeURIComponent(buildMessage(data));
-          const url = `mailto:${email}?subject=${subject}&body=${body}`;
-
-          setStatus("Abrindo e-mail...", true);
-          window.location.href = url;
-        });
-      }
-
-
-      setupContactForm();
-      applyHeroState();
+        applyHeroState();
         setCooldown();
 
         if(step === 1) scheduleAutoRole();
@@ -2963,67 +2903,7 @@
           window.setTimeout(() => {
             animating = false;
             setHeroTransitionMode(true);
-          const emailOk = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(data.email);
-          if(!emailOk){
-            setStatus("Confira o e-mail informado antes de enviar.");
-            return false;
-          }
-          setStatus("");
-          return true;
-        };
-
-        const buildMessage = (data) => {
-          const lines = [
-            "Olá, gostaria de entrar em contato pelo site.",
-            "",
-            `Nome: ${data.name}`,
-            `E-mail: ${data.email}`
-          ];
-
-          if(data.phone) lines.push(`Telefone: ${data.phone}`);
-
-          lines.push(`Motivo do contato: ${data.reason}`, "", "Mensagem:", data.message);
-          return lines.join("\\n");
-        };
-
-        const hasPlaceholder = (value) => !value || /5555000000000|contato@exemplo\\.com/i.test(value);
-
-        whatsappBtn?.addEventListener("click", () => {
-          const data = collectData();
-          if(!validate(data)) return;
-
-          const whatsapp = (form.dataset.whatsapp || "").replace(/\\D/g, "");
-          if(hasPlaceholder(whatsapp)){
-            setStatus("Atualize no código o número do WhatsApp antes de publicar o site.");
-            return;
-          }
-
-          const url = `https://wa.me/${whatsapp}?text=${encodeURIComponent(buildMessage(data))}`;
-          setStatus("Abrindo WhatsApp...", true);
-          window.open(url, "_blank", "noopener");
-        });
-
-        emailBtn?.addEventListener("click", () => {
-          const data = collectData();
-          if(!validate(data)) return;
-
-          const email = (form.dataset.email || "").trim();
-          if(hasPlaceholder(email)){
-            setStatus("Atualize no código o e-mail de atendimento antes de publicar o site.");
-            return;
-          }
-
-          const subject = encodeURIComponent(`${data.reason} — contato pelo site`);
-          const body = encodeURIComponent(buildMessage(data));
-          const url = `mailto:${email}?subject=${subject}&body=${body}`;
-
-          setStatus("Abrindo e-mail...", true);
-          window.location.href = url;
-        });
-      }
-
-
-      applyHeroState();
+            applyHeroState();
             unlockBody();
             resolve();
           }, 90);
@@ -3377,67 +3257,7 @@
         if(!flowStarted){
           clearAutoRole();
           step = 3;
-          const emailOk = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(data.email);
-          if(!emailOk){
-            setStatus("Confira o e-mail informado antes de enviar.");
-            return false;
-          }
-          setStatus("");
-          return true;
-        };
-
-        const buildMessage = (data) => {
-          const lines = [
-            "Olá, gostaria de entrar em contato pelo site.",
-            "",
-            `Nome: ${data.name}`,
-            `E-mail: ${data.email}`
-          ];
-
-          if(data.phone) lines.push(`Telefone: ${data.phone}`);
-
-          lines.push(`Motivo do contato: ${data.reason}`, "", "Mensagem:", data.message);
-          return lines.join("\\n");
-        };
-
-        const hasPlaceholder = (value) => !value || /5555000000000|contato@exemplo\\.com/i.test(value);
-
-        whatsappBtn?.addEventListener("click", () => {
-          const data = collectData();
-          if(!validate(data)) return;
-
-          const whatsapp = (form.dataset.whatsapp || "").replace(/\\D/g, "");
-          if(hasPlaceholder(whatsapp)){
-            setStatus("Atualize no código o número do WhatsApp antes de publicar o site.");
-            return;
-          }
-
-          const url = `https://wa.me/${whatsapp}?text=${encodeURIComponent(buildMessage(data))}`;
-          setStatus("Abrindo WhatsApp...", true);
-          window.open(url, "_blank", "noopener");
-        });
-
-        emailBtn?.addEventListener("click", () => {
-          const data = collectData();
-          if(!validate(data)) return;
-
-          const email = (form.dataset.email || "").trim();
-          if(hasPlaceholder(email)){
-            setStatus("Atualize no código o e-mail de atendimento antes de publicar o site.");
-            return;
-          }
-
-          const subject = encodeURIComponent(`${data.reason} — contato pelo site`);
-          const body = encodeURIComponent(buildMessage(data));
-          const url = `mailto:${email}?subject=${subject}&body=${body}`;
-
-          setStatus("Abrindo e-mail...", true);
-          window.location.href = url;
-        });
-      }
-
-
-      applyHeroState();
+          applyHeroState();
           flowStarted = true;
           topbar.classList.add("show-brand");
         }
@@ -3509,70 +3329,11 @@
         unlockBody();
         requestAnimationFrame(() => setTimeout(() => goToScene(idx), 40));
       }));
-          const emailOk = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(data.email);
-          if(!emailOk){
-            setStatus("Confira o e-mail informado antes de enviar.");
-            return false;
-          }
-          setStatus("");
-          return true;
-        };
-
-        const buildMessage = (data) => {
-          const lines = [
-            "Olá, gostaria de entrar em contato pelo site.",
-            "",
-            `Nome: ${data.name}`,
-            `E-mail: ${data.email}`
-          ];
-
-          if(data.phone) lines.push(`Telefone: ${data.phone}`);
-
-          lines.push(`Motivo do contato: ${data.reason}`, "", "Mensagem:", data.message);
-          return lines.join("\\n");
-        };
-
-        const hasPlaceholder = (value) => !value || /5555000000000|contato@exemplo\\.com/i.test(value);
-
-        whatsappBtn?.addEventListener("click", () => {
-          const data = collectData();
-          if(!validate(data)) return;
-
-          const whatsapp = (form.dataset.whatsapp || "").replace(/\\D/g, "");
-          if(hasPlaceholder(whatsapp)){
-            setStatus("Atualize no código o número do WhatsApp antes de publicar o site.");
-            return;
-          }
-
-          const url = `https://wa.me/${whatsapp}?text=${encodeURIComponent(buildMessage(data))}`;
-          setStatus("Abrindo WhatsApp...", true);
-          window.open(url, "_blank", "noopener");
-        });
-
-        emailBtn?.addEventListener("click", () => {
-          const data = collectData();
-          if(!validate(data)) return;
-
-          const email = (form.dataset.email || "").trim();
-          if(hasPlaceholder(email)){
-            setStatus("Atualize no código o e-mail de atendimento antes de publicar o site.");
-            return;
-          }
-
-          const subject = encodeURIComponent(`${data.reason} — contato pelo site`);
-          const body = encodeURIComponent(buildMessage(data));
-          const url = `mailto:${email}?subject=${subject}&body=${body}`;
-
-          setStatus("Abrindo e-mail...", true);
-          window.location.href = url;
-        });
-      }
-
 
 
       function setupContactForm(){
         const form = document.getElementById("contactForm");
-        if(!form) return;
+        if(!form || form.dataset.bound === "true") return;
 
         const status = document.getElementById("contactStatus");
         const whatsappBtn = form.querySelector('[data-contact-action="whatsapp"]');
@@ -3581,25 +3342,28 @@
         const setStatus = (message, ok = false) => {
           if(!status) return;
           status.textContent = message;
-          status.classList.toggle("is-ok", !!ok);
+          status.classList.toggle("is-ok", ok);
         };
 
-        const escapeLine = (value) => String(value || "").replace(/\s+/g, " ").trim();
-
-        const collectData = () => {
-          const fd = new FormData(form);
-          return {
-            name: escapeLine(fd.get("name")),
-            email: escapeLine(fd.get("email")),
-            phone: escapeLine(fd.get("phone")),
-            reason: escapeLine(fd.get("reason")),
-            message: String(fd.get("message") || "").trim()
-          };
-        };
+        const collectData = () => ({
+          name: (form.elements.name?.value || "").trim(),
+          email: (form.elements.email?.value || "").trim(),
+          phone: (form.elements.phone?.value || "").trim(),
+          reason: (form.elements.reason?.value || "Agendar sessão").trim(),
+          message: (form.elements.message?.value || "").trim()
+        });
 
         const validate = (data) => {
-          if(!data.name || !data.email || !data.reason || !data.message){
-            setStatus("Preencha nome, e-mail, motivo do contato e mensagem para continuar.");
+          if(!data.name){
+            setStatus("Preencha seu nome para continuar.");
+            return false;
+          }
+          if(!data.email){
+            setStatus("Preencha seu e-mail para continuar.");
+            return false;
+          }
+          if(!data.message){
+            setStatus("Escreva uma mensagem antes de enviar.");
             return false;
           }
           const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email);
@@ -3659,8 +3423,13 @@
           setStatus("Abrindo e-mail...", true);
           window.location.href = url;
         });
+
+        form.addEventListener("submit", (e) => e.preventDefault());
+        form.dataset.bound = "true";
       }
 
+
+      setupContactForm();
       applyHeroState();
       hideAllCards();
       scheduleRender();
