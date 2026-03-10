@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -1568,6 +1569,25 @@
         text-overflow: clip;
       }
 
+      .contact-grid{
+        grid-template-columns: 1fr !important;
+        gap: 10px;
+      }
+      .contact-form-shell{
+        padding: 15px 14px;
+        border-radius: 16px;
+      }
+      .contact-buttons{
+        flex-direction: column;
+      }
+      .contact-btn{
+        width: 100%;
+      }
+      .contact-meta{
+        grid-template-columns: 1fr !important;
+        gap: 10px;
+      }
+
       #sobre,
       #como-funciona,
       #areas-de-atuacao,
@@ -1677,6 +1697,192 @@
   0%{ width:0%; }
   100%{ width:100%; }
 }
+
+
+    /* ========================= CONTATO ========================= */
+    .contact-wrap{
+      display:grid;
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .contact-intro{
+      display:grid;
+      gap: 14px;
+    }
+    .contact-form-shell{
+      border-radius: 20px;
+      background: rgba(255,255,255,.92);
+      border: 1px solid var(--softBorder);
+      box-shadow: 0 16px 32px rgba(0,0,0,.05);
+      padding: 18px 18px;
+      display:grid;
+      gap: 16px;
+    }
+    .contact-form{
+      display:grid;
+      gap: 14px;
+    }
+    .contact-grid{
+      display:grid;
+      gap: 12px;
+      grid-template-columns: 1fr 1fr;
+    }
+    .field{
+      display:grid;
+      gap: 7px;
+      min-width: 0;
+    }
+    .field--full{ grid-column: 1 / -1; }
+    .field label{
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(20,28,32,.68);
+      font-weight: 800;
+      font-family: var(--bodyFont);
+    }
+    .field input,
+    .field select,
+    .field textarea{
+      width: 100%;
+      min-width: 0;
+      appearance: none;
+      border: 1px solid rgba(0,0,0,.08);
+      border-radius: 14px;
+      background: rgba(255,255,255,.88);
+      color: var(--softInk);
+      font: 500 14px/1.4 var(--bodyFont);
+      padding: 14px 15px;
+      outline: none;
+      transition: border-color .24s ease, box-shadow .24s ease, background .24s ease, transform .24s ease;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.45);
+    }
+    .field textarea{
+      min-height: 150px;
+      resize: vertical;
+    }
+    .field input::placeholder,
+    .field textarea::placeholder{
+      color: rgba(20,28,32,.46);
+    }
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus{
+      border-color: rgba(26,93,102,.34);
+      box-shadow: 0 0 0 4px rgba(26,93,102,.08);
+      background: rgba(255,255,255,.96);
+    }
+    .contact-actions{
+      display:grid;
+      gap: 12px;
+      margin-top: 2px;
+    }
+    .contact-actions-head{
+      display:grid;
+      gap: 6px;
+    }
+    .contact-actions-head strong{
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(20,28,32,.76);
+      font-weight: 800;
+      font-family: var(--bodyFont);
+    }
+    .contact-actions-head span{
+      color: var(--softInk2);
+      line-height: 1.75;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .contact-buttons{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .contact-btn{
+      appearance:none;
+      min-height: 46px;
+      border-radius: 999px;
+      padding: 12px 18px;
+      border: 1px solid transparent;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+      cursor:pointer;
+      text-decoration:none;
+      font: 800 11px/1 var(--bodyFont);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      transition: transform .24s ease, box-shadow .24s ease, background .24s ease, color .24s ease, border-color .24s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .contact-btn:hover,
+    .contact-btn:focus-visible{
+      transform: translateY(-1px);
+      outline: none;
+    }
+    .contact-btn--wa{
+      background: rgba(26,93,102,.96);
+      color: #fff;
+      box-shadow: 0 14px 28px rgba(26,93,102,.20);
+    }
+    .contact-btn--wa:hover,
+    .contact-btn--wa:focus-visible{
+      box-shadow: 0 18px 34px rgba(26,93,102,.24);
+      background: rgba(22,82,90,.98);
+    }
+    .contact-btn--mail{
+      background: rgba(255,255,255,.92);
+      color: var(--brand);
+      border-color: rgba(26,93,102,.16);
+      box-shadow: 0 12px 24px rgba(0,0,0,.05);
+    }
+    .contact-btn--mail:hover,
+    .contact-btn--mail:focus-visible{
+      border-color: rgba(26,93,102,.28);
+      box-shadow: 0 16px 30px rgba(0,0,0,.07);
+      background: rgba(255,255,255,.98);
+    }
+    .contact-status{
+      min-height: 20px;
+      color: rgba(148,44,44,.92);
+      font-size: 12px;
+      line-height: 1.55;
+      font-weight: 600;
+    }
+    .contact-status.is-ok{
+      color: rgba(26,93,102,.94);
+    }
+    .contact-meta{
+      display:grid;
+      gap: 10px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .contact-chip{
+      border-radius: 16px;
+      background: rgba(255,255,255,.90);
+      border: 1px solid var(--softBorder);
+      box-shadow: 0 10px 22px rgba(0,0,0,.035);
+      padding: 14px 14px;
+      display:grid;
+      gap: 6px;
+      align-content:start;
+    }
+    .contact-chip span{
+      font-size: 10.5px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: rgba(20,28,32,.62);
+      font-weight: 800;
+      font-family: var(--bodyFont);
+    }
+    .contact-chip strong{
+      color: var(--softInk);
+      font-size: 14px;
+      line-height: 1.55;
+    }
 
 </style>
 </head>
@@ -2057,46 +2263,105 @@
         <!-- CONTATO -->
         <article class="section-card glass-card card--process" data-card data-origin="bl" id="agendar-sessao">
           <div class="card-inner">
-            <div class="card-kicker">Primeiro passo</div>
+            <div class="card-kicker">Primeiro contato</div>
             <h2 class="card-title">Agendar sessão</h2>
 
             <div class="card-scroll" data-scroll>
-              <div class="about about--process">
+              <div class="contact-wrap">
 
-                <div class="editorial" aria-label="Apresentação do contato">
-                  <div class="lead" aria-label="Convite para agendamento">
-                    <p class="intro-kicker">Canais de atendimento</p>
+                <div class="contact-intro">
+                  <div class="lead" aria-label="Convite para contato">
+                    <p class="intro-kicker">Contato</p>
                     <p class="signature">Vamos conversar</p>
                     <div class="divider" aria-hidden="true"></div>
 
                     <p>
-                      Este espaço é dedicado ao agendamento inicial e ao envio das informações necessárias para começar o acompanhamento com clareza, discrição e acolhimento.
+                      Se você deseja agendar uma sessão ou esclarecer alguma dúvida sobre o atendimento, sinta-se à vontade para entrar em contato. Será um prazer acolher sua mensagem.
                     </p>
                   </div>
+
+                  <section class="body-copy" aria-label="Orientações para o primeiro contato">
+                    <p>
+                      Preencha os campos abaixo e escolha o canal pelo qual prefere encaminhar sua mensagem. O texto será preparado automaticamente para <strong>WhatsApp</strong> ou <strong>e-mail</strong>, tornando este primeiro passo mais simples, organizado e acolhedor.
+                    </p>
+                    <p>
+                      O atendimento é realizado de forma <strong>online</strong>, mediante agendamento, com atenção cuidadosa desde o primeiro contato.
+                    </p>
+                  </section>
                 </div>
 
-                <section class="body-copy" aria-label="Informações de contato">
-                  <p>
-                    Você pode inserir aqui os canais principais de atendimento, como <strong>WhatsApp</strong>, <strong>e-mail</strong> e demais formas de contato profissional, mantendo o visual elegante e organizado do site.
-                  </p>
-                  <p>
-                    Também é possível destacar uma chamada curta e refinada para o agendamento, convidando a pessoa a dar o primeiro passo com leveza e segurança.
-                  </p>
+                <section class="contact-form-shell" aria-label="Formulário de contato">
+                  <form
+                    class="contact-form"
+                    id="contactForm"
+                    data-whatsapp="5555000000000"
+                    data-email="contato@exemplo.com"
+                    novalidate
+                  >
+                    <div class="contact-grid">
+                      <div class="field">
+                        <label for="contactName">Nome</label>
+                        <input id="contactName" name="name" type="text" placeholder="Seu nome" required>
+                      </div>
+
+                      <div class="field">
+                        <label for="contactEmail">E-mail</label>
+                        <input id="contactEmail" name="email" type="email" placeholder="voce@email.com" required>
+                      </div>
+
+                      <div class="field">
+                        <label for="contactPhone">Telefone</label>
+                        <input id="contactPhone" name="phone" type="tel" placeholder="(00) 00000-0000">
+                      </div>
+
+                      <div class="field">
+                        <label for="contactReason">Motivo do contato</label>
+                        <select id="contactReason" name="reason" required>
+                          <option value="">Selecione</option>
+                          <option value="Agendar sessão">Agendar sessão</option>
+                          <option value="Tirar dúvidas">Tirar dúvidas</option>
+                          <option value="Informações sobre atendimento">Informações sobre atendimento</option>
+                        </select>
+                      </div>
+
+                      <div class="field field--full">
+                        <label for="contactMessage">Mensagem</label>
+                        <textarea id="contactMessage" name="message" placeholder="Escreva sua mensagem com tranquilidade." required></textarea>
+                      </div>
+                    </div>
+
+                    <div class="contact-actions">
+                      <div class="contact-actions-head">
+                        <strong>Escolha como prefere enviar sua mensagem</strong>
+                        <span>Os dados serão organizados automaticamente antes de abrir o canal selecionado.</span>
+                      </div>
+
+                      <div class="contact-buttons">
+                        <button type="button" class="contact-btn contact-btn--wa" data-contact-action="whatsapp">
+                          Enviar por WhatsApp
+                        </button>
+                        <button type="button" class="contact-btn contact-btn--mail" data-contact-action="email">
+                          Enviar por e-mail
+                        </button>
+                      </div>
+
+                      <div class="contact-status" id="contactStatus" aria-live="polite"></div>
+                    </div>
+                  </form>
                 </section>
 
-                <section class="grid" aria-label="Estrutura recomendada para contato">
-                  <div class="box" aria-label="Canais de comunicação">
-                    <h3>Canais principais</h3>
-                    <p>
-                      WhatsApp profissional, e-mail de atendimento e, se desejar, horário de retorno ou orientações breves para o primeiro contato.
-                    </p>
+                <section class="contact-meta" aria-label="Informações complementares">
+                  <div class="contact-chip">
+                    <span>Atendimento</span>
+                    <strong>Online, com agendamento prévio</strong>
                   </div>
-
-                  <div class="box" aria-label="Chamada de ação">
-                    <h3>Chamada de ação</h3>
-                    <p>
-                      Uma frase curta como “Agende sua primeira conversa” ou “Entre em contato para iniciar seu atendimento” já funciona muito bem sem pesar o layout.
-                    </p>
+                  <div class="contact-chip">
+                    <span>Retorno</span>
+                    <strong>Mensagens respondidas em horário comercial</strong>
+                  </div>
+                  <div class="contact-chip">
+                    <span>Primeiro passo</span>
+                    <strong>Contato inicial com clareza, discrição e acolhimento</strong>
                   </div>
                 </section>
 
@@ -2105,6 +2370,7 @@
             </div>
           </div>
         </article>
+
 
       </div>
 
@@ -2373,8 +2639,68 @@
 
         const dur = stepDurationMs(next);
         step = clamp(next, 0, 3);
+          const emailOk = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(data.email);
+          if(!emailOk){
+            setStatus("Confira o e-mail informado antes de enviar.");
+            return false;
+          }
+          setStatus("");
+          return true;
+        };
 
-        applyHeroState();
+        const buildMessage = (data) => {
+          const lines = [
+            "Olá, gostaria de entrar em contato pelo site.",
+            "",
+            `Nome: ${data.name}`,
+            `E-mail: ${data.email}`
+          ];
+
+          if(data.phone) lines.push(`Telefone: ${data.phone}`);
+
+          lines.push(`Motivo do contato: ${data.reason}`, "", "Mensagem:", data.message);
+          return lines.join("\\n");
+        };
+
+        const hasPlaceholder = (value) => !value || /5555000000000|contato@exemplo\\.com/i.test(value);
+
+        whatsappBtn?.addEventListener("click", () => {
+          const data = collectData();
+          if(!validate(data)) return;
+
+          const whatsapp = (form.dataset.whatsapp || "").replace(/\\D/g, "");
+          if(hasPlaceholder(whatsapp)){
+            setStatus("Atualize no código o número do WhatsApp antes de publicar o site.");
+            return;
+          }
+
+          const url = `https://wa.me/${whatsapp}?text=${encodeURIComponent(buildMessage(data))}`;
+          setStatus("Abrindo WhatsApp...", true);
+          window.open(url, "_blank", "noopener");
+        });
+
+        emailBtn?.addEventListener("click", () => {
+          const data = collectData();
+          if(!validate(data)) return;
+
+          const email = (form.dataset.email || "").trim();
+          if(hasPlaceholder(email)){
+            setStatus("Atualize no código o e-mail de atendimento antes de publicar o site.");
+            return;
+          }
+
+          const subject = encodeURIComponent(`${data.reason} — contato pelo site`);
+          const body = encodeURIComponent(buildMessage(data));
+          const url = `mailto:${email}?subject=${subject}&body=${body}`;
+
+          setStatus("Abrindo e-mail...", true);
+          window.location.href = url;
+        });
+      }
+
+
+      setupContactForm();
+      applyHeroState();
         setCooldown();
 
         if(step === 1) scheduleAutoRole();
@@ -2637,7 +2963,67 @@
           window.setTimeout(() => {
             animating = false;
             setHeroTransitionMode(true);
-            applyHeroState();
+          const emailOk = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(data.email);
+          if(!emailOk){
+            setStatus("Confira o e-mail informado antes de enviar.");
+            return false;
+          }
+          setStatus("");
+          return true;
+        };
+
+        const buildMessage = (data) => {
+          const lines = [
+            "Olá, gostaria de entrar em contato pelo site.",
+            "",
+            `Nome: ${data.name}`,
+            `E-mail: ${data.email}`
+          ];
+
+          if(data.phone) lines.push(`Telefone: ${data.phone}`);
+
+          lines.push(`Motivo do contato: ${data.reason}`, "", "Mensagem:", data.message);
+          return lines.join("\\n");
+        };
+
+        const hasPlaceholder = (value) => !value || /5555000000000|contato@exemplo\\.com/i.test(value);
+
+        whatsappBtn?.addEventListener("click", () => {
+          const data = collectData();
+          if(!validate(data)) return;
+
+          const whatsapp = (form.dataset.whatsapp || "").replace(/\\D/g, "");
+          if(hasPlaceholder(whatsapp)){
+            setStatus("Atualize no código o número do WhatsApp antes de publicar o site.");
+            return;
+          }
+
+          const url = `https://wa.me/${whatsapp}?text=${encodeURIComponent(buildMessage(data))}`;
+          setStatus("Abrindo WhatsApp...", true);
+          window.open(url, "_blank", "noopener");
+        });
+
+        emailBtn?.addEventListener("click", () => {
+          const data = collectData();
+          if(!validate(data)) return;
+
+          const email = (form.dataset.email || "").trim();
+          if(hasPlaceholder(email)){
+            setStatus("Atualize no código o e-mail de atendimento antes de publicar o site.");
+            return;
+          }
+
+          const subject = encodeURIComponent(`${data.reason} — contato pelo site`);
+          const body = encodeURIComponent(buildMessage(data));
+          const url = `mailto:${email}?subject=${subject}&body=${body}`;
+
+          setStatus("Abrindo e-mail...", true);
+          window.location.href = url;
+        });
+      }
+
+
+      applyHeroState();
             unlockBody();
             resolve();
           }, 90);
@@ -2991,7 +3377,67 @@
         if(!flowStarted){
           clearAutoRole();
           step = 3;
-          applyHeroState();
+          const emailOk = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(data.email);
+          if(!emailOk){
+            setStatus("Confira o e-mail informado antes de enviar.");
+            return false;
+          }
+          setStatus("");
+          return true;
+        };
+
+        const buildMessage = (data) => {
+          const lines = [
+            "Olá, gostaria de entrar em contato pelo site.",
+            "",
+            `Nome: ${data.name}`,
+            `E-mail: ${data.email}`
+          ];
+
+          if(data.phone) lines.push(`Telefone: ${data.phone}`);
+
+          lines.push(`Motivo do contato: ${data.reason}`, "", "Mensagem:", data.message);
+          return lines.join("\\n");
+        };
+
+        const hasPlaceholder = (value) => !value || /5555000000000|contato@exemplo\\.com/i.test(value);
+
+        whatsappBtn?.addEventListener("click", () => {
+          const data = collectData();
+          if(!validate(data)) return;
+
+          const whatsapp = (form.dataset.whatsapp || "").replace(/\\D/g, "");
+          if(hasPlaceholder(whatsapp)){
+            setStatus("Atualize no código o número do WhatsApp antes de publicar o site.");
+            return;
+          }
+
+          const url = `https://wa.me/${whatsapp}?text=${encodeURIComponent(buildMessage(data))}`;
+          setStatus("Abrindo WhatsApp...", true);
+          window.open(url, "_blank", "noopener");
+        });
+
+        emailBtn?.addEventListener("click", () => {
+          const data = collectData();
+          if(!validate(data)) return;
+
+          const email = (form.dataset.email || "").trim();
+          if(hasPlaceholder(email)){
+            setStatus("Atualize no código o e-mail de atendimento antes de publicar o site.");
+            return;
+          }
+
+          const subject = encodeURIComponent(`${data.reason} — contato pelo site`);
+          const body = encodeURIComponent(buildMessage(data));
+          const url = `mailto:${email}?subject=${subject}&body=${body}`;
+
+          setStatus("Abrindo e-mail...", true);
+          window.location.href = url;
+        });
+      }
+
+
+      applyHeroState();
           flowStarted = true;
           topbar.classList.add("show-brand");
         }
@@ -3063,6 +3509,157 @@
         unlockBody();
         requestAnimationFrame(() => setTimeout(() => goToScene(idx), 40));
       }));
+          const emailOk = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(data.email);
+          if(!emailOk){
+            setStatus("Confira o e-mail informado antes de enviar.");
+            return false;
+          }
+          setStatus("");
+          return true;
+        };
+
+        const buildMessage = (data) => {
+          const lines = [
+            "Olá, gostaria de entrar em contato pelo site.",
+            "",
+            `Nome: ${data.name}`,
+            `E-mail: ${data.email}`
+          ];
+
+          if(data.phone) lines.push(`Telefone: ${data.phone}`);
+
+          lines.push(`Motivo do contato: ${data.reason}`, "", "Mensagem:", data.message);
+          return lines.join("\\n");
+        };
+
+        const hasPlaceholder = (value) => !value || /5555000000000|contato@exemplo\\.com/i.test(value);
+
+        whatsappBtn?.addEventListener("click", () => {
+          const data = collectData();
+          if(!validate(data)) return;
+
+          const whatsapp = (form.dataset.whatsapp || "").replace(/\\D/g, "");
+          if(hasPlaceholder(whatsapp)){
+            setStatus("Atualize no código o número do WhatsApp antes de publicar o site.");
+            return;
+          }
+
+          const url = `https://wa.me/${whatsapp}?text=${encodeURIComponent(buildMessage(data))}`;
+          setStatus("Abrindo WhatsApp...", true);
+          window.open(url, "_blank", "noopener");
+        });
+
+        emailBtn?.addEventListener("click", () => {
+          const data = collectData();
+          if(!validate(data)) return;
+
+          const email = (form.dataset.email || "").trim();
+          if(hasPlaceholder(email)){
+            setStatus("Atualize no código o e-mail de atendimento antes de publicar o site.");
+            return;
+          }
+
+          const subject = encodeURIComponent(`${data.reason} — contato pelo site`);
+          const body = encodeURIComponent(buildMessage(data));
+          const url = `mailto:${email}?subject=${subject}&body=${body}`;
+
+          setStatus("Abrindo e-mail...", true);
+          window.location.href = url;
+        });
+      }
+
+
+
+      function setupContactForm(){
+        const form = document.getElementById("contactForm");
+        if(!form) return;
+
+        const status = document.getElementById("contactStatus");
+        const whatsappBtn = form.querySelector('[data-contact-action="whatsapp"]');
+        const emailBtn = form.querySelector('[data-contact-action="email"]');
+
+        const setStatus = (message, ok = false) => {
+          if(!status) return;
+          status.textContent = message;
+          status.classList.toggle("is-ok", !!ok);
+        };
+
+        const escapeLine = (value) => String(value || "").replace(/\s+/g, " ").trim();
+
+        const collectData = () => {
+          const fd = new FormData(form);
+          return {
+            name: escapeLine(fd.get("name")),
+            email: escapeLine(fd.get("email")),
+            phone: escapeLine(fd.get("phone")),
+            reason: escapeLine(fd.get("reason")),
+            message: String(fd.get("message") || "").trim()
+          };
+        };
+
+        const validate = (data) => {
+          if(!data.name || !data.email || !data.reason || !data.message){
+            setStatus("Preencha nome, e-mail, motivo do contato e mensagem para continuar.");
+            return false;
+          }
+          const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email);
+          if(!emailOk){
+            setStatus("Confira o e-mail informado antes de enviar.");
+            return false;
+          }
+          setStatus("");
+          return true;
+        };
+
+        const buildMessage = (data) => {
+          const lines = [
+            "Olá, gostaria de entrar em contato pelo site.",
+            "",
+            `Nome: ${data.name}`,
+            `E-mail: ${data.email}`
+          ];
+
+          if(data.phone) lines.push(`Telefone: ${data.phone}`);
+
+          lines.push(`Motivo do contato: ${data.reason}`, "", "Mensagem:", data.message);
+          return lines.join("\n");
+        };
+
+        const hasPlaceholder = (value) => !value || /5555000000000|contato@exemplo\.com/i.test(value);
+
+        whatsappBtn?.addEventListener("click", () => {
+          const data = collectData();
+          if(!validate(data)) return;
+
+          const whatsapp = (form.dataset.whatsapp || "").replace(/\D/g, "");
+          if(hasPlaceholder(whatsapp)){
+            setStatus("Atualize no código o número do WhatsApp antes de publicar o site.");
+            return;
+          }
+
+          const url = `https://wa.me/${whatsapp}?text=${encodeURIComponent(buildMessage(data))}`;
+          setStatus("Abrindo WhatsApp...", true);
+          window.open(url, "_blank", "noopener");
+        });
+
+        emailBtn?.addEventListener("click", () => {
+          const data = collectData();
+          if(!validate(data)) return;
+
+          const email = (form.dataset.email || "").trim();
+          if(hasPlaceholder(email)){
+            setStatus("Atualize no código o e-mail de atendimento antes de publicar o site.");
+            return;
+          }
+
+          const subject = encodeURIComponent(`${data.reason} — contato pelo site`);
+          const body = encodeURIComponent(buildMessage(data));
+          const url = `mailto:${email}?subject=${subject}&body=${body}`;
+
+          setStatus("Abrindo e-mail...", true);
+          window.location.href = url;
+        });
+      }
 
       applyHeroState();
       hideAllCards();
