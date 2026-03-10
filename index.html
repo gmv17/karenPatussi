@@ -8,8 +8,8 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" as="image" href="imagens/Logo.PNG" fetchpriority="high">
-  <link rel="preload" as="image" href="imagens/Tree ring hero.png" fetchpriority="high">
+  <link rel="preload" as="image" href="imagens/Logo.webp" fetchpriority="high">
+  <link rel="preload" as="image" href="imagens/Tree ring hero.webp" fetchpriority="high">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
@@ -144,7 +144,7 @@
       position: fixed;
       inset: 0;
       z-index: -6;
-      background-image: url("imagens/fundo textura.png");
+      background-image: url("imagens/fundo textura.webp");
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -223,12 +223,12 @@
       filter: blur(var(--glowBlur));
       mix-blend-mode: screen;
 
-      -webkit-mask-image: url("imagens/Tree ring hero.png");
+      -webkit-mask-image: url("imagens/Tree ring hero.webp");
       -webkit-mask-repeat: no-repeat;
       -webkit-mask-size: contain;
       -webkit-mask-position: center;
 
-      mask-image: url("imagens/Tree ring hero.png");
+      mask-image: url("imagens/Tree ring hero.webp");
       mask-repeat: no-repeat;
       mask-size: contain;
       mask-position: center;
@@ -292,12 +292,12 @@
       position: relative;
       background: rgba(255,255,255,.18);
 
-      -webkit-mask-image: url("imagens/Logo.PNG");
+      -webkit-mask-image: url("imagens/Logo.webp");
       -webkit-mask-repeat: no-repeat;
       -webkit-mask-position: center;
       -webkit-mask-size: contain;
 
-      mask-image: url("imagens/Logo.PNG");
+      mask-image: url("imagens/Logo.webp");
       mask-repeat: no-repeat;
       mask-position: center;
       mask-size: contain;
@@ -414,12 +414,12 @@
     @supports ((-webkit-mask-image: url("x.png")) or (mask-image: url("x.png"))){
       .logo-img{ display:none; }
       .logo-mark{
-        -webkit-mask-image: url("imagens/Logo.PNG");
+        -webkit-mask-image: url("imagens/Logo.webp");
         -webkit-mask-repeat: no-repeat;
         -webkit-mask-position: center;
         -webkit-mask-size: contain;
 
-        mask-image: url("imagens/Logo.PNG");
+        mask-image: url("imagens/Logo.webp");
         mask-repeat: no-repeat;
         mask-position: center;
         mask-size: contain;
@@ -1821,7 +1821,7 @@
   <div class="loader" id="loader" aria-label="Carregando" role="status" aria-live="polite">
     <div class="loader-wrap">
       <div class="loader-logoMark" aria-hidden="true"></div>
-      <img class="loader-fallbackImg" src="imagens/Logo.PNG" alt="Logo Káren Patussi" decoding="async" fetchpriority="high">
+      <img class="loader-fallbackImg" src="imagens/Logo.webp" alt="Logo Káren Patussi" decoding="async" fetchpriority="high">
       <div class="loader-bar"><span class="loader-progress"></span></div>
     </div>
   </div>
@@ -1829,7 +1829,7 @@
   <!-- Árvore fixa -->
   <div class="bg-stage" aria-hidden="true">
     <div class="tree">
-      <img src="imagens/Tree ring hero.png" alt="" decoding="async" fetchpriority="high">
+      <img src="imagens/Tree ring hero.webp" alt="" decoding="async" fetchpriority="high">
     </div>
   </div>
 
@@ -1837,7 +1837,7 @@
   <header class="topbar" id="topbar" aria-label="Barra superior">
     <div class="bar-title" id="barTitle" role="button" tabindex="0" aria-label="Voltar ao topo">
       <span class="logo-mark" aria-hidden="true"></span>
-      <img class="logo-img" src="imagens/Logo.PNG" alt="Logo" decoding="async">
+      <img class="logo-img" src="imagens/Logo.webp" alt="Logo" decoding="async">
       <span class="bar-name">Káren Patussi</span>
     </div>
 
@@ -1883,7 +1883,7 @@
 
       <div class="menu-logo" aria-hidden="true">
         <div class="logo-box">
-          <img src="imagens/Logo.PNG" alt="">
+          <img src="imagens/Logo.webp" alt="">
         </div>
       </div>
     </aside>
@@ -1928,7 +1928,7 @@
                 <div class="editorial" aria-label="Apresentação da psicóloga">
                   <div class="portrait" aria-label="Foto da psicóloga">
                     <img
-                      src="imagens/Foto Karen Sobre.png"
+                      src="imagens/Foto Karen Sobre.webp"
                       loading="lazy"
                       decoding="async"
                       fetchpriority="low"
