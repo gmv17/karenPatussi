@@ -1875,13 +1875,13 @@
 
     <nav class="topbar-nav" aria-label="Navegação principal">
       <a href="#home" data-link data-index="-1">Home</a>
-            <a href="#sobre" data-link data-index="0">Sobre</a>
+      <a href="#sobre" data-link data-index="0">Sobre</a>
       <a href="#como-funciona" data-link data-index="1">Como funciona</a>
       <a href="#areas-de-atuacao" data-link data-index="2">Áreas de atuação</a>
       <a href="#perguntas-frequentes" data-link data-index="3">Perguntas frequentes</a>
       <a href="#agendar-sessao" data-link data-index="4">Agendar sessão</a>
       <a href="blog.html" class="nav-blog">Blog</a>
-      </nav>
+    </nav>
 
     <button class="menu-btn" id="openMenu" type="button" aria-label="Abrir menu" aria-controls="menuOverlay" aria-expanded="false">
       <span class="burger" aria-hidden="true"><span></span><span></span><span></span></span>
@@ -1907,13 +1907,13 @@
 
       <nav class="drawer-nav" aria-label="Navegação">
         <a href="#home" data-link data-index="-1">Home</a>
-              <a href="#sobre" data-link data-index="0">Sobre</a>
+        <a href="#sobre" data-link data-index="0">Sobre</a>
         <a href="#como-funciona" data-link data-index="1">Como funciona</a>
         <a href="#areas-de-atuacao" data-link data-index="2">Áreas de atuação</a>
         <a href="#perguntas-frequentes" data-link data-index="3">Perguntas frequentes</a>
         <a href="#agendar-sessao" data-link data-index="4">Agendar sessão</a>
         <a href="blog.html" class="nav-blog">Blog</a>
-        </nav>
+      </nav>
 
       <div class="menu-logo" aria-hidden="true">
         <div class="logo-box">
@@ -3440,33 +3440,5 @@
 })();
 
 </script>
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  const hash = window.location.hash;
-  if (!hash) return;
-
-  const map = {
-    "#sobre": 0,
-    "#como-funciona": 1,
-    "#areas-de-atuacao": 2,
-    "#perguntas-frequentes": 3,
-    "#agendar-sessao": 4
-  };
-
-  if (map[hash] !== undefined) {
-    const index = map[hash];
-
-    if (typeof goToScene === "function") {
-      goToScene(index);
-    }
-
-    if (typeof goToCard === "function") {
-      goToCard(index);
-    }
-  }
-});
-</script>
-
 </body>
 </html>
