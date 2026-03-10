@@ -1678,7 +1678,18 @@
   100%{ width:100%; }
 }
 
-</style>
+
+    /* ===== Mobile hero return fix ===== */
+    @media (max-width: 979.98px){
+      body.mobile-at-hero .brand,
+      body.mobile-at-hero .role{
+        opacity: 1 !important;
+        filter: blur(0) !important;
+        transform: translate3d(0,0,0) !important;
+      }
+    }
+
+  </style>
 </head>
 
 <body class="is-loading">
@@ -2978,5 +2989,48 @@
       window.addEventListener("load", () => window.setTimeout(setupMobileCardToggles, 120), { once: true });
     })();
   </script>
+
+<script>
+(function(){
+  const mq = window.matchMedia('(max-width: 979.98px)');
+  const hero = document.getElementById('home');
+  const brand = document.getElementById('brand');
+  const role = document.getElementById('role');
+
+  if(!hero || !brand || !role) return;
+
+  function syncMobileHeroState(){
+    if(!mq.matches){
+      document.body.classList.remove('mobile-at-hero');
+      return;
+    }
+
+    const heroRect = hero.getBoundingClientRect();
+    const atHero = heroRect.top <= 80 && heroRect.bottom >= (window.innerHeight * 0.45);
+
+    document.body.classList.toggle('mobile-at-hero', atHero);
+
+    if(atHero){
+      brand.style.setProperty('--nameY', '0px');
+      brand.style.setProperty('--nameO', '1');
+      brand.style.setProperty('--nameB', '0px');
+
+      role.style.setProperty('--roleY', '0px');
+      role.style.setProperty('--roleO', '1');
+      role.style.setProperty('--roleB', '0px');
+    }
+  }
+
+  window.addEventListener('scroll', syncMobileHeroState, { passive: true });
+  window.addEventListener('resize', syncMobileHeroState, { passive: true });
+  window.addEventListener('orientationchange', syncMobileHeroState, { passive: true });
+  document.addEventListener('DOMContentLoaded', syncMobileHeroState);
+  window.addEventListener('load', syncMobileHeroState);
+
+  setTimeout(syncMobileHeroState, 120);
+  setTimeout(syncMobileHeroState, 500);
+})();
+</script>
+
 </body>
 </html>
