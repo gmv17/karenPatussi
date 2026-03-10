@@ -1650,7 +1650,35 @@
       50%{ opacity: .94; letter-spacing: .26em; }
     }
 
-  </style>
+  
+/* ===== Thin Loader Progress Bar ===== */
+.loader-bar{
+  width: min(220px,40vw);
+  height: 2px;
+  margin-top: 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.28);
+  overflow: hidden;
+  position: relative;
+}
+
+.loader-progress{
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:0%;
+  background: rgba(255,255,255,.95);
+  box-shadow: 0 0 8px rgba(255,255,255,.55);
+  animation: loaderBar 2.5s cubic-bezier(.16,1,.18,1) forwards;
+}
+
+@keyframes loaderBar{
+  0%{ width:0%; }
+  100%{ width:100%; }
+}
+
+</style>
 </head>
 
 <body class="is-loading">
@@ -1659,7 +1687,7 @@
     <div class="loader-wrap">
       <div class="loader-logoMark" aria-hidden="true"></div>
       <img class="loader-fallbackImg" src="imagens/Logo.PNG" alt="Logo Káren Patussi">
-      <p class="loader-sub">Carregando</p>
+      <div class="loader-bar"><span class="loader-progress"></span></div>
     </div>
   </div>
 
