@@ -1835,7 +1835,7 @@
 
   <!-- TOPBAR -->
   <header class="topbar" id="topbar" aria-label="Barra superior">
-    <div class="bar-title" id="barTitle">
+    <div class="bar-title" id="barTitle" role="button" tabindex="0" aria-label="Voltar ao topo">
       <span class="logo-mark" aria-hidden="true"></span>
       <img class="logo-img" src="imagens/Logo.PNG" alt="Logo" decoding="async">
       <span class="bar-name">Káren Patussi</span>
@@ -1863,7 +1863,7 @@
       <span class="grain" aria-hidden="true"></span>
 
       <div class="drawer-head">
-        <div class="drawer-brand" aria-hidden="true">
+        <div class="drawer-brand" id="drawerBrand" role="button" tabindex="0" aria-label="Voltar ao topo">
           <strong>Káren Patussi</strong>
           <span>Menu</span>
         </div>
@@ -3369,22 +3369,43 @@
       }, { once: true });
     })();
   
-// voltar para o hero ao clicar no nome da barra
-document.addEventListener("DOMContentLoaded", function(){
-  const homeBtn = document.getElementById("homeBtn");
-  const hero = document.getElementById("hero");
+// voltar para o hero ao clicar no nome da barra / marca do menu
+(function(){
+  const barTitle = document.getElementById("barTitle");
+  const drawerBrand = document.getElementById("drawerBrand");
+  const heroTarget = document.getElementById("home");
+  const overlay = document.getElementById("menuOverlay");
+  const openBtn = document.getElementById("openMenu");
 
-  if(homeBtn){
-    homeBtn.addEventListener("click", function(){
-      if(hero){
-        hero.scrollIntoView({behavior:"smooth"});
-      }else{
-        window.scrollTo({top:0,behavior:"smooth"});
-      }
+  function goHome(){
+    if(typeof closeMenu === "function"){
+      closeMenu();
+    }else if(overlay){
+      overlay.classList.remove("is-open");
+      overlay.setAttribute("aria-hidden", "true");
       document.body.classList.remove("menu-open");
-    });
+      if(openBtn) openBtn.setAttribute("aria-expanded", "false");
+    }
+
+    if(heroTarget){
+      heroTarget.scrollIntoView({ behavior: "smooth", block: "start" });
+    }else{
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   }
-});
+
+  [barTitle, drawerBrand].forEach((el) => {
+    if(!el) return;
+    el.style.cursor = "pointer";
+    el.addEventListener("click", goHome);
+    el.addEventListener("keydown", (e) => {
+      if(e.key === "Enter" || e.key === " "){
+        e.preventDefault();
+        goHome();
+      }
+    });
+  });
+})();
 
 </script>
 </body>
