@@ -491,15 +491,18 @@
 
   <div class="shell">
     <header class="topbar" aria-label="Barra superior">
-      <a class="brand-link" href="index.html" aria-label="Voltar ao site principal">
+      <a class="brand-link" href="index.html#home" aria-label="Voltar ao site principal">
         <img src="imagens/Logo.webp" alt="Logo Káren Patussi">
         <span class="brand-name">Káren Patussi</span>
       </a>
 
       <nav class="topnav" aria-label="Navegação do blog">
-        <a href="index.html">Home</a>
+        <a href="index.html#home">Home</a>
         <a href="index.html#sobre">Sobre</a>
         <a href="index.html#como-funciona">Como funciona</a>
+        <a href="index.html#areas-de-atuacao">Áreas de atuação</a>
+        <a href="index.html#perguntas-frequentes">Perguntas frequentes</a>
+        <a href="index.html#agendar-sessao">Agendar sessão</a>
         <a class="is-current" href="blog.html" aria-current="page">Blog</a>
       </nav>
     </header>
@@ -514,7 +517,7 @@
           </p>
           <div class="hero-actions">
             <a class="btn btn--solid" href="#artigos">Explorar textos</a>
-            <a class="btn btn--ghost" href="index.html">Voltar ao site principal</a>
+            <a class="btn btn--ghost" href="index.html#home">Voltar ao site principal</a>
           </div>
         </div>
       </section>
@@ -609,10 +612,24 @@
           © Káren Patussi — Psicóloga &amp; Terapeuta Sexual
         </div>
         <div>
-          <a href="index.html">Voltar ao site</a>
+          <a href="index.html#home">Voltar ao site</a>
         </div>
       </div>
     </footer>
   </div>
+
+  <script>
+    (function () {
+      var navLinks = document.querySelectorAll('a[href^="index.html#"]');
+      navLinks.forEach(function(link){
+        link.addEventListener('click', function(){
+          try {
+            sessionStorage.setItem('kp-target-hash', link.getAttribute('href').split('index.html')[1] || '#home');
+          } catch (e) {}
+        });
+      });
+    })();
+  </script>
+
 </body>
 </html>
