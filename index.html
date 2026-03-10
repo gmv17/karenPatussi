@@ -2652,6 +2652,24 @@
         root.style.setProperty("--heroParallax", `${offset.toFixed(2)}px`);
       }
 
+      function ensureDesktopCardsVisible(){
+        if(isMobileLayout()) return;
+        if(prefersReduced()) return;
+        if(!heroStage || !cardsTrack) return;
+        if(flowStarted || animating) return;
+        if(document.body.classList.contains("is-loading")) return;
+
+        const scrollY = window.scrollY || window.pageYOffset || 0;
+        const triggerY = (cardsTrack.getBoundingClientRect().top + scrollY) - Math.max((topbar?.offsetHeight || 0) + 56, 120);
+
+        if(scrollY >= triggerY){
+          clearAutoRole();
+          step = 3;
+          applyHeroState();
+          handoffToCards();
+        }
+      }
+
       function syncMobileHeroWithScroll(){
         if(!isMobileLayout()) return;
         if(animating) return;
@@ -3259,6 +3277,7 @@
       window.addEventListener("scroll", () => {
         syncMobileHeroWithScroll();
         updateHeroParallax();
+        ensureDesktopCardsVisible();
         updateCurrentNav();
       }, { passive:true });
 
