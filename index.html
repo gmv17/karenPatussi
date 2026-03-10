@@ -2320,6 +2320,26 @@
         root.style.setProperty("--roleB", String((blurMax * 0.9) * (1 - t)) + "px");
       }
 
+      function syncMobileHeroWithScroll(){
+        if(!isMobileLayout()) return;
+        if(flowStarted) return;
+        if(animating) return;
+
+        const firstCard = cards[0];
+        if(!heroStage || !firstCard) return;
+
+        const heroTop = heroStage.offsetTop || 0;
+        const scrollY = window.scrollY || window.pageYOffset || 0;
+        const vh = window.innerHeight || 800;
+        const fadeDistance = Math.max(120, heroStage.offsetHeight - (vh * 0.34));
+
+        const raw = 1 - ((scrollY - heroTop) / fadeDistance);
+        const t = clamp(raw, 0, 1);
+
+        syncHeroReturnWithCardProgress(t);
+        topbar.classList.toggle("show-brand", t < 0.98);
+      }
+
       function scheduleAutoRole(){
         if(step !== 1) return;
         if(autoRolePending) return;
@@ -2892,6 +2912,10 @@
         return true;
       }
 
+      window.addEventListener("scroll", () => {
+        syncMobileHeroWithScroll();
+      }, { passive:true });
+
       window.addEventListener("keydown", (e) => {
         if(document.body.classList.contains("is-loading")) return;
 
@@ -2939,10 +2963,12 @@
       window.addEventListener("resize", () => {
         scheduleRender();
         window.setTimeout(setupMobileCardToggles, 80);
+        window.setTimeout(syncMobileHeroWithScroll, 30);
       }, { passive:true });
       window.addEventListener("orientationchange", () => {
         setTimeout(scheduleRender, 120);
         setTimeout(setupMobileCardToggles, 180);
+        setTimeout(syncMobileHeroWithScroll, 220);
       }, { passive:true });
 
       function goToScene(i){
@@ -3031,7 +3057,11 @@
       hideAllCards();
       scheduleRender();
       window.setTimeout(setupMobileCardToggles, 60);
-      window.addEventListener("load", () => window.setTimeout(setupMobileCardToggles, 120), { once: true });
+      window.setTimeout(syncMobileHeroWithScroll, 60);
+      window.addEventListener("load", () => {
+        window.setTimeout(setupMobileCardToggles, 120);
+        window.setTimeout(syncMobileHeroWithScroll, 140);
+      }, { once: true });
     })();
   </script>
 </body>
