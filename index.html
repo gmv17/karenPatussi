@@ -1444,14 +1444,17 @@
       }
       .card-scroll{
         position: relative;
-        max-height: clamp(150px, 30vh, 220px) !important;
+        max-height: 300px !important;
         overflow: hidden !important;
         padding-top: 0;
         padding-bottom: 0;
         transition: max-height 420ms cubic-bezier(.16, 1, .18, 1);
       }
       .section-card.is-expanded .card-scroll{
-        max-height: 4000px !important;
+        max-height: min(68dvh, 620px) !important;
+        overflow: auto !important;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
       }
       .card-scroll::before,
       .card-scroll::after{ display:none !important; }
@@ -2048,6 +2051,7 @@
 
       const clamp = (v,a,b)=>Math.max(a,Math.min(b,v));
       const prefersReduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const isMobileLayout = () => window.matchMedia("(max-width: 900px)").matches;
 
       function getMsVar(name, fallbackMs){
         const raw = getComputedStyle(root).getPropertyValue(name).trim();
@@ -2083,8 +2087,7 @@
             scroll.insertAdjacentElement("afterend", toggle);
           }
 
-          const collapsedMax = Math.min(window.innerHeight * 0.30, 220);
-          const shouldCollapse = scroll.scrollHeight > (collapsedMax + 24);
+          const shouldCollapse = scroll.scrollHeight > 360;
           card.classList.toggle("has-toggle", shouldCollapse);
 
           if(!toggle.dataset.bound){
@@ -2105,12 +2108,6 @@
           }
 
           toggle.hidden = !isMobileLayout();
-
-          if(isMobileLayout() && shouldCollapse){
-            card.classList.remove("is-expanded");
-            toggle.setAttribute("aria-expanded", "false");
-            toggle.textContent = "Ver mais";
-          }
         });
       }
 
@@ -2593,8 +2590,18 @@
         const active = cards[sceneIndex];
         if(!active) return { used: false, atEdge: true };
 
+        if(isMobileLayout() && !active.classList.contains("is-expanded")){
+          return { used: false, atEdge: true };
+        }
+
         const sc = active.querySelector("[data-scroll]");
         if(!sc) return { used: false, atEdge: true };
+
+        const style = window.getComputedStyle(sc);
+        const canOverflow = /(auto|scroll)/.test(style.overflowY) || /(auto|scroll)/.test(style.overflow);
+        if(isMobileLayout() && !canOverflow){
+          return { used: false, atEdge: true };
+        }
 
         const max = sc.scrollHeight - sc.clientHeight;
         const hasScroll = max > 2;
@@ -2616,6 +2623,10 @@
       window.addEventListener("wheel", (e) => {
         if(document.body.classList.contains("is-loading")) return;
         if(overlay.classList.contains("is-open")) return;
+
+        if(isMobileLayout() && flowStarted){
+          return;
+        }
 
         if(flowStarted && !prefersReduced()){
           if(e.ctrlKey) return;
@@ -2676,6 +2687,10 @@
         const yy = (e.touches && e.touches.length) ? e.touches[0].clientY : touchY;
         const dy = touchY - yy;
         touchY = yy;
+
+        if(isMobileLayout() && flowStarted){
+          return;
+        }
 
         if(flowStarted && !prefersReduced()){
           e.preventDefault();
