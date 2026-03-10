@@ -15,30 +15,23 @@
     :root{
       --brand:#1A5D66;
       --text:#0b0d0f;
-      --muted:#26343a;
+      --muted:#4b5c62;
+      --softInk:rgba(20,28,32,.88);
+      --line:rgba(0,0,0,.08);
+      --glass:rgba(255,255,255,.72);
+      --glassStrong:rgba(255,255,255,.88);
 
       --safeT: env(safe-area-inset-top, 0px);
       --safeR: env(safe-area-inset-right, 0px);
       --safeB: env(safe-area-inset-bottom, 0px);
       --safeL: env(safe-area-inset-left, 0px);
 
-      --padX: clamp(16px, 6vw, 120px);
+      --padX: clamp(18px, 6vw, 120px);
       --headerH: 56px;
 
       --treeYOffset: clamp(10px, 2vh, 34px);
       --treeScale: 0.92;
-      --treeOpacity: 0.92;
-
-      --treeBreathDur: 14s;
-      --treeBreathAmp: 0.045;
-      --treePushZ: 60px;
-      --treeBreathShadowA: 0.16;
-      --treeBreathShadowB: 0.26;
-
-      --glowOpacity: 0.16;
-      --glowDur: 6.2s;
-      --glowBlur: 10px;
-      --glowColor: rgba(26,93,102,.48);
+      --treeOpacity: 0.90;
 
       --bodyFont: "Inter", system-ui, sans-serif;
       --titleFont: "Playfair Display", serif;
@@ -88,8 +81,8 @@
       z-index:-5;
       pointer-events:none;
       background:
-        radial-gradient(1100px 720px at 50% 32%, rgba(255,255,255,.28), rgba(255,255,255,0) 60%),
-        linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0));
+        radial-gradient(1100px 720px at 50% 32%, rgba(255,255,255,.26), rgba(255,255,255,0) 60%),
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0));
     }
 
     .bg-stage{
@@ -98,18 +91,17 @@
       z-index:-3;
       display:flex;
       align-items:center;
-      justify-content:center;
+      justify-content:flex-end;
       pointer-events:none;
       transform:translateY(var(--treeYOffset));
+      padding-right:min(5vw, 42px);
     }
     .tree{
-      width:min(74vw, 74vh);
-      height:min(74vw, 74vh);
+      width:min(58vw, 72vh);
+      height:min(58vw, 72vh);
       opacity:var(--treeOpacity);
       position:relative;
-      transform-style:preserve-3d;
-      will-change:filter;
-      animation:treeBreath var(--treeBreathDur) ease-in-out infinite;
+      filter:drop-shadow(0 28px 70px rgba(0,0,0,.16));
     }
     .tree img{
       width:100%;
@@ -119,54 +111,6 @@
       user-select:none;
       -webkit-user-drag:none;
       transform:translateZ(0) scale(var(--treeScale));
-      will-change:transform;
-      animation:treeScaleBreath var(--treeBreathDur) ease-in-out infinite;
-    }
-    @keyframes treeBreath{
-      0%,100%{ filter: drop-shadow(0 28px 70px rgba(0,0,0,var(--treeBreathShadowA))) brightness(.98); }
-      50%{ filter: drop-shadow(0 48px 130px rgba(0,0,0,var(--treeBreathShadowB))) brightness(1.03); }
-    }
-    @keyframes treeScaleBreath{
-      0%,100%{ transform: translateZ(0) scale(calc(var(--treeScale) * (1 - var(--treeBreathAmp)))); }
-      50%{ transform: translate3d(0,0,var(--treePushZ)) scale(calc(var(--treeScale) * (1 + var(--treeBreathAmp)))); }
-    }
-    .tree::after{
-      content:"";
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-      background:
-        linear-gradient(180deg,
-          rgba(255,255,255,0) 0%,
-          rgba(255,255,255,0) 35%,
-          rgba(255,255,255,.50) 50%,
-          rgba(255,255,255,0) 65%,
-          rgba(255,255,255,0) 100%
-        ),
-        radial-gradient(closest-side at 50% 50%, var(--glowColor), rgba(26,93,102,0) 62%);
-      background-size:100% 220%, 120% 120%;
-      background-position:0 140%, 50% 160%;
-      background-repeat:no-repeat;
-      opacity:var(--glowOpacity);
-      filter:blur(var(--glowBlur));
-      mix-blend-mode:screen;
-      -webkit-mask-image:url("imagens/Tree ring hero.webp");
-      -webkit-mask-repeat:no-repeat;
-      -webkit-mask-size:contain;
-      -webkit-mask-position:center;
-      mask-image:url("imagens/Tree ring hero.webp");
-      mask-repeat:no-repeat;
-      mask-size:contain;
-      mask-position:center;
-      animation:glowRise var(--glowDur) cubic-bezier(.3, 0, .2, 1) infinite;
-      will-change:opacity, background-position;
-    }
-    @keyframes glowRise{
-      0% { opacity: 0; background-position: 0 140%, 50% 160%; }
-      12% { opacity: var(--glowOpacity); }
-      58% { opacity: var(--glowOpacity); background-position: 0 22%, 50% 40%; }
-      86% { opacity: calc(var(--glowOpacity) * 0.60); background-position: 0 -36%, 50% -10%; }
-      100% { opacity: 0; background-position: 0 -70%, 50% -40%; }
     }
 
     .topbar{
@@ -181,10 +125,10 @@
       align-items:center;
       justify-content:space-between;
       gap:12px;
-      background:linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.72));
+      background:linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.74));
       backdrop-filter:blur(10px);
       -webkit-backdrop-filter:blur(10px);
-      border-bottom:1px solid rgba(0,0,0,.07);
+      border-bottom:1px solid var(--line);
     }
 
     .brand-link{
@@ -245,52 +189,51 @@
       display:flex;
       align-items:center;
       padding:
-        clamp(56px, 8vw, 96px)
+        clamp(54px, 8vw, 96px)
         calc(var(--padX) + var(--safeR))
-        clamp(48px, 7vw, 88px)
+        clamp(28px, 5vw, 44px)
         calc(var(--padX) + var(--safeL));
       position:relative;
       z-index:2;
     }
     .hero-inner{
-      max-width:1080px;
-      margin:0 auto;
+      max-width:760px;
       display:grid;
-      gap:24px;
+      gap:18px;
       width:100%;
     }
     .eyebrow{
       margin:0;
-      font-size:12px;
-      letter-spacing:.18em;
+      font-size:11px;
+      letter-spacing:.22em;
       text-transform:uppercase;
-      color:rgba(20,28,32,.68);
+      color:rgba(20,28,32,.64);
       font-weight:800;
     }
     .hero h1{
       margin:0;
-      max-width:900px;
+      max-width:760px;
       font-family:var(--titleFont);
       font-weight:900;
       color:var(--brand);
-      font-size:clamp(42px, 7vw, 84px);
-      line-height:.96;
-      letter-spacing:-.03em;
-      text-shadow:0 14px 34px rgba(0,0,0,.07);
+      font-size:clamp(34px, 5vw, 58px);
+      line-height:1.02;
+      letter-spacing:-.028em;
+      text-shadow:0 14px 34px rgba(0,0,0,.05);
     }
     .hero-copy{
-      max-width:780px;
+      max-width:660px;
       margin:0;
-      color:rgba(20,28,32,.92);
-      line-height:1.95;
-      font-size:clamp(15px, 1.6vw, 18px);
+      color:var(--softInk);
+      line-height:1.85;
+      font-size:clamp(15px, 1.35vw, 17px);
       font-weight:500;
     }
     .hero-actions{
       display:flex;
       flex-wrap:wrap;
       gap:12px;
-      margin-top:4px;
+      margin-top:6px;
     }
     .btn{
       appearance:none;
@@ -321,6 +264,211 @@
       box-shadow:0 12px 24px rgba(0,0,0,.05);
     }
 
+    .blog-shell{
+      position:relative;
+      z-index:2;
+      padding:
+        0 calc(var(--padX) + var(--safeR))
+        calc(80px + var(--safeB))
+        calc(var(--padX) + var(--safeL));
+    }
+    .blog-grid{
+      display:grid;
+      grid-template-columns:minmax(0, 1.2fr) minmax(260px, .65fr);
+      gap:28px;
+      align-items:start;
+    }
+
+    .panel{
+      position:relative;
+      border-radius:26px;
+      background:var(--glass);
+      border:1px solid rgba(0,0,0,.06);
+      box-shadow:0 18px 54px rgba(0,0,0,.08);
+      backdrop-filter:blur(16px) saturate(1.06);
+      -webkit-backdrop-filter:blur(16px) saturate(1.06);
+      overflow:hidden;
+    }
+    .panel::before{
+      content:"";
+      position:absolute;
+      inset:-40% -20%;
+      pointer-events:none;
+      background:
+        radial-gradient(closest-side at 18% 20%, rgba(26,93,102,.10), rgba(26,93,102,0) 65%),
+        radial-gradient(closest-side at 85% 0%, rgba(255,255,255,.28), rgba(255,255,255,0) 60%);
+      opacity:.8;
+    }
+    .panel-inner{
+      position:relative;
+      padding:clamp(22px, 3vw, 34px);
+    }
+
+    .section-label{
+      margin:0 0 10px;
+      font-size:11px;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:rgba(20,28,32,.64);
+      font-weight:800;
+    }
+
+    .featured{
+      display:grid;
+      gap:18px;
+    }
+    .featured-tag,
+    .meta-chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      width:max-content;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(26,93,102,.10);
+      border:1px solid rgba(26,93,102,.14);
+      color:var(--brand);
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+    .featured-title{
+      margin:0;
+      font-family:var(--titleFont);
+      font-size:clamp(28px, 3vw, 40px);
+      line-height:1.06;
+      color:var(--brand);
+      letter-spacing:-.02em;
+    }
+    .featured-copy{
+      margin:0;
+      font-size:16px;
+      line-height:1.9;
+      color:var(--softInk);
+    }
+    .featured-footer{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      padding-top:8px;
+      border-top:1px solid rgba(0,0,0,.07);
+    }
+    .post-link{
+      text-decoration:none;
+      color:var(--brand);
+      font-weight:700;
+      letter-spacing:.04em;
+    }
+
+    .posts-list{
+      margin-top:22px;
+      display:grid;
+      gap:0;
+    }
+    .post-item{
+      display:grid;
+      gap:10px;
+      padding:22px 0;
+      border-top:1px solid rgba(0,0,0,.08);
+    }
+    .post-item:first-child{ border-top:none; padding-top:0; }
+    .post-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      color:rgba(20,28,32,.62);
+      font-size:12px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-weight:700;
+    }
+    .post-item h3{
+      margin:0;
+      font-family:var(--titleFont);
+      color:var(--brand);
+      font-size:clamp(24px, 2.1vw, 32px);
+      line-height:1.08;
+      letter-spacing:-.015em;
+    }
+    .post-item p{
+      margin:0;
+      color:var(--softInk);
+      line-height:1.86;
+      font-size:15.5px;
+    }
+
+    .sidebar-stack{
+      display:grid;
+      gap:18px;
+      position:sticky;
+      top:calc(var(--headerH) + var(--safeT) + 20px);
+    }
+    .mini-title{
+      margin:0 0 14px;
+      font-family:var(--titleFont);
+      font-size:26px;
+      line-height:1.1;
+      color:var(--brand);
+      letter-spacing:-.015em;
+    }
+    .mini-copy{
+      margin:0;
+      color:var(--softInk);
+      line-height:1.82;
+      font-size:15px;
+    }
+    .tag-list{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+    .tag-list span{
+      display:inline-flex;
+      align-items:center;
+      min-height:38px;
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.86);
+      border:1px solid rgba(0,0,0,.06);
+      color:rgba(20,28,32,.78);
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.04em;
+    }
+
+    .notes-list{
+      display:grid;
+      gap:14px;
+    }
+    .notes-item{
+      display:grid;
+      gap:6px;
+      padding:14px 0;
+      border-top:1px solid rgba(0,0,0,.07);
+    }
+    .notes-item:first-child{ border-top:none; padding-top:0; }
+    .notes-item strong{
+      color:var(--brand);
+      font-size:14px;
+      letter-spacing:.04em;
+    }
+    .notes-item span{
+      color:rgba(20,28,32,.74);
+      line-height:1.68;
+      font-size:14px;
+    }
+
+    .footer-note{
+      margin-top:18px;
+      color:rgba(20,28,32,.62);
+      font-size:12px;
+      line-height:1.75;
+    }
+
     @media (min-width:980px){
       .topbar{
         padding-left:calc(22px + var(--safeL));
@@ -328,6 +476,28 @@
         gap:22px;
       }
       .topnav{ gap:4px; }
+    }
+
+    @media (max-width:980px){
+      .bg-stage{
+        justify-content:center;
+        padding-right:0;
+      }
+      .tree{
+        width:min(78vw, 64vh);
+        height:min(78vw, 64vh);
+        opacity:.32;
+      }
+      .hero{
+        min-height:auto;
+        padding-bottom:20px;
+      }
+      .blog-grid{
+        grid-template-columns:1fr;
+      }
+      .sidebar-stack{
+        position:static;
+      }
     }
 
     @media (max-width:640px){
@@ -340,7 +510,20 @@
         font-size:10px;
         padding:9px 11px;
       }
-      .hero{ padding-top:48px; }
+      .hero{
+        padding-top:42px;
+      }
+      .hero-inner{
+        gap:14px;
+      }
+      .hero h1{
+        font-size:clamp(30px, 9vw, 42px);
+      }
+      .featured-title,
+      .post-item h3,
+      .mini-title{
+        line-height:1.1;
+      }
     }
   </style>
 </head>
@@ -366,15 +549,119 @@
   <main>
     <section class="hero" aria-label="Introdução do blog">
       <div class="hero-inner">
-        <p class="eyebrow">Artigos, pesquisas e reflexões</p>
-        <h1>Um espaço de escrita para pensar a subjetividade com profundidade e acolhimento.</h1>
+        <p class="eyebrow">Blog</p>
+        <h1>Psicologia, sexualidade e relações humanas.</h1>
         <p class="hero-copy">
-          Esta página foi pensada para reunir textos sobre psicologia, sexualidade, relações humanas, saúde emocional e questões contemporâneas que atravessam a experiência de viver, amar, desejar e elaborar a própria história.
+          Reflexões clínicas, pesquisas e textos sobre subjetividade, saúde emocional, vínculos, desejo e experiência humana — com uma apresentação mais leve, editorial e sem poluição visual.
         </p>
         <div class="hero-actions">
           <a class="btn btn--solid" href="index.html#agendar-sessao">Agendar sessão</a>
           <a class="btn btn--ghost" href="index.html#home">Voltar ao site principal</a>
         </div>
+      </div>
+    </section>
+
+    <section class="blog-shell" aria-label="Conteúdo do blog">
+      <div class="blog-grid">
+        <div class="panel">
+          <div class="panel-inner">
+            <p class="section-label">Escrito em destaque</p>
+
+            <article class="featured" aria-label="Artigo em destaque">
+              <span class="featured-tag">Destaque editorial</span>
+              <h2 class="featured-title">Um espaço para textos profundos, com leitura confortável e presença visual mais sutil.</h2>
+              <p class="featured-copy">
+                Aqui você pode destacar o artigo mais recente ou mais importante, com uma entrada elegante, sem carregar a página demais. A ideia é que o blog pareça um espaço de leitura e não um corredor de anúncios em pânico. O design agradece e o olho também.
+              </p>
+              <div class="featured-footer">
+                <span class="meta-chip">Leitura em destaque</span>
+                <a class="post-link" href="#">Ler artigo completo →</a>
+              </div>
+            </article>
+
+            <div class="posts-list" aria-label="Lista de artigos">
+              <article class="post-item">
+                <div class="post-meta">
+                  <span>Sexualidade</span>
+                  <span>•</span>
+                  <span>Artigo</span>
+                </div>
+                <h3>Desejo, silêncio e comunicação nos relacionamentos</h3>
+                <p>
+                  Um texto sobre como o que não é dito também organiza a intimidade. Ideal para artigos autorais, com resumo curto e leitura convidativa.
+                </p>
+                <a class="post-link" href="#">Ler artigo →</a>
+              </article>
+
+              <article class="post-item">
+                <div class="post-meta">
+                  <span>Saúde emocional</span>
+                  <span>•</span>
+                  <span>Reflexão clínica</span>
+                </div>
+                <h3>Quando o excesso de autocobrança começa a adoecer a rotina</h3>
+                <p>
+                  Espaço para textos que dialoguem com sofrimento psíquico, exigência interna, esgotamento e formas mais cuidadosas de existir.
+                </p>
+                <a class="post-link" href="#">Ler artigo →</a>
+              </article>
+
+              <article class="post-item">
+                <div class="post-meta">
+                  <span>Relações humanas</span>
+                  <span>•</span>
+                  <span>Texto</span>
+                </div>
+                <h3>Presença, escuta e vínculo: o que sustenta encontros reais</h3>
+                <p>
+                  Um terceiro bloco pronto para receber novos artigos. Você pode trocar os títulos, resumos e links sem mexer na estrutura visual do blog.
+                </p>
+                <a class="post-link" href="#">Ler artigo →</a>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <aside class="sidebar-stack" aria-label="Complementos do blog">
+          <section class="panel">
+            <div class="panel-inner">
+              <p class="section-label">Categorias</p>
+              <h2 class="mini-title">Linhas de escrita</h2>
+              <div class="tag-list">
+                <span>Psicologia</span>
+                <span>Sexualidade</span>
+                <span>Relações</span>
+                <span>Saúde emocional</span>
+                <span>Subjetividade</span>
+                <span>Sociedade</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-inner">
+              <p class="section-label">Direção visual</p>
+              <h2 class="mini-title">O que mudou</h2>
+              <div class="notes-list">
+                <div class="notes-item">
+                  <strong>Hero menor</strong>
+                  <span>Menos manifesto, mais editorial. O texto principal ficou mais curto e mais elegante.</span>
+                </div>
+                <div class="notes-item">
+                  <strong>Leitura em foco</strong>
+                  <span>A página agora privilegia títulos, resumos e ritmo visual limpo.</span>
+                </div>
+                <div class="notes-item">
+                  <strong>Estrutura pronta</strong>
+                  <span>Você já pode substituir os textos fictícios pelos artigos reais sem desmontar o layout.</span>
+                </div>
+              </div>
+              <p class="footer-note">
+                Se depois você quiser, essa estrutura pode virar um blog real com cadastro de posts, categorias e página individual de artigo.
+              </p>
+            </div>
+          </section>
+        </aside>
       </div>
     </section>
   </main>
