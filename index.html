@@ -1317,7 +1317,6 @@
         border-radius: 18px;
         animation: none !important;
         overflow: hidden;
-        contain: layout paint;
       }
       .glass-card{
         background: rgba(255,255,255,.90);
@@ -1487,6 +1486,38 @@
       .contact-meta{
         grid-template-columns: 1fr !important;
         gap: 10px;
+      }
+
+      .overlay{
+        transition: opacity 280ms cubic-bezier(.16,1,.18,1), visibility 280ms cubic-bezier(.16,1,.18,1);
+      }
+      .overlay-bg{
+        transition: opacity 220ms cubic-bezier(.16,1,.18,1);
+      }
+      .drawer{
+        transform: translateX(18px) scale(.992);
+        transition:
+          transform 320ms cubic-bezier(.16,1,.18,1),
+          opacity 220ms cubic-bezier(.16,1,.18,1);
+      }
+      .drawer-nav a{
+        transform: translate3d(16px, 0, 0) scaleX(.94);
+        filter: blur(.5px);
+        transition:
+          transform 300ms cubic-bezier(.16, 1, .16, 1),
+          opacity  240ms cubic-bezier(.16, 1, .16, 1),
+          filter   240ms cubic-bezier(.16, 1, .16, 1);
+      }
+      .overlay.is-open .drawer-nav a{
+        transition-delay: calc(36ms + (var(--i, 0) * 26ms));
+      }
+      .menu-logo{
+        transform: translate3d(10px, 0, 0);
+        filter: blur(.8px);
+        transition: opacity 280ms cubic-bezier(.16,1,.18,1), transform 280ms cubic-bezier(.16,1,.18,1), filter 280ms cubic-bezier(.16,1,.18,1);
+      }
+      .overlay.is-open .menu-logo{
+        transition-delay: 120ms;
       }
 
       #sobre,
@@ -2295,10 +2326,8 @@
       const cards = Array.from(document.querySelectorAll("[data-card]"));
 
       const clamp = (v,a,b)=>Math.max(a,Math.min(b,v));
-      const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-      const mobileLayoutQuery = window.matchMedia("(max-width: 900px)");
-      const prefersReduced = () => reducedMotionQuery.matches;
-      const isMobileLayout = () => mobileLayoutQuery.matches;
+      const prefersReduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const isMobileLayout = () => window.matchMedia("(max-width: 900px)").matches;
 
       function getMsVar(name, fallbackMs){
         const raw = getComputedStyle(root).getPropertyValue(name).trim();
@@ -2468,27 +2497,6 @@
         const value = enabled ? "" : "none";
         if(brandEl) brandEl.style.transition = value;
         if(roleEl) roleEl.style.transition = value;
-      }
-
-      let mobileHeroSyncRaf = 0;
-      let responsiveRefreshTimer = 0;
-
-      function runResponsiveRefresh(delay = 0){
-        if(responsiveRefreshTimer) window.clearTimeout(responsiveRefreshTimer);
-        responsiveRefreshTimer = window.setTimeout(() => {
-          responsiveRefreshTimer = 0;
-          scheduleRender();
-          setupMobileCardToggles();
-          scheduleMobileHeroSync();
-        }, delay);
-      }
-
-      function scheduleMobileHeroSync(){
-        if(mobileHeroSyncRaf) return;
-        mobileHeroSyncRaf = requestAnimationFrame(() => {
-          mobileHeroSyncRaf = 0;
-          syncMobileHeroWithScroll();
-        });
       }
 
       function syncHeroReturnWithCardProgress(progress){
@@ -3110,8 +3118,7 @@
       }
 
       window.addEventListener("scroll", () => {
-        if(!isMobileLayout()) return;
-        scheduleMobileHeroSync();
+        syncMobileHeroWithScroll();
       }, { passive:true });
 
       window.addEventListener("keydown", (e) => {
@@ -3159,10 +3166,14 @@
       });
 
       window.addEventListener("resize", () => {
-        runResponsiveRefresh(isMobileLayout() ? 90 : 40);
+        scheduleRender();
+        window.setTimeout(setupMobileCardToggles, 80);
+        window.setTimeout(syncMobileHeroWithScroll, 30);
       }, { passive:true });
       window.addEventListener("orientationchange", () => {
-        runResponsiveRefresh(160);
+        setTimeout(scheduleRender, 120);
+        setTimeout(setupMobileCardToggles, 180);
+        setTimeout(syncMobileHeroWithScroll, 220);
       }, { passive:true });
 
       function goToScene(i){
@@ -3350,9 +3361,11 @@
       applyHeroState();
       hideAllCards();
       scheduleRender();
-      runResponsiveRefresh(60);
+      window.setTimeout(setupMobileCardToggles, 60);
+      window.setTimeout(syncMobileHeroWithScroll, 60);
       window.addEventListener("load", () => {
-        runResponsiveRefresh(120);
+        window.setTimeout(setupMobileCardToggles, 120);
+        window.setTimeout(syncMobileHeroWithScroll, 140);
       }, { once: true });
     })();
   </script>
