@@ -4,7 +4,19 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Káren Patussi</title>
+  <title>Káren Patussi | Psicóloga e Terapeuta Sexual</title>
+  <meta name="description" content="Psicoterapia online com escuta qualificada, sigilo e responsabilidade ética. Atendimento para adultos, casais e questões relacionadas à sexualidade.">
+  <meta name="theme-color" content="#1A5D66">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Káren Patussi | Psicóloga e Terapeuta Sexual">
+  <meta property="og:description" content="Psicoterapia online com escuta qualificada, sigilo e responsabilidade ética.">
+  <meta property="og:image" content="imagens/Foto Karen Sobre.png">
+  <meta property="og:image:alt" content="Foto profissional da psicóloga Káren Patussi">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Káren Patussi | Psicóloga e Terapeuta Sexual">
+  <meta name="twitter:description" content="Psicoterapia online com escuta qualificada, sigilo e responsabilidade ética.">
+  <meta name="twitter:image" content="imagens/Foto Karen Sobre.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,7 +49,8 @@
 
       --glowOpacity: 0.16;
       --glowDur: 6.2s;
-      --glowBlur: 10px;
+      --glowBlur: 8px;
+      --heroParallax: 0px;
       --glowColor: rgba(26,93,102,.48);
 
       --menuGlass: 0.52;
@@ -131,6 +144,7 @@
 
     html{
       scroll-behavior:smooth;
+      overflow-y:auto;
       scrollbar-width: none;
       -ms-overflow-style: none;
     }
@@ -190,7 +204,8 @@
       align-items:center;
       justify-content:center;
       pointer-events: none;
-      transform: translateY(var(--treeYOffset));
+      transform: translateY(calc(var(--treeYOffset) + var(--heroParallax, 0px)));
+      transition: transform .18s linear;
     }
     .tree{
       width: min(74vw, 74vh);
@@ -513,7 +528,13 @@
       outline: none;
     }
     .topbar-nav a:hover::after,
-    .topbar-nav a:focus-visible::after{ transform: scaleX(1); }
+    .topbar-nav a:focus-visible::after,
+    .topbar-nav a.is-current::after{ transform: scaleX(1); }
+    .topbar-nav a.is-current{
+      background: rgba(26,93,102,.08);
+      color: var(--brand);
+      box-shadow: 0 10px 24px rgba(26,93,102,.08);
+    }
 
     .menu-btn{
       appearance: none;
@@ -799,7 +820,7 @@
         calc(26px + var(--safeB))
         calc(var(--padX) + var(--safeL));
     }
-    .hero{ width: 100%; max-width: 1200px; position: relative; }
+    .hero{ width: 100%; max-width: 1200px; position: relative; will-change: transform; transition: transform .24s linear; }
 
     .content{
       width: 100%;
@@ -1440,8 +1461,8 @@
       .about li,
       .skill-item,
       .edu-desc{
-        font-size: 14px;
-        line-height: 1.78;
+        font-size: 15px;
+        line-height: 1.82;
       }
       .card-scroll{
         position: relative;
@@ -1637,17 +1658,17 @@
       0%{
         transform: scale(.82);
         opacity: 0;
-        filter: blur(6px) drop-shadow(0 10px 28px rgba(0,0,0,.18));
+        filter: blur(4px) drop-shadow(0 10px 28px rgba(0,0,0,.16));
       }
       60%{
         transform: scale(1.06);
         opacity: 1;
-        filter: blur(0) drop-shadow(0 18px 44px rgba(0,0,0,.28));
+        filter: blur(0) drop-shadow(0 18px 40px rgba(0,0,0,.24));
       }
       100%{
         transform: scale(1);
         opacity: 1;
-        filter: blur(0) drop-shadow(0 16px 44px rgba(0,0,0,.28));
+        filter: blur(0) drop-shadow(0 16px 40px rgba(0,0,0,.24));
       }
     }
 
@@ -1690,7 +1711,7 @@
   bottom:0;
   width:0%;
   background: rgba(255,255,255,.95);
-  box-shadow: 0 0 8px rgba(255,255,255,.55);
+  box-shadow: 0 0 6px rgba(255,255,255,.42);
   animation: loaderBar 2.5s cubic-bezier(.16,1,.18,1) forwards;
 }
 
@@ -1957,7 +1978,7 @@
 
       <div class="menu-logo" aria-hidden="true">
         <div class="logo-box">
-          <img src="imagens/Logo.PNG" alt="">
+          <img src="imagens/Logo.PNG" alt="" loading="lazy" decoding="async">
         </div>
       </div>
     </aside>
@@ -2003,7 +2024,7 @@
                   <div class="portrait" aria-label="Foto da psicóloga">
                     <img
                       src="imagens/Foto Karen Sobre.png"
-                      loading="eager"
+                      loading="lazy"
                       decoding="async"
                       onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=900&q=80';"
                       alt="Foto profissional da psicóloga">
@@ -2418,6 +2439,41 @@
 
       links.forEach((a, i) => a.style.setProperty("--i", String(i)));
 
+      function setCurrentNav(hash){
+        links.forEach((link) => {
+          const isCurrent = (link.getAttribute("href") || "") === hash;
+          link.classList.toggle("is-current", isCurrent);
+          if(isCurrent) link.setAttribute("aria-current", "page");
+          else link.removeAttribute("aria-current");
+        });
+      }
+
+      function updateCurrentNav(){
+        if(isMobileLayout()){
+          const sections = [heroStage, ...cards].filter(Boolean);
+          const vh = window.innerHeight || 800;
+          const probe = vh * 0.28 + (topbar?.offsetHeight || 0);
+          let current = "#home";
+          for(const section of sections){
+            const rect = section.getBoundingClientRect();
+            if(rect.top <= probe && rect.bottom >= probe){
+              current = `#${section.id}`;
+              break;
+            }
+          }
+          setCurrentNav(current);
+          return;
+        }
+
+        if(!flowStarted || sceneIndex < 0){
+          setCurrentNav("#home");
+          return;
+        }
+
+        const activeCard = cards[sceneIndex];
+        setCurrentNav(activeCard ? `#${activeCard.id}` : "#home");
+      }
+
       function setupMobileCardToggles(){
         cards.forEach((card, index) => {
           const scroll = card.querySelector(".card-scroll");
@@ -2468,9 +2524,9 @@
         const fade = getMsVar("--loaderFade", 820);
         window.setTimeout(() => { loader.style.display = "none"; }, Math.max(560, fade + 80));
       }
-      const LOADER_DUR = getMsVar("--loaderDur", 3000);
-      window.addEventListener("load", () => window.setTimeout(finishLoader, Math.max(3000, LOADER_DUR)), { once: true });
-      if(document.readyState === "complete") window.setTimeout(finishLoader, Math.max(3000, LOADER_DUR));
+      const LOADER_DUR = getMsVar("--loaderDur", 2500);
+      window.addEventListener("load", () => window.setTimeout(finishLoader, LOADER_DUR), { once: true });
+      if(document.readyState === "complete") window.setTimeout(finishLoader, LOADER_DUR);
       window.addEventListener("pageshow", (e) => { if(e.persisted) finishLoader(); });
 
       function openMenu(){
@@ -2546,6 +2602,7 @@
         root.style.setProperty("--roleB", roleB + "px");
 
         topbar.classList.toggle("show-brand", flowStarted || step >= 1);
+        updateCurrentNav();
       }
 
       function setCooldown(){
@@ -2584,6 +2641,15 @@
         root.style.setProperty("--roleY", String(-liftRole * (1 - t)) + "px");
         root.style.setProperty("--roleO", String(t));
         root.style.setProperty("--roleB", String((blurMax * 0.9) * (1 - t)) + "px");
+      }
+
+      function updateHeroParallax(){
+        if(!heroStage) return;
+        const rect = heroStage.getBoundingClientRect();
+        const vh = window.innerHeight || 800;
+        const progress = clamp((vh * 0.5 - rect.top) / Math.max(vh, 1), -1, 1);
+        const offset = progress * 12;
+        root.style.setProperty("--heroParallax", `${offset.toFixed(2)}px`);
       }
 
       function syncMobileHeroWithScroll(){
@@ -2739,6 +2805,7 @@
 
       function setActiveCardClass(){
         cards.forEach((c, i) => c.classList.toggle("is-active", flowStarted && i === sceneIndex && p >= 0.96));
+        updateCurrentNav();
       }
 
       function hideAllCards(){
@@ -3191,6 +3258,8 @@
 
       window.addEventListener("scroll", () => {
         syncMobileHeroWithScroll();
+        updateHeroParallax();
+        updateCurrentNav();
       }, { passive:true });
 
       window.addEventListener("keydown", (e) => {
@@ -3241,11 +3310,15 @@
         scheduleRender();
         window.setTimeout(setupMobileCardToggles, 80);
         window.setTimeout(syncMobileHeroWithScroll, 30);
+        window.setTimeout(updateHeroParallax, 30);
+        window.setTimeout(updateCurrentNav, 40);
       }, { passive:true });
       window.addEventListener("orientationchange", () => {
         setTimeout(scheduleRender, 120);
         setTimeout(setupMobileCardToggles, 180);
         setTimeout(syncMobileHeroWithScroll, 220);
+        setTimeout(updateHeroParallax, 220);
+        setTimeout(updateCurrentNav, 240);
       }, { passive:true });
 
       function goToScene(i){
@@ -3433,11 +3506,16 @@
       applyHeroState();
       hideAllCards();
       scheduleRender();
+      updateHeroParallax();
+      updateCurrentNav();
       window.setTimeout(setupMobileCardToggles, 60);
       window.setTimeout(syncMobileHeroWithScroll, 60);
+      window.setTimeout(updateCurrentNav, 80);
       window.addEventListener("load", () => {
         window.setTimeout(setupMobileCardToggles, 120);
         window.setTimeout(syncMobileHeroWithScroll, 140);
+        window.setTimeout(updateHeroParallax, 150);
+        window.setTimeout(updateCurrentNav, 170);
       }, { once: true });
     })();
   </script>
