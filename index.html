@@ -2667,6 +2667,14 @@
           step = 3;
           applyHeroState();
           handoffToCards();
+
+          window.setTimeout(() => {
+            const first = cards[0];
+            const visible = first && parseFloat(getComputedStyle(first).opacity || "0") > 0.08;
+            if(!visible){
+              forceDesktopCardOpen(0);
+            }
+          }, 320);
         }
       }
 
@@ -2923,6 +2931,22 @@
         scheduleRender();
       }
 
+      function forceDesktopCardOpen(index = 0){
+        const active = cards[index];
+        if(!active) return;
+        flowStarted = true;
+        sceneIndex = clamp(index, 0, cards.length - 1);
+        pendingDir = +1;
+        returnToHeroAfterClose = false;
+        phase = "open";
+        p = 1;
+        pTarget = 1;
+        hideAllCards();
+        applyCardStyles(active, 1);
+        setActiveCardClass();
+        unlockBody();
+      }
+
       function handoffToCards(){
         if(flowStarted) return;
         flowStarted = true;
@@ -2948,11 +2972,19 @@
         resetActiveScroll();
 
         requestAnimationFrame(() => {
-          p = 0;
+          p = 0.02;
           pTarget = 1;
           phase = "opening";
           scheduleRender();
           unlockBody();
+
+          window.setTimeout(() => {
+            const first = cards[0];
+            const visible = first && parseFloat(getComputedStyle(first).opacity || "0") > 0.08;
+            if(!visible && !isMobileLayout()){
+              forceDesktopCardOpen(0);
+            }
+          }, 260);
         });
       }
 
