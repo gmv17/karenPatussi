@@ -1338,14 +1338,6 @@
       .topbar-nav{ display:none !important; }
 
       :root{
-        --stepDistanceDown: 70;
-        --stepDistanceUp: 85;
-        --sceneLockMs: 180ms;
-        --easeDurName: 420ms;
-        --easeDurRole: 520ms;
-      }
-
-      :root{
         --padX: 18px;
         --cardStickyTop: calc(var(--headerH) + var(--safeT) + 18px);
       }
@@ -2753,19 +2745,9 @@
       }
 
       function stepDurationMs(nextStep){
-        const mobile = isMobileLayout();
-
-        if(nextStep === 1){
-          const ms = getMsVar("--easeDurName", 900);
-          return mobile ? Math.min(ms, 420) : ms;
-        }
-
-        if(nextStep === 2){
-          const ms = getMsVar("--easeDurRole", 1500);
-          return mobile ? Math.min(ms, 520) : ms;
-        }
-
-        return mobile ? 520 : 900;
+        if(nextStep === 1) return getMsVar("--easeDurName", 900);
+        if(nextStep === 2) return getMsVar("--easeDurRole", 1500);
+        return 900;
       }
 
       function clearAutoRole(){
@@ -2832,20 +2814,14 @@
         autoRolePending = true;
 
         const nameDur = stepDurationMs(1);
-        const delay = isMobileLayout()
-          ? Math.max(24, nameDur + 16)
-          : Math.max(320, nameDur + 80);
-
         autoRoleTimer = window.setTimeout(() => {
           autoRoleTimer = 0;
           autoRolePending = false;
-          if(flowStarted || step !== 1) return;
+          if(flowStarted) return;
 
           lockBody();
-          animateToStep(2).then(() => {
-            if(step < 3) unlockBody();
-          });
-        }, delay);
+          animateToStep(2).then(() => unlockBody());
+        }, Math.max(320, nameDur + 80));
       }
 
       function animateToStep(next){
@@ -2858,8 +2834,23 @@
         applyHeroState();
         setCooldown();
 
-        if(step === 1) scheduleAutoRole();
-        else clearAutoRole();
+        if(step === 1){
+          clearAutoRole();
+          if(isMobileLayout()){
+            autoRolePending = true;
+            autoRoleTimer = window.setTimeout(() => {
+              autoRoleTimer = 0;
+              autoRolePending = false;
+              if(flowStarted || step !== 1 || animating) return;
+              lockBody();
+              animateToStep(2).then(() => {
+                if(step < 3) unlockBody();
+              });
+            }, Math.max(10, dur - 10));
+          }else{
+            scheduleAutoRole();
+          }
+        }else clearAutoRole();
 
         return new Promise((resolve) => {
           window.setTimeout(() => {
