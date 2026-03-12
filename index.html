@@ -1373,12 +1373,22 @@
         border-radius: 18px;
         animation: none !important;
         overflow: hidden;
+        touch-action: pan-y;
       }
       .glass-card{
         background: rgba(255,255,255,.90);
         backdrop-filter: blur(10px) saturate(1.02);
         -webkit-backdrop-filter: blur(10px) saturate(1.02);
         box-shadow: 0 10px 26px rgba(0,0,0,.08);
+      }
+      .topbar{
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
+      .tree,
+      .tree img,
+      .tree::after{
+        animation: none !important;
       }
       .glass-card::before{ opacity:.22; }
       .card-inner{
@@ -1405,10 +1415,13 @@
       .card-scroll{
         position: relative;
         max-height: 300px !important;
-        overflow: hidden !important;
+        overflow: clip !important;
         padding-top: 0;
         padding-bottom: 0;
         transition: max-height 420ms cubic-bezier(.16, 1, .18, 1);
+        touch-action: pan-y;
+        overscroll-behavior: auto;
+        -webkit-overflow-scrolling: touch;
       }
       .section-card.is-expanded .card-scroll{
         max-height: min(68dvh, 620px) !important;
@@ -1990,25 +2003,6 @@
       height: 16px;
       display: block;
       fill: currentColor;
-    }
-
-    @media (max-width: 979.98px){
-      .site-footer{
-        position: relative;
-        bottom: auto;
-        left: auto;
-        right: auto;
-        transform: none !important;
-        opacity: 1 !important;
-        pointer-events: auto !important;
-        will-change: auto;
-      }
-      .site-footer.is-visible,
-      .site-footer.is-hiding{
-        transform: none !important;
-        opacity: 1 !important;
-        pointer-events: auto !important;
-      }
     }
 
     @media (max-width: 640px){
