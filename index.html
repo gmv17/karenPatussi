@@ -2917,6 +2917,7 @@
         if(autoCardPending) return;
         autoCardPending = true;
 
+        const roleDur = stepDurationMs(2);
         autoCardTimer = window.setTimeout(() => {
           autoCardTimer = 0;
           autoCardPending = false;
@@ -2924,7 +2925,7 @@
 
           lockBody();
           handoffToCards();
-        }, 90);
+        }, Math.max(40, roleDur + 20));
       }
 
       function animateToStep(next){
@@ -2946,6 +2947,14 @@
         return new Promise((resolve) => {
           window.setTimeout(() => {
             animating = false;
+
+            if(isMobileLayout() && step === 2 && !flowStarted){
+              clearAutoCard();
+              handoffToCards();
+              resolve();
+              return;
+            }
+
             if(step < 3) unlockBody();
             if(step >= 3) handoffToCards();
             resolve();
