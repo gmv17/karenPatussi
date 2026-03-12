@@ -1340,6 +1340,9 @@
       :root{
         --padX: 18px;
         --cardStickyTop: calc(var(--headerH) + var(--safeT) + 18px);
+        --stepDistanceDown: 210;
+        --stepDistanceUp: 250;
+        --sceneLockMs: 820ms;
       }
 
       .cards-track{
@@ -1414,17 +1417,17 @@
       }
       .card-scroll{
         position: relative;
-        max-height: 300px !important;
-        overflow: clip !important;
+        max-height: 280px !important;
+        overflow: visible !important;
         padding-top: 0;
         padding-bottom: 0;
-        transition: max-height 420ms cubic-bezier(.16, 1, .18, 1);
+        transition: max-height 300ms cubic-bezier(.16, 1, .18, 1);
         touch-action: pan-y;
         overscroll-behavior: auto;
         -webkit-overflow-scrolling: touch;
       }
       .section-card.is-expanded .card-scroll{
-        max-height: min(68dvh, 620px) !important;
+        max-height: min(72dvh, 700px) !important;
         overflow: auto !important;
         -webkit-overflow-scrolling: touch;
         overscroll-behavior: contain;
@@ -2639,7 +2642,7 @@
             scroll.insertAdjacentElement("afterend", toggle);
           }
 
-          const shouldCollapse = scroll.scrollHeight > 360;
+          const shouldCollapse = scroll.scrollHeight > (isMobileLayout() ? 300 : 360);
           card.classList.toggle("has-toggle", shouldCollapse);
 
           if(!toggle.dataset.bound){
@@ -3352,7 +3355,8 @@
         if(!flowStarted && inHeroViewport()){
           e.preventDefault();
           lockBody();
-          handleDelta(dy * 1.75);
+          const heroBoost = isMobileLayout() ? 2.6 : 1.75;
+          handleDelta(dy * heroBoost);
         }
       }, { passive: false });
 
