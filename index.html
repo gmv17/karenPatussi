@@ -2752,6 +2752,8 @@
 
       let autoRoleTimer = 0;
       let autoRolePending = false;
+      let autoCardTimer = 0;
+      let autoCardPending = false;
 
       let lastMobileScrollY = window.scrollY || window.pageYOffset || 0;
       let mobileHeroLatchedHidden = false;
@@ -2808,6 +2810,12 @@
         if(autoRoleTimer) window.clearTimeout(autoRoleTimer);
         autoRoleTimer = 0;
         autoRolePending = false;
+      }
+
+      function clearAutoCard(){
+        if(autoCardTimer) window.clearTimeout(autoCardTimer);
+        autoCardTimer = 0;
+        autoCardPending = false;
       }
 
       function setHeroTransitionMode(enabled){
@@ -2874,6 +2882,7 @@
         if(currentY <= (heroStage.offsetHeight + 80)){
           flowStarted = false;
           step = 0;
+          clearAutoCard();
         }
 
         if(mobileHeroLatchedHidden && currentY > releaseLatchPoint){
@@ -2902,6 +2911,22 @@
         }, Math.max(320, nameDur + 80));
       }
 
+      function scheduleAutoCardHandoff(){
+        if(!isMobileLayout()) return;
+        if(step !== 2) return;
+        if(autoCardPending) return;
+        autoCardPending = true;
+
+        autoCardTimer = window.setTimeout(() => {
+          autoCardTimer = 0;
+          autoCardPending = false;
+          if(flowStarted || step !== 2 || animating) return;
+
+          lockBody();
+          handoffToCards();
+        }, 90);
+      }
+
       function animateToStep(next){
         if(animating) return Promise.resolve();
         animating = true;
@@ -2914,6 +2939,9 @@
 
         if(step === 1) scheduleAutoRole();
         else clearAutoRole();
+
+        if(step === 2) scheduleAutoCardHandoff();
+        else clearAutoCard();
 
         return new Promise((resolve) => {
           window.setTimeout(() => {
@@ -3145,6 +3173,7 @@
       async function returnToHeroWithSameMotion(){
         flowStarted = false;
         clearAutoRole();
+        clearAutoCard();
 
         phase = "closed";
         p = 0;
