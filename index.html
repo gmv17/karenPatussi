@@ -1337,9 +1337,9 @@
     @media (max-width: 979.98px){
 
       :root{
-        --stepDistanceDown: 90;
-        --stepDistanceUp: 110;
-        --sceneLockMs: 420ms;
+        --stepDistanceDown: 70;
+        --stepDistanceUp: 85;
+        --sceneLockMs: 180ms;
       }
 
       .topbar-nav{ display:none !important; }
@@ -1392,10 +1392,12 @@
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
       }
-      .tree,
-      .tree img,
-      .tree::after{
-        animation: none !important;
+      :root{
+        --treeBreathDur: 16s;
+        --treeBreathAmp: 0.028;
+        --treePushZ: 28px;
+        --glowOpacity: 0.10;
+        --glowBlur: 8px;
       }
       .glass-card::before{ opacity:.22; }
       .card-inner{
@@ -1457,23 +1459,31 @@
         justify-content:center;
         gap:10px;
         align-self:flex-start;
-        margin-top: 2px;
-        min-height: 42px;
-        padding: 11px 14px;
+        margin-top: 6px;
+        min-height: 44px;
+        padding: 12px 18px;
         border-radius: 999px;
-        border: 1px solid rgba(26,93,102,.16);
-        background: rgba(255,255,255,.94);
+        border: 1px solid rgba(26,93,102,.35);
+        background: rgba(26,93,102,.08);
         color: var(--brand);
-        box-shadow: 0 10px 24px rgba(0,0,0,.05);
-        font: 700 11px/1 var(--bodyFont);
+        box-shadow:
+          0 8px 18px rgba(26,93,102,.14),
+          inset 0 1px 0 rgba(255,255,255,.6);
+        font: 800 11px/1 var(--bodyFont);
         letter-spacing: .12em;
         text-transform: uppercase;
         cursor: pointer;
         -webkit-tap-highlight-color: transparent;
+        transition: transform .18s ease, background .18s ease, box-shadow .18s ease;
+      }
+      .card-toggle:active{
+        transform: scale(.96);
+        background: rgba(26,93,102,.15);
       }
       .card-toggle::after{
         content: "+";
-        font-size: 15px;
+        font-size: 16px;
+        font-weight: 900;
         line-height: 1;
         letter-spacing: 0;
       }
@@ -2878,8 +2888,8 @@
         if(lastDir !== 0 && dir !== lastDir) accum = 0;
         lastDir = dir;
 
-        const down = Math.max(160, getNumVar("--stepDistanceDown", 320));
-        const up   = Math.max(180, getNumVar("--stepDistanceUp", 380));
+        const down = Math.max(45, getNumVar("--stepDistanceDown", 320));
+        const up   = Math.max(55, getNumVar("--stepDistanceUp", 380));
 
         accum += deltaY;
 
@@ -3034,7 +3044,7 @@
       }
 
       function setLock(){
-        const ms = Math.max(520, getMsVar("--sceneLockMs", 1350));
+        const ms = Math.max(120, getMsVar("--sceneLockMs", 1350));
         lockedUntil = performance.now() + ms;
       }
 
