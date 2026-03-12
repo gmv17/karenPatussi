@@ -2774,7 +2774,7 @@
       function stepDurationMs(nextStep){
         if(nextStep === 1) return getMsVar("--easeDurName", 900);
         if(nextStep === 2) return getMsVar("--easeDurRole", 1500);
-        if(nextStep === 3 && isMobileLayout()) return 140;
+        if(nextStep === 3 && isMobileLayout()) return 90;
         return 900;
       }
 
@@ -2888,7 +2888,7 @@
 
         const downBase = Math.max(160, getNumVar("--stepDistanceDown", 320));
         let down = downBase;
-        if(isMobileLayout() && step === 2) down = Math.max(12, Math.min(20, downBase * 0.055));
+        if(isMobileLayout() && step === 2) down = Math.max(6, Math.min(12, downBase * 0.035));
         else if(isMobileLayout() && step >= 3) down = Math.max(28, Math.min(56, downBase * 0.14));
         const up   = Math.max(180, getNumVar("--stepDistanceUp", 380));
 
@@ -2956,8 +2956,13 @@
         const dt = Math.min(0.05, Math.max(0.008, (now - lastFrame) / 1000));
         lastFrame = now;
 
+        let resolvedLag = lag;
+        if(isMobileLayout() && phase === "opening"){
+          resolvedLag = Math.min(resolvedLag, sceneIndex === 0 ? 0.18 : 0.24);
+        }
+
         // k menor => aproxima mais devagar (mais sedoso)
-        const k = 8.0 * (1 - lag) + 2.8;
+        const k = 8.0 * (1 - resolvedLag) + 2.8;
         return 1 - Math.exp(-k * dt);
       }
 
@@ -3087,7 +3092,7 @@
         resetActiveScroll();
 
         requestAnimationFrame(() => {
-          p = 0;
+          p = isMobileLayout() ? 0.12 : 0;
           pTarget = 1;
           phase = "opening";
           scheduleRender();
@@ -3370,7 +3375,7 @@
         if(!flowStarted && inHeroViewport()){
           e.preventDefault();
           lockBody();
-          handleDelta(dy * 2.35);
+          handleDelta(dy * (isMobileLayout() ? 3.15 : 2.35));
         }
       }, { passive: false });
 
