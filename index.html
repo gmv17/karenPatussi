@@ -2774,7 +2774,7 @@
       function stepDurationMs(nextStep){
         if(nextStep === 1) return getMsVar("--easeDurName", 900);
         if(nextStep === 2) return getMsVar("--easeDurRole", 1500);
-        if(nextStep === 3 && isMobileLayout()) return 220;
+        if(nextStep === 3 && isMobileLayout()) return 140;
         return 900;
       }
 
@@ -2887,7 +2887,9 @@
         lastDir = dir;
 
         const downBase = Math.max(160, getNumVar("--stepDistanceDown", 320));
-        const down = (isMobileLayout() && step >= 2) ? Math.max(34, Math.min(72, downBase * 0.16)) : downBase;
+        let down = downBase;
+        if(isMobileLayout() && step === 2) down = Math.max(12, Math.min(20, downBase * 0.055));
+        else if(isMobileLayout() && step >= 3) down = Math.max(28, Math.min(56, downBase * 0.14));
         const up   = Math.max(180, getNumVar("--stepDistanceUp", 380));
 
         accum += deltaY;
@@ -3368,7 +3370,7 @@
         if(!flowStarted && inHeroViewport()){
           e.preventDefault();
           lockBody();
-          handleDelta(dy * 1.75);
+          handleDelta(dy * 2.35);
         }
       }, { passive: false });
 
